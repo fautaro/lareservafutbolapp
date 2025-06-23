@@ -11,7 +11,7 @@
       </div>
       <div class="flex items-center gap-3 border-b border-gray-200 pb-3 text-lg font-medium">
         <i class="fas fa-calendar-check w-5 text-[#5c748a]"></i>
-        Mis Reservas
+        Reservas
       </div>
       <div class="flex items-center gap-3 border-b border-gray-200 pb-3 text-lg font-medium">
         <i class="fas fa-cog w-5 text-[#5c748a]"></i>

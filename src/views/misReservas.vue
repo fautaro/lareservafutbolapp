@@ -30,14 +30,23 @@ const closeModal = () => {
     showModal.value = false
 }
 </script>
-
 <template>
-    <div class="p-4 text-gray-700 space-y-6">
-        <h1 class="text-2xl font-bold text-[#101518] text-left">Mis Reservas</h1>
+    <div class="p-4 text-gray-700">
+        <h1 class="text-4xl font-bold text-[#101518] text-left mb-7">Reservas</h1>
+        <!-- Botón reservar cancha -->
+        <div class="flex justify-start mb-10">
+            <button class="flex items-center gap-2 text-base font-semibold text-white shadow"
+                style="background-color: #1DB954; padding: 1rem 1.5rem; border-radius: 0.75rem;"
+                aria-label="Reservar cancha">
+                <i class="fas fa-calendar-plus text-lg"></i>
+                Reservar cancha
+            </button>
+        </div>
 
-        <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2 text-left">
+        <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide text-left mb-4">
             Partidos pendientes
         </h2>
+
 
         <div class="relative rounded-xl bg-blue-100 p-4 shadow-sm text-left space-y-1">
             <!-- Botón tres puntitos -->

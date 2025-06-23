@@ -35,7 +35,7 @@
             </path>
           </svg>
         </div>
-        <p class="text-xs font-medium leading-normal tracking-[0.015em]">Mis reservas</p>
+        <p class="text-xs font-medium leading-normal tracking-[0.015em]">Reservas</p>
       </router-link>
 
       <router-link
