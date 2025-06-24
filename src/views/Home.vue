@@ -111,7 +111,6 @@ export default {
   methods: {
     async loadData() {
       try {
-        await new Promise(resolve => setTimeout(resolve, 3000))
         const response = await fetch('https://jsonkeeper.com/b/PB80');
         const data = await response.json();
         this.deportes = data.deportes;
