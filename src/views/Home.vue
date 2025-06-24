@@ -1,6 +1,4 @@
-<style>
-
-</style>
+<style></style>
 
 <template>
   <div class="relative min-h-screen">
@@ -111,7 +109,7 @@ export default {
   methods: {
     async loadData() {
       try {
-        const response = await fetch('https://jsonkeeper.com/b/PB80');
+        const response = await fetch(`${import.meta.env.BASE_URL}data/data.json`);
         const data = await response.json();
         this.deportes = data.deportes;
         this.complejos = data.complejos;
