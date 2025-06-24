@@ -1,0 +1,150 @@
+{
+    "deportes": [
+        {
+            "id": 1,
+            "nombre": "Fútbol",
+            "icon": "fas fa-futbol",
+            "bgClass": "bg-blue-600",
+            "textClass": "text-white"
+        },
+        {
+            "id": 2,
+            "nombre": "Pádel",
+            "icon": "fas fa-table-tennis",
+            "bgClass": "bg-gray-200",
+            "textClass": "text-black"
+        }
+    ],
+    "complejos": [
+        {
+            "id": 1,
+            "ciudad_Id": 1,
+            "nombre": "La tranquera Complejo Deportivo",
+            "precio": "$45.000",
+            "imagen": "https://scontent.faep14-2.fna.fbcdn.net/v/t39.30808-6/476896814_1202268868572457_7157653707725514313_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=oNXPJ_cMAfEQ7kNvwE_ydgq&_nc_oc=Adk_0G4fQ_EaCoTHSMtWiodB7x0VlEXS6YYb1VXiCxBtYjZpBoaFv_DZK75aN-k-koY&_nc_zt=23&_nc_ht=scontent.faep14-2.fna&_nc_gid=5EzOde_xurjY87FPSvef7g&oh=00_AfI3uGwY0arXaO7dJVRnvYc9a-Of_DCX1Wczlxg1N4z7QQ&oe=6840C330",
+            "categoria": "Fútbol 5",
+            "deportePillBg": "bg-blue-100",
+            "deportePillText": "text-blue-800"
+        },
+        {
+            "id": 4,
+            "ciudad_Id": 1,
+            "nombre": "Tercer Tiempo",
+            "precio": "$40.000",
+            "imagen": "https://scontent.faep14-4.fna.fbcdn.net/v/t1.6435-9/32214712_837391896460746_1358321018388611072_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=V77dO0FB0CYQ7kNvwHBX2tu&_nc_oc=AdlLSemZuq2vcXw1SP8BounxeLpRa45DdFJCyY9RKVnWU46jcHphcPq6A3rdfj3z1jg&_nc_zt=23&_nc_ht=scontent.faep14-4.fna&_nc_gid=GY8nQ-Ws8clgC3QN3GKt5Q&oh=00_AfKNeXnxAUqu8sMz8qo8vHj2EU6xHfta1u48mH12z9M5rQ&oe=68627CAC",
+            "categoria": "Fútbol 5",
+            "deportePillBg": "bg-blue-100",
+            "deportePillText": "text-blue-800"
+        },
+        {
+            "id": 5,
+            "ciudad_Id": 1,
+            "nombre": "La Scaloneta Futbol 5",
+            "precio": "$45.000",
+            "imagen": "https://distritofutbol.com.ar/media-library/constitucion-9-n2dbvs6y-double-picture.jpg",
+            "categoria": "Fútbol 5",
+            "deportePillBg": "bg-blue-100",
+            "deportePillText": "text-blue-800"
+        },
+        {
+            "id": 6,
+            "ciudad_Id": 1,
+            "nombre": "De Rabona",
+            "precio": "$35.000",
+            "imagen": "https://scontent.faep14-3.fna.fbcdn.net/v/t39.30808-6/473445981_1130293418791097_3064557571277368517_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=fua8FlxLxE4Q7kNvwEwg9Ur&_nc_oc=AdlNLiLORUcY_11vPuqZ3kdBxvFHzHJJ2qc2egbmCQ1vFGDr4o1iaLkqVmUDImFizV4&_nc_zt=23&_nc_ht=scontent.faep14-3.fna&_nc_gid=rvAGTBBjqGl9a2mYjyB4fA&oh=00_AfKtWf15bVsPxqqtCfjETV7genWMLW5_9eCfmPWZaIDBBw&oe=6840F3F0",
+            "categoria": "Fútbol 5",
+            "deportePillBg": "bg-blue-100",
+            "deportePillText": "text-blue-800"
+        },
+        {
+            "id": 7,
+            "ciudad_Id": 1,
+            "nombre": "Sol de Mayo",
+            "precio": "$50.000",
+            "imagen": "https://i.ibb.co/nN5FYsk2/c3be3e45-c03b-4996-9aec-202e9ccc0a4c.png",
+            "categoria": "Fútbol 5",
+            "deportePillBg": "bg-blue-100",
+            "deportePillText": "text-blue-800"
+        },
+        {
+            "id": 8,
+            "ciudad_Id": 2,
+            "nombre": "La vieja Bodega - Futbol 5",
+            "precio": "$48.000",
+            "imagen": "https://i.ibb.co/6cHpD7GK/Chat-GPT-Image-31-may-2025-11-25-48.png",
+            "categoria": "Fútbol 5",
+            "deportePillBg": "bg-blue-100",
+            "deportePillText": "text-blue-800"
+        },
+        {
+            "id": 9,
+            "ciudad_Id": 2,
+            "nombre": "Barsa Futbol 5",
+            "precio": "$48.000",
+            "imagen": "https://scontent.faep14-4.fna.fbcdn.net/v/t39.30808-6/316957786_111974945077139_6985398123545921938_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=I7LJRUTWtnYQ7kNvwF3DjaG&_nc_oc=Adlcd6gXFpAeB-YQ-mr1nLX_tXpp6U_sUUFKiAP5Gb1b2ZOMdcdFBjHWrnVaHe7Vy2g&_nc_zt=23&_nc_ht=scontent.faep14-4.fna&_nc_gid=wvt3y3_2ut6M2BuZgCdH2A&oh=00_AfLxuhJSkZDOzGf0T6NCeY33BtiIL8_IFtysMYj6SCLjlQ&oe=6840DF90",
+            "categoria": "Fútbol 5",
+            "deportePillBg": "bg-blue-100",
+            "deportePillText": "text-blue-800"
+        },
+        {
+            "id": 10,
+            "ciudad_Id": 2,
+            "nombre": "Barrilete Cósmico",
+            "precio": "$40.000",
+            "imagen": "https://i.ibb.co/N62JrpK5/barrilete.png",
+            "categoria": "Fútbol 5",
+            "deportePillBg": "bg-blue-100",
+            "deportePillText": "text-blue-800"
+        },
+        {
+            "id": 11,
+            "ciudad_Id": 1,
+            "nombre": "A un toque - Futbol 5",
+            "precio": "$40.000",
+            "imagen": "https://www.hoysejuega.com/uploads/Modules/ImagenesComplejos/800_600_grun-3.jpg",
+            "categoria": "Fútbol 5",
+            "deportePillBg": "bg-blue-100",
+            "deportePillText": "text-blue-800"
+        },
+        {
+            "id": 12,
+            "ciudad_Id": 1,
+            "nombre": "Los Aromos Padel",
+            "precio": "$25.000",
+            "imagen": "https://i.ibb.co/xSGvpmCC/los-aromos.png",
+            "categoria": "Pádel",
+            "deportePillBg": "bg-green-100",
+            "deportePillText": "text-green-800"
+        },
+        {
+            "id": 13,
+            "ciudad_Id": 1,
+            "nombre": "Tercer Tiempo Pádel",
+            "precio": "$30.000",
+            "imagen": "https://acdn-us.mitiendanube.com/stores/001/408/700/products/full-360-5-b1a2ca90efa7b1d7c917368620610522-1024-1024.jpeg",
+            "categoria": "Pádel",
+            "deportePillBg": "bg-green-100",
+            "deportePillText": "text-green-800"
+        },
+        {
+            "id": 14,
+            "ciudad_Id": 1,
+            "nombre": "1114 Pádel Club",
+            "precio": "$25.000",
+            "imagen": "https://dalviansa.com/wp-content/uploads/2021/06/News_Cancha_de_padel_1.jpeg",
+            "categoria": "Pádel",
+            "deportePillBg": "bg-green-100",
+            "deportePillText": "text-green-800"
+        },
+        {
+            "id": 15,
+            "ciudad_Id": 2,
+            "nombre": "Guanches Padel",
+            "precio": "$25.000",
+            "imagen": "https://scontent.faep14-2.fna.fbcdn.net/v/t39.30808-6/469217905_1029712398865393_4808413163776126527_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=r2lJBDnjxRYQ7kNvwFJa5TB&_nc_oc=AdnHZZDRynyx7t2QaDImlzQEyzHg55LLCvLQxmRZDU5YTgBN63nxp0mHe5SLD9_MRPA&_nc_zt=23&_nc_ht=scontent.faep14-2.fna&_nc_gid=XpcqqC31k46eYqoZ2jRrZQ&oh=00_AfLFZjZWJ3MkLpsxj35P9MyM-PrehbQabKZRliRp9e5nNg&oe=6840E8E8",
+            "categoria": "Pádel",
+            "deportePillBg": "bg-green-100",
+            "deportePillText": "text-green-800"
+        }
+    ]
+}
