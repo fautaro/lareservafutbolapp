@@ -57,15 +57,18 @@
         <div class="mb-6">
             <h3 class="text-base font-semibold text-gray-700 mb-2">Canchas disponibles:</h3>
             <div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-                <button v-for="(deporte, index) in deportesDisponibles" :key="index"
+                <button v-for="(deporte, index) in deportesFiltradosPorDia" :key="index"
                     @click="seleccionarDeporte(deporte.tipo)" :class="[
-                        'text-sm px-4 py-2 rounded-full whitespace-nowrap transition-colors duration-200',
+                        'flex items-center gap-2 text-sm px-4 py-2 rounded-full whitespace-nowrap transition-colors duration-200',
                         deporte.tipo === deporteSeleccionado ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'
                     ]">
+                    <i :class="deporte.icono" class="text-base"></i>
                     {{ deporte.nombre }}
                 </button>
+
             </div>
         </div>
+
 
         <!-- Horarios disponibles -->
         <div v-if="horarios.length" class="mb-6">
@@ -98,10 +101,10 @@ export default {
                 imagen: 'https://lh3.googleusercontent.com/p/AF1QipM9N9YYOEDzYw3ejjlq9tdIhq0KHZsmb2EFNFW1=w426-h240-k-no'
             },
             deportesDisponibles: [
-                { tipo: 'futbol5', nombre: 'Fútbol 5' },
-                { tipo: 'futbol7', nombre: 'Fútbol 7' },
-                { tipo: 'futbol11', nombre: 'Fútbol 11' },
-                { tipo: 'padel', nombre: 'Pádel' }
+                { tipo: 'futbol5', nombre: 'Fútbol 5', icono: 'fas fa-futbol' },
+                { tipo: 'futbol7', nombre: 'Fútbol 7', icono: 'fas fa-futbol' },
+                { tipo: 'futbol11', nombre: 'Fútbol 11', icono: 'fas fa-futbol' },
+                { tipo: 'padel', nombre: 'Pádel', icono: 'fas fa-table-tennis' }
             ],
             diasDisponibles: [
                 { dia: 'jueves', fecha: '03-07', fechaExacta: '2025-07-03' },
@@ -129,6 +132,10 @@ export default {
         horarios() {
             const horariosDelDia = this.horariosPorDia[this.diaSeleccionado] || {};
             return horariosDelDia[this.deporteSeleccionado] || [];
+        },
+        deportesFiltradosPorDia() {
+            const disponibles = this.horariosPorDia[this.diaSeleccionado] || {};
+            return this.deportesDisponibles.filter(deporte => disponibles[deporte.tipo]?.length > 0);
         }
     },
     created() {
