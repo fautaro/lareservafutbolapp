@@ -33,22 +33,9 @@ const closeModal = () => {
 <template>
     <div class="p-4 text-gray-700">
         <h1 class="text-4xl font-bold text-[#101518] text-left mb-7">Reservas</h1>
-        <!-- Botón reservar cancha -->
-        <div class="flex justify-start mb-10">
-            <router-link to="/reservar" aria-label="Reservar cancha">
-                <button class="flex items-center gap-2 text-base font-semibold text-white shadow"
-                    style="background-color: #1DB954; padding: 1rem 1.5rem; border-radius: 0.75rem;">
-                    <i class="fas fa-calendar-plus text-lg"></i>
-                    Reservar cancha
-                </button>
-            </router-link>
-        </div>
-
         <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide text-left mb-4">
             Partidos pendientes
         </h2>
-
-
         <div class="relative rounded-xl bg-blue-100 p-4 shadow-sm text-left space-y-1">
             <!-- Botón tres puntitos -->
             <button @click.stop="toggleMenu"

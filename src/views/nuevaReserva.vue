@@ -1,10 +1,37 @@
 <template>
+    <!-- Botón de cerrar -->
+    <div class="absolute top-4 right-4 z-10">
+        <div @click="mostrarModalConfirmacion = true" class="text-gray-500 hover:text-red-500 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación -->
+    <div v-if="mostrarModalConfirmacion"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[999]">
+        <div class="bg-white rounded-xl p-6 mx-4 max-w-sm w-full shadow-xl text-center space-y-4">
+            <h2 class="text-lg font-semibold text-gray-800">¿Volver a la pantalla principal?</h2>
+            <p class="text-sm text-gray-600">Se perderán los datos seleccionados.</p>
+            <div class="flex justify-center gap-3 pt-2">
+                <button @click="mostrarModalConfirmacion = false"
+                    class="text-sm px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-gray-800">Cancelar</button>
+                <button @click="volverAInicio"
+                    class="text-sm px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Salir</button>
+            </div>
+        </div>
+    </div>
+
+
     <div class="px-4 pt-6 pb-28">
         <!-- Datos del complejo -->
         <div class="mb-6">
-            <h2 class="text-lg font-semibold text-gray-800">{{ complejo.nombre }}</h2>
-            <p class="text-sm text-gray-600">{{ complejo.direccion }}</p>
+            <h1 class="text-2xl font-bold text-gray-900">{{ complejo.nombre }}</h1>
+            <p class="text-base text-gray-500">{{ complejo.direccion }}</p>
         </div>
+
 
         <!-- Selector de días -->
         <div class="mb-6">
@@ -12,12 +39,10 @@
             <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
                 <button v-for="(dia, index) in diasDisponibles" :key="index" @click="seleccionarDia(dia.fechaExacta)"
                     :class="[
-                        'w-[110px] h-[80px] flex-shrink-0 flex flex-col items-center justify-center rounded-xl text-center border font-medium transition-colors duration-200',
-                        dia.fechaExacta === diaSeleccionado
-                            ? 'bg-green-500 text-white border-green-600'
-                            : 'bg-white text-gray-700 border-gray-300'
+                        'w-[110px] h-[80px] flex-shrink-0 flex flex-col items-center justify-center rounded-xl text-center text-base font-semibold shadow-md p-3 transition-colors duration-200',
+                        dia.fechaExacta === diaSeleccionado ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'
                     ]">
-                    <div class="text-sm font-semibold leading-tight capitalize">
+                    <div class="text-sm leading-tight capitalize">
                         {{ dia.dia }}
                     </div>
                     <div class="text-sm leading-tight">
@@ -26,6 +51,7 @@
                 </button>
             </div>
         </div>
+
 
 
 
@@ -48,6 +74,7 @@ export default {
     name: 'NuevaReserva',
     data() {
         return {
+            mostrarModalConfirmacion: false,
             complejo: {
                 id: 1,
                 nombre: 'Tercer Tiempo',
@@ -86,7 +113,11 @@ export default {
     methods: {
         seleccionarDia(fecha) {
             this.diaSeleccionado = fecha
-        }
+        },
+        volverAInicio() {
+            this.mostrarModalConfirmacion = false;
+            this.$router.push('/');
+        },
     }
 }
 </script>
