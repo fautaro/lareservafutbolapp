@@ -53,7 +53,19 @@
         </div>
 
 
-
+        <!-- Selector de deportes -->
+        <div class="mb-6">
+            <h3 class="text-base font-semibold text-gray-700 mb-2">Canchas disponibles:</h3>
+            <div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+                <button v-for="(deporte, index) in deportesDisponibles" :key="index"
+                    @click="seleccionarDeporte(deporte.tipo)" :class="[
+                        'text-sm px-4 py-2 rounded-full whitespace-nowrap transition-colors duration-200',
+                        deporte.tipo === deporteSeleccionado ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'
+                    ]">
+                    {{ deporte.nombre }}
+                </button>
+            </div>
+        </div>
 
         <!-- Horarios disponibles -->
         <div v-if="horarios.length" class="mb-6">
@@ -66,6 +78,9 @@
                 </div>
             </div>
         </div>
+        <div v-else class="text-sm text-center text-gray-500 mb-6">
+            No hay canchas disponibles para los horarios seleccionados.
+        </div>
     </div>
 </template>
 
@@ -75,12 +90,19 @@ export default {
     data() {
         return {
             mostrarModalConfirmacion: false,
+            deporteSeleccionado: 'futbol5',
             complejo: {
                 id: 1,
                 nombre: 'Tercer Tiempo',
                 direccion: 'Del Laurel 236, Viedma',
                 imagen: 'https://lh3.googleusercontent.com/p/AF1QipM9N9YYOEDzYw3ejjlq9tdIhq0KHZsmb2EFNFW1=w426-h240-k-no'
             },
+            deportesDisponibles: [
+                { tipo: 'futbol5', nombre: 'Fútbol 5' },
+                { tipo: 'futbol7', nombre: 'Fútbol 7' },
+                { tipo: 'futbol11', nombre: 'Fútbol 11' },
+                { tipo: 'padel', nombre: 'Pádel' }
+            ],
             diasDisponibles: [
                 { dia: 'jueves', fecha: '03-07', fechaExacta: '2025-07-03' },
                 { dia: 'viernes', fecha: '04-07', fechaExacta: '2025-07-04' },
@@ -92,15 +114,21 @@ export default {
             ],
             diaSeleccionado: '2025-07-03',
             horariosPorDia: {
-                '2025-07-03': [{ rango: '13 a 14hs' }, { rango: '14 a 15hs' }],
-                '2025-07-04': [{ rango: '16 a 17hs' }, { rango: '17 a 18hs' }],
-                '2025-07-05': [{ rango: '15 a 16hs' }]
+                '2025-07-03': {
+                    futbol5: [{ rango: '13 a 14hs' }, { rango: '14 a 15hs' }],
+                    futbol7: [{ rango: '15 a 16hs' }]
+                },
+                '2025-07-04': {
+                    futbol5: [{ rango: '16 a 17hs' }],
+                    padel: [{ rango: '17 a 18hs' }]
+                }
             }
         }
     },
     computed: {
         horarios() {
-            return this.horariosPorDia[this.diaSeleccionado] || []
+            const horariosDelDia = this.horariosPorDia[this.diaSeleccionado] || {};
+            return horariosDelDia[this.deporteSeleccionado] || [];
         }
     },
     created() {
@@ -113,6 +141,9 @@ export default {
     methods: {
         seleccionarDia(fecha) {
             this.diaSeleccionado = fecha
+        },
+        seleccionarDeporte(tipo) {
+            this.deporteSeleccionado = tipo;
         },
         volverAInicio() {
             this.mostrarModalConfirmacion = false;
