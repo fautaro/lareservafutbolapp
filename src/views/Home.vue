@@ -43,7 +43,8 @@
         <transition name="fade" mode="out-in">
           <div :key="deporteSeleccionado">
             <div class="px-4 py-2" v-for="complejo in complejosFiltrados" :key="complejo.id">
-              <div class="rounded-xl overflow-hidden shadow-md bg-white">
+              <div class="rounded-xl overflow-hidden shadow-md bg-white cursor-pointer"
+                @click="nuevaReserva(complejo.id)">
                 <div class="relative">
                   <img class="w-full h-40 object-cover rounded-t-xl" :src="complejo.imagen" :alt="complejo.nombre" />
                   <div
@@ -125,8 +126,11 @@ export default {
     },
     onCitySelected(ciudad) {
       this.ciudadSeleccionada = ciudad;
+    },
+    nuevaReserva(complejoId) {
+      this.$router.push({ name: 'NuevaReserva', query: { id: complejoId } })
     }
-
+    
   }
 };
 </script>

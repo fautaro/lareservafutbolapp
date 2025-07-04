@@ -1,7 +1,8 @@
-import { createRouter, createWebHashHistory  } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import DefaultLayout from '../layouts/DefaultLayout.vue';
 import Home from '../views/Home.vue';
 import MisReservas from '../views/misReservas.vue';
+import nuevaReserva from '../views/nuevaReserva.vue';
 import Menu from '../views/Menu.vue';
 
 const routes = [
@@ -23,6 +24,11 @@ const routes = [
         path: 'menu',
         name: 'Menu',
         component: Menu
+      },
+      {
+        path: 'reservar',
+        name: 'NuevaReserva',
+        component: nuevaReserva
       }
     ]
   }
