@@ -1,7 +1,7 @@
 <template>
     <!-- Botón de cerrar -->
     <div class="absolute top-4 right-4 z-10">
-        <div @click="mostrarModalConfirmacion = true" class="text-gray-500 hover:text-red-500 transition-colors">
+        <div @click="onCerrarClick" class="text-gray-500 hover:text-red-500 transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -13,7 +13,7 @@
     <div v-if="mostrarModalConfirmacion"
         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[999]">
         <div class="bg-white rounded-xl p-6 mx-4 max-w-sm w-full shadow-xl text-center space-y-4">
-            <h2 class="text-lg font-semibold text-gray-800">¿Volver a la pantalla principal?</h2>
+            <h2 class="text-lg font-semibold text-gray-800">Está seguro que desea salir?</h2>
             <p class="text-sm text-gray-600">Se perderán los datos seleccionados.</p>
             <div class="flex justify-center gap-3 pt-2">
                 <button @click="mostrarModalConfirmacion = false"
@@ -25,7 +25,7 @@
     </div>
 
 
-    <div class="px-4 pt-6 pb-28">
+    <div class="max-w-screen-sm mx-auto pt-6 pb-20">
         <!-- Datos del complejo -->
         <div class="mb-6">
             <h1 class="text-2xl font-bold text-gray-900">{{ complejo.nombre }}</h1>
@@ -93,6 +93,8 @@ export default {
     data() {
         return {
             mostrarModalConfirmacion: false,
+            nextRoute: null,
+            salidaConfirmada: false,
             deporteSeleccionado: 'futbol5',
             complejo: {
                 id: 1,
@@ -153,9 +155,28 @@ export default {
             this.deporteSeleccionado = tipo;
         },
         volverAInicio() {
-            this.mostrarModalConfirmacion = false;
-            this.$router.push('/');
+            this.mostrarModalConfirmacion = false
+            this.salidaConfirmada = true
+            this.$router.push(this.nextRoute)
         },
+        onCerrarClick() {
+            this.mostrarModalConfirmacion = true
+            this.nextRoute = { name: 'Home' }
+        }
+
+    },
+    beforeRouteLeave(to, from, next) {
+        if (this.salidaConfirmada) {
+            next()
+            return
+        }
+        this.mostrarModalConfirmacion = true
+        this.nextRoute = {
+            name: to.name,
+            params: to.params,
+            query: to.query
+        }
+        next(false)
     }
 }
 </script>
