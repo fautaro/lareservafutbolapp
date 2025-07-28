@@ -1,18 +1,17 @@
 <!-- src/layouts/DefaultLayout.vue -->
 <template>
-  <div class="relative min-h-screen flex flex-col bg-gray-50 overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+  <div class="relative min-h-screen flex flex-col bg-gray-50 overflow-x-hidden"
+    style='font-family: Inter, "Noto Sans", sans-serif;'>
     <!-- Contenido dinámico de la vista -->
     <main class="flex-1 pb-28">
       <router-view />
     </main>
 
     <!-- Footer fijo -->
-    <div class="fixed bottom-0 left-0 right-0 z-50 flex gap-2 border-t border-[#eaedf1] bg-gray-50 px-4 pb-3 pt-2">
-      <router-link
-        to="/"
-        class="just flex flex-1 flex-col items-center justify-end gap-1"
-        :class="route.name === 'Home' ? 'text-[#101518]' : 'text-[#5c748a]'"
-      >
+    <div class="fixed bottom-0 left-0 right-0 z-50 flex gap-2 border-t border-[#eaedf1] bg-gray-50 px-4 pt-2"
+      style="padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);">
+      <router-link to="/" class="just flex flex-1 flex-col items-center justify-end gap-1"
+        :class="route.name === 'Home' ? 'text-[#101518]' : 'text-[#5c748a]'">
         <div class="flex h-8 items-center justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
             <path
@@ -23,11 +22,8 @@
         <p class="text-xs font-medium leading-normal tracking-[0.015em]">Inicio</p>
       </router-link>
 
-      <router-link
-        to="/reservas"
-        class="just flex flex-1 flex-col items-center justify-end gap-1"
-        :class="route.name === 'MisReservas' ? 'text-[#101518]' : 'text-[#5c748a]'"
-      >
+      <router-link to="/reservas" class="just flex flex-1 flex-col items-center justify-end gap-1"
+        :class="route.name === 'MisReservas' ? 'text-[#101518]' : 'text-[#5c748a]'">
         <div class="flex h-8 items-center justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
             <path
@@ -38,11 +34,8 @@
         <p class="text-xs font-medium leading-normal tracking-[0.015em]">Reservas</p>
       </router-link>
 
-      <router-link
-        to="/menu"
-        class="just flex flex-1 flex-col items-center justify-end gap-1"
-        :class="route.name === 'Menu' ? 'text-[#101518]' : 'text-[#5c748a]'"
-      >
+      <router-link to="/menu" class="just flex flex-1 flex-col items-center justify-end gap-1"
+        :class="route.name === 'Menu' ? 'text-[#101518]' : 'text-[#5c748a]'">
         <div class="flex h-8 items-center justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
             <path
