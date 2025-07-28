@@ -1,7 +1,7 @@
 {
   "name": "La Reserva",
   "short_name": "LaReserva",
-  "start_url": "/",
+  "start_url": "/lareservafutbolapp/",
   "orientation": "portrait",
   "icons": [
     {
