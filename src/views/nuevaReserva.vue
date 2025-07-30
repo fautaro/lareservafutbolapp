@@ -25,7 +25,7 @@
     </div>
 
 
-    <div class="max-w-screen-sm mx-auto pt-6 pb-20">
+    <div class="w-full sm:px-2 pt-6 pb-20">
         <!-- Datos del complejo -->
         <div class="mb-6">
             <h1 class="text-2xl font-bold text-gray-900">{{ complejo.nombre }}</h1>
