@@ -4,6 +4,8 @@ import Home from '../views/Home.vue';
 import MisReservas from '../views/misReservas.vue';
 import nuevaReserva from '../views/nuevaReserva.vue';
 import Menu from '../views/Menu.vue';
+import UserProfile from '../views/User/UserProfile.vue';
+import ConfigUser from '../views/User/ConfigUser.vue';
 
 const routes = [
   {
@@ -29,6 +31,16 @@ const routes = [
         path: 'reservar',
         name: 'NuevaReserva',
         component: nuevaReserva
+      },
+      {
+        path: 'perfil',
+        name: 'UserProfile',
+        component: UserProfile
+      },
+      {
+        path: 'configuracion',
+        name: 'ConfigUser',
+        component: ConfigUser
       }
     ]
   }

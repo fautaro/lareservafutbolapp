@@ -3,7 +3,7 @@
   <div class="relative min-h-screen flex flex-col bg-gray-50 overflow-x-hidden"
     style='font-family: Inter, "Noto Sans", sans-serif;'>
     <!-- Contenido dinámico de la vista -->
-<main class="flex-1 pb-28" style="padding-top: max(12px, env(safe-area-inset-top, 0px));">
+<main class="flex-1 overflow-y-auto pb-28" style="padding-top: max(12px, env(safe-area-inset-top, 0px));">
       <router-view />
     </main>
 
