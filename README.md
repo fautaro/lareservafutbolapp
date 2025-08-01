@@ -1,5 +1,46 @@
-# Vue 3 + Vite
+# 📅 La Reserva
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Aplicación web mobile (PWA – con plan de despliegue futuro en tiendas de aplicaciones)  para **gestionar reservas de canchas deportivas** de forma sencilla, rápida y visual.  
+Permite a los usuarios **ver sus turnos pendientes, pasados y antiguos**, cancelarlos cuando sea necesario y recibir confirmaciones visuales mediante notificaciones y transiciones suaves.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+---
+
+## 🚀 Funcionalidades principales
+
+- **Listado de turnos pendientes** con opción de cancelación.
+- **Sección de turnos pasados y antiguos** para mantener un historial.
+- **Sección de reserva de turnos** para generar una reserva en un complejo determinado.
+- **Menú de configuración** para que el usuario pueda configurar su perfil.
+
+
+---
+
+## 🛠️ Tecnologías utilizadas
+
+- **[Vue 3](https://vuejs.org/)** .
+- **[Tailwind CSS](https://tailwindcss.com/)** 
+- **[Flowbite](https://flowbite.com/)** 
+- **[Font Awesome](https://fontawesome.com/)** 
+- **JavaScript**
+- **HTML5** 
+- **CSS3**
+
+
+
+## ⚙️ Instalación y ejecución
+
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone https://github.com/usuario/mi-proyecto-reservas.git
+   cd mi-proyecto-reservas
+
+   
+2. **Instalar dependencias:**
+   ```bash
+    npm install
+
+       
+3. **Ejecución en modo web:**
+   ```bash
+    npm run dev
