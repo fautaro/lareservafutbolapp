@@ -93,20 +93,34 @@
             Turnos antiguos
         </h2>
 
-        <!-- Cards en otro color (gris suave) -->
-        <section v-for="ta in turnosAntiguos" :key="ta.id"
-            class="relative rounded-xl bg-gray-200 p-4 shadow-sm mb-4 text-left space-y-1">
-            <p class="text-base font-semibold">{{ ta.complejo }}</p>
-            <p class="text-sm text-gray-700">{{ ta.cancha }} · {{ ta.fecha }} · {{ ta.hora }}</p>
-
-            <div class="mt-2 flex items-center justify-between">
-                <p class="inline-flex items-center gap-2 text-sm font-medium text-gray-700">
-                    <i class="fas fa-flag-checkered"></i>
-                    {{ ta.estado }}
-                </p>
-                <p class="text-sm font-semibold text-[#101518]">Resultado: {{ ta.resultado }}</p>
+        <!-- Aviso cuando no hay turnos antiguos -->
+        <div v-if="turnosAntiguos.length === 0"
+            class="rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-600">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-info-circle text-gray-500"></i>
+                <span>No hay turnos antiguos.</span>
             </div>
-        </section>
+        </div>
+
+        <!-- Lista con transición -->
+        <transition-group v-else name="fade" tag="div">
+            <section v-for="ta in turnosAntiguos" :key="ta.id"
+                class="relative rounded-xl bg-gray-200 p-4 shadow-sm mb-4 text-left space-y-1">
+                <p class="text-base font-semibold">{{ ta.complejo }}</p>
+                <p class="text-sm text-gray-700">{{ ta.cancha }} · {{ ta.fecha }} · {{ ta.hora }}</p>
+
+                <div class="mt-2 flex items-center justify-between">
+                    <p class="inline-flex items-center gap-2 text-sm font-medium text-gray-700">
+                        <i class="fas fa-flag-checkered"></i>
+                        {{ ta.estado }}
+                    </p>
+                    <p class="text-sm font-semibold text-[#101518]">
+                        Resultado: {{ ta.resultado }}
+                    </p>
+                </div>
+            </section>
+        </transition-group>
+
         <!-- MODAL ÚNICO -->
         <teleport to="body">
             <div v-if="showModal" class="fixed inset-0 z-[999] grid place-items-center p-4">
