@@ -6,10 +6,9 @@ Permite a los usuarios **ver sus turnos pendientes, pasados y antiguos**, cancel
 ---
 
 ## 🚀 Funcionalidades principales
-
+- **Sección de reserva de turnos** para generar una reserva en un complejo determinado.
 - **Listado de turnos pendientes** con opción de cancelación.
 - **Sección de turnos pasados y antiguos** para mantener un historial.
-- **Sección de reserva de turnos** para generar una reserva en un complejo determinado.
 - **Menú de configuración** para que el usuario pueda configurar su perfil.
 
 
@@ -34,13 +33,9 @@ Permite a los usuarios **ver sus turnos pendientes, pasados y antiguos**, cancel
    ```bash
    git clone https://github.com/usuario/mi-proyecto-reservas.git
    cd mi-proyecto-reservas
-
-   
 2. **Instalar dependencias:**
    ```bash
     npm install
-
-       
 3. **Ejecución en modo web:**
    ```bash
     npm run dev
