@@ -1,7 +1,7 @@
 <template>
     <div class="max-w-4xl mx-auto text-[#101518] font-sans space-y-8">
         <!-- Título -->
-        <h1 class="text-4xl font-bold">Mi cuenta</h1>
+        <h1 class="text-4xl text-left font-bold mb-10">Mi cuenta</h1>
 
         <!-- Sección de perfil -->
         <section class="flex flex-col items-center gap-4">
@@ -71,10 +71,13 @@
         <!-- Botón cerrar sesión -->
         <div class="pt-6">
             <button @click="cerrarSesion"
-                class="w-full sm:w-auto px-5 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-200 rounded-lg transition">
+                class="w-full sm:w-auto px-5 py-2 text-sm font-medium text-white rounded-lg transition focus:outline-none focus:ring-4"
+                style="background-color: #EB5757;" @mouseover="hovering = true" @mouseleave="hovering = false"
+                :style="{ backgroundColor: hovering ? '#D94444' : '#EB5757' }">
                 Cerrar sesión
             </button>
         </div>
+
     </div>
 </template>
 

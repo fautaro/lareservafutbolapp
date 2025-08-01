@@ -3,10 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
-
-
 .card {
   padding: 2em;
 }

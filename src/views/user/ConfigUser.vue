@@ -1,7 +1,7 @@
 <template>
     <div class="p-4 min-h-screen text-[#101518] font-sans">
         <!-- Título -->
-        <h1 class="text-4xl font-bold mb-7 text-left mb-4">Configuración</h1>
+        <h1 class="text-4xl font-bold text-left mb-10">Configuración</h1>
 
         <!-- Campos -->
         <div class="space-y-6">
@@ -40,10 +40,10 @@
                 </span>
                 <label class="relative inline-flex items-center cursor-pointer">
                     <input id="notificaciones" type="checkbox" v-model="form.notificaciones" class="sr-only peer" />
-                    <div class="w-11 h-6 bg-gray-200 peer-checked:bg-blue-600 rounded-full transition-colors"></div>
-                    <div
-                        class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5">
-                    </div>
+                    <div class="w-11 h-6 bg-gray-200 rounded-full transition-colors"
+                        :class="form.notificaciones ? 'bg-[#2D9CDB]' : 'bg-gray-200'"></div>
+                    <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform"
+                        :class="form.notificaciones ? 'translate-x-5' : ''"></div>
                 </label>
             </div>
 
@@ -51,18 +51,22 @@
 
         <!-- Botón guardar -->
         <button type="button" :disabled="!hasChanges" @click="guardarCambios"
-            class="w-full mt-10 text-white bg-blue-600 hover:bg-blue-700 font-medium py-2 rounded transition disabled:opacity-50 disabled:cursor-not-allowed">
+            class="w-full mt-10 text-white font-medium py-2 rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
+            style="background-color: #2D9CDB;" @mouseover="hoverAzul = true" @mouseleave="hoverAzul = false"
+            :style="{ backgroundColor: hoverAzul ? '#249BCF' : '#2D9CDB' }">
             Guardar cambios
         </button>
+
         <transition name="fade">
             <div v-if="showSuccess" class="fixed bottom-20 inset-x-0 flex justify-center z-50 px-4">
-                <div class="flex items-center w-full max-w-xs p-4 text-sm text-white bg-green-500 rounded-lg shadow-lg"
-                    role="alert">
+                <div class="flex items-center w-full max-w-xs p-4 text-sm text-white rounded-lg shadow-lg" role="alert"
+                    style="background-color: #1DB954;">
                     <i class="fas fa-check-circle text-white me-2"></i>
                     <div>Cambios guardados correctamente.</div>
                 </div>
             </div>
         </transition>
+
 
     </div>
 </template>
