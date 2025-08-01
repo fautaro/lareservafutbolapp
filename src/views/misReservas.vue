@@ -1,37 +1,111 @@
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .25s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+</style>
+
 <template>
     <div class="p-4">
         <h1 class="text-4xl font-bold mb-7">Reservas</h1>
-        <!-- LISTA -->
-        <section v-for="(t, i) in turnos" :key="t.id"
-            class="relative rounded-xl bg-blue-100 p-4 shadow-sm mb-4 text-left space-y-1">
-            <!-- botón menú -->
-            <button @click.stop="toggleMenu(i)"
-                class="absolute top-3 right-2 w-9 h-9 inline-flex items-center justify-center rounded-lg hover:bg-white/60"
-                :aria-expanded="(showMenuIndex === i).toString()" aria-haspopup="menu">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 256 256">
-                    <circle cx="128" cy="64" r="10" />
-                    <circle cx="128" cy="128" r="10" />
-                    <circle cx="128" cy="192" r="10" />
-                </svg>
-            </button>
-            <!-- menú -->
-            <div v-if="showMenuIndex === i"
-                class="absolute right-2 top-12 z-50 w-40 rounded-lg border border-gray-200 bg-white shadow-lg"
-                role="menu">
-                <button
-                    class="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 rounded-lg"
-                    @click="openModal(t.id)">
-                    <i class="fas fa-ban"></i> Cancelar
-                </button>
+
+        <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide text-left mb-4">
+            Partidos pendientes
+        </h2>
+
+        <!-- Toast estilo Flowbite -->
+        <transition name="fade">
+            <div v-if="showSuccess" class="fixed bottom-20 inset-x-0 flex justify-center z-50 px-4">
+                <div class="flex items-center w-full max-w-xs p-4 text-sm text-white rounded-lg shadow-lg" role="alert"
+                    style="background-color: #1DB954;">
+                    <i class="fas fa-check-circle text-white me-2"></i>
+                    <div>La reserva ha sido cancelada correctamente.</div>
+                </div>
             </div>
-            <!-- contenido -->
-            <p class="text-base font-semibold">{{ t.complejo }}</p>
-            <p class="text-sm text-gray-700">{{ t.cancha }} · {{ t.fecha }} · {{ t.hora }}</p>
-            <p class="mt-2 inline-flex items-center gap-2 text-lg font-medium"
-                :class="t.estado === 'Confirmado' ? 'text-green-700' : 'text-yellow-700'">
-                <i :class="t.estado === 'Confirmado' ? 'fas fa-circle-check' : 'fas fa-hourglass-half'"></i>
-                {{ t.estado }}
-            </p>
+        </transition>
+
+
+        <!-- Aviso cuando no hay turnos -->
+        <div v-if="turnos.length === 0" class="rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-600">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-info-circle text-gray-500"></i>
+                <span>No hay turnos reservados actualmente.</span>
+            </div>
+        </div>
+
+        <!-- LISTA con transición para fade-out al eliminar -->
+        <transition-group v-else name="fade" tag="div">
+            <section v-for="(t, i) in turnos" :key="t.id"
+                class="relative rounded-xl bg-blue-100 p-4 shadow-sm mb-4 text-left space-y-1">
+                <!-- overlay loader mientras cancela -->
+                <div v-if="cancellingId === t.id"
+                    class="absolute inset-0 z-40 grid place-items-center rounded-xl bg-white/70 backdrop-blur-[1px]">
+                    <div class="inline-flex items-center gap-2 text-sm text-gray-700">
+                        <svg class="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                            <path class="opacity-75" fill="currentColor" d="M4 12a 8 8 0 0 1 8-8v4A4 4 0 0 0 4 12z" />
+                        </svg>
+                        Cancelando turno…
+                    </div>
+                </div>
+
+                <!-- botón menú -->
+                <button @click.stop="toggleMenu(i)"
+                    class="absolute top-3 right-2 w-9 h-9 inline-flex items-center justify-center rounded-lg hover:bg-white/60"
+                    :aria-expanded="(showMenuIndex === i).toString()" aria-haspopup="menu"
+                    :disabled="cancellingId === t.id">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 256 256">
+                        <circle cx="128" cy="64" r="10" />
+                        <circle cx="128" cy="128" r="10" />
+                        <circle cx="128" cy="192" r="10" />
+                    </svg>
+                </button>
+
+                <!-- menú -->
+                <div v-if="showMenuIndex === i"
+                    class="absolute right-2 top-12 z-50 w-40 rounded-lg border border-gray-200 bg-white shadow-lg"
+                    role="menu">
+                    <button
+                        class="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 rounded-lg"
+                        @click="openModal(t.id)">
+                        <i class="fas fa-ban"></i>
+                        Cancelar
+                    </button>
+                </div>
+
+                <!-- contenido -->
+                <p class="text-base font-semibold">{{ t.complejo }}</p>
+                <p class="text-sm text-gray-700">{{ t.cancha }} · {{ t.fecha }} · {{ t.hora }}</p>
+                <p class="mt-2 inline-flex items-center gap-2 text-lg font-medium"
+                    :class="t.estado === 'Confirmado' ? 'text-green-700' : 'text-yellow-700'">
+                    <i :class="t.estado === 'Confirmado' ? 'fas fa-circle-check' : 'fas fa-hourglass-half'"></i>
+                    {{ t.estado }}
+                </p>
+            </section>
+        </transition-group>
+
+        <h2 class="mt-8 text-sm font-semibold text-gray-500 uppercase tracking-wide text-left mb-4">
+            Turnos antiguos
+        </h2>
+
+        <!-- Cards en otro color (gris suave) -->
+        <section v-for="ta in turnosAntiguos" :key="ta.id"
+            class="relative rounded-xl bg-gray-200 p-4 shadow-sm mb-4 text-left space-y-1">
+            <p class="text-base font-semibold">{{ ta.complejo }}</p>
+            <p class="text-sm text-gray-700">{{ ta.cancha }} · {{ ta.fecha }} · {{ ta.hora }}</p>
+
+            <div class="mt-2 flex items-center justify-between">
+                <p class="inline-flex items-center gap-2 text-sm font-medium text-gray-700">
+                    <i class="fas fa-flag-checkered"></i>
+                    {{ ta.estado }}
+                </p>
+                <p class="text-sm font-semibold text-[#101518]">Resultado: {{ ta.resultado }}</p>
+            </div>
         </section>
         <!-- MODAL ÚNICO -->
         <teleport to="body">
@@ -74,33 +148,50 @@ export default {
                 { id: 1, complejo: 'Complejo Deportivo Norte', cancha: 'Cancha 1', fecha: '01/01/2026', hora: '13:00', estado: 'Confirmado' },
                 { id: 2, complejo: 'Club Parque Sur', cancha: 'Cancha 2', fecha: '05/01/2026', hora: '20:30', estado: 'Pendiente' },
             ],
-            showMenuIndex: null,   // solo un menú abierto
-            showModal: false,      // modal único
-            selectedId: null,      // id del turno a operar
+            turnosAntiguos: [
+                {
+                    id: 201,
+                    complejo: 'Polideportivo Oeste',
+                    cancha: 'Cancha 4',
+                    fecha: '10/10/2025',
+                    hora: '19:00',
+                    estado: 'Finalizado',
+                    resultado: '1 - 3',
+                },
+                {
+                    id: 202,
+                    complejo: 'Club Central',
+                    cancha: 'Cancha 2',
+                    fecha: '02/11/2025',
+                    hora: '21:00',
+                    estado: 'Finalizado',
+                    resultado: '2 - 2',
+                }],
+            showMenuIndex: null,
+            showModal: false,
+            selectedId: null,
+
+            // loader por card
+            cancellingId: null,
+            showSuccess: false,
+            successTimer: null,
         }
     },
     computed: {
+        sinTurnos() {
+            return this.turnos.length === 0
+        },
         turnoSeleccionado() {
             return this.turnos.find(t => t.id === this.selectedId) || null
         },
     },
-    mounted() {
-        // cerrar menú al click fuera (simple)
-        document.addEventListener('click', this.closeMenuOnOutside)
-    },
-    unmounted() {
-        document.removeEventListener('click', this.closeMenuOnOutside)
+    beforeUnmount() {
+        if (this.toastTimer) clearTimeout(this.toastTimer)
     },
     methods: {
         toggleMenu(i) {
+            if (this.cancellingId !== null) return
             this.showMenuIndex = this.showMenuIndex === i ? null : i
-        },
-        closeMenuOnOutside(e) {
-            // si hay menú abierto y el click no viene de un botón de menú, cerramos
-            // (esto es básico: si querés 100% robusto, chequeá target.closest por selector)
-            if (this.showMenuIndex !== null && !e.target.closest('[role="menu"],[aria-haspopup="menu"]')) {
-                this.showMenuIndex = null
-            }
         },
         openModal(id) {
             this.selectedId = id
@@ -109,12 +200,21 @@ export default {
         },
         closeModal() {
             this.showModal = false
-            this.selectedId = null
         },
         confirmCancel() {
-            const t = this.turnoSeleccionado
-            // TODO: cancelar turno con t.id (API)
-            this.closeModal()
+            const id = this.selectedId
+            this.showModal = false
+            this.cancellingId = id
+
+            setTimeout(() => {
+                this.turnos = this.turnos.filter(t => t.id !== id)
+                this.cancellingId = null
+                this.selectedId = null
+                this.showSuccess = true
+
+                if (this.successTimer) clearTimeout(this.successTimer)
+                this.successTimer = setTimeout(() => (this.showSuccess = false), 3000)
+            }, 2000)
         },
     },
 }
