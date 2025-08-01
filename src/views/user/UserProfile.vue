@@ -1,41 +1,97 @@
 <template>
-    <!-- Título -->
-<div class="p-4 text-gray-700">
-  <h1 class="text-4xl font-bold text-[#101518] text-left mb-7">Mi cuenta</h1>
-</div>
+    <div class="max-w-4xl mx-auto text-[#101518] font-sans space-y-8">
+        <!-- Título -->
+        <h1 class="text-4xl font-bold">Mi cuenta</h1>
 
-    <div class="p-4 text-[#101518] space-y-6" style="font-family: Inter, 'Noto Sans', sans-serif;">
-        <!-- Perfil -->
-        <div class="flex flex-col items-center space-y-4">
+        <!-- Sección de perfil -->
+        <section class="flex flex-col items-center gap-4">
             <img src="https://i.ibb.co/7J6gkj7s/28003-1740766555.webp" alt="Foto de perfil"
                 class="w-32 h-32 rounded-full object-cover border border-gray-300" />
-            <p class="text-xl font-semibold">Juan Perez</p>
-        </div>
+            <h2 class="text-2xl font-semibold">Juan Perez</h2>
+            <!-- Label de rol -->
+            <p class="text-sm text-gray-600">Rol: <span class="font-medium">{{ rol }}</span></p>
+            <!-- Estado de verificación -->
+            <span class="px-3 py-1 text-sm rounded-full font-medium"
+                :class="cuentaVerificada ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-800'">
+                {{ cuentaVerificada ? 'Cuenta verificada' : 'Cuenta sin verificar' }}
+            </span>
+        </section>
 
-        <!-- Datos de usuario -->
-        <div class="space-y-4">
-            <div class="border-b pb-2">
-                <p class="text-sm text-gray-500">Usuario</p>
-                <p class="text-base">fautaro123</p>
+        <!-- Datos del usuario -->
+        <section class="border border-gray-100 rounded-lg divide-y divide-gray-200">
+            <div class="flex items-center justify-between px-6 py-3">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-user text-gray-500"></i>
+                    <span class="text-sm text-gray-500">Usuario</span>
+                </div>
+                <span class="text-base font-medium text-[#101518]">fautaro123</span>
             </div>
-            <div class="border-b pb-2">
-                <p class="text-sm text-gray-500">Email</p>
-                <p class="text-base">fautaro@email.com</p>
+
+            <div class="flex items-center justify-between px-6 py-3">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-envelope text-gray-500"></i>
+                    <span class="text-sm text-gray-500">Email</span>
+                </div>
+                <span class="text-base font-medium text-[#101518]">fautaro@email.com</span>
             </div>
-            <div class="border-b pb-2">
-                <p class="text-sm text-gray-500">Fecha de registro</p>
-                <p class="text-base">15 de marzo de 2024</p>
+
+            <div class="flex items-center justify-between px-6 py-3">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-calendar-alt text-gray-500"></i>
+                    <span class="text-sm text-gray-500">Fecha de registro</span>
+                </div>
+                <span class="text-base font-medium text-[#101518]">15/03/2024</span>
             </div>
-            <div class="border-b pb-2">
-                <p class="text-sm text-gray-500">Teléfono</p>
-                <p class="text-base">+54 9 11 2345-6789</p>
+
+            <div class="flex items-center justify-between px-6 py-3">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-phone text-gray-500"></i>
+                    <span class="text-sm text-gray-500">Teléfono</span>
+                </div>
+                <span class="text-base font-medium text-[#101518]">+54 9 11 2345-6789</span>
             </div>
+
+            <div class="flex items-center justify-between px-6 py-3">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-futbol text-gray-500"></i>
+                    <span class="text-sm text-gray-500">Partidos jugados</span>
+                </div>
+                <span class="text-base font-medium text-[#101518]">25</span>
+            </div>
+
+            <div class="flex items-center justify-between px-6 py-3">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-trophy text-gray-500"></i>
+                    <span class="text-sm text-gray-500">Deporte preferido</span>
+                </div>
+                <span class="text-base font-medium text-[#101518]">Fútbol</span>
+            </div>
+
+        </section>
+        <!-- Botón cerrar sesión -->
+        <div class="pt-6">
+            <button @click="cerrarSesion"
+                class="w-full sm:w-auto px-5 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-200 rounded-lg transition">
+                Cerrar sesión
+            </button>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'UserProfile'
+    name: 'UserProfile',
+    data() {
+        return {
+            rol: 'Jugador', // o 'Dueño de cancha'
+            cuentaVerificada: true // o false
+        }
+    },
+    methods: {
+        cerrarSesion() {
+            // lógica real de logout
+            console.log('Sesión cerrada')
+        }
+    }
 }
 </script>

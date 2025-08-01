@@ -1,7 +1,7 @@
 <template>
     <div class="p-4 min-h-screen text-[#101518] font-sans">
         <!-- Título -->
-        <h1 class="text-4xl font-bold mb-7">Configuración</h1>
+        <h1 class="text-4xl font-bold mb-7 text-left mb-4">Configuración</h1>
 
         <!-- Campos -->
         <div class="space-y-6">
