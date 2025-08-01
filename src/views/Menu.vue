@@ -5,26 +5,22 @@
 
     <!-- Lista de opciones -->
     <div class="flex flex-col gap-6">
-      <router-link
-        :to="{ name: 'UserProfile' }"
-        class="no-underline text-inherit flex items-center gap-3 border-b border-gray-200 pb-3 text-lg font-medium"
-      >
+      <router-link :to="{ name: 'UserProfile' }"
+        class="no-underline text-inherit flex items-center gap-3 border-b border-gray-200 pb-3 text-lg font-medium">
         <i class="fas fa-user w-5 text-[#5c748a]"></i>
         Mi perfil
       </router-link>
 
-      <router-link
-        :to="{ name: 'ConfigUser' }"
-        class="no-underline text-inherit flex items-center gap-3 border-b border-gray-200 pb-3 text-lg font-medium"
-      >
+      <router-link :to="{ name: 'ConfigUser' }"
+        class="no-underline text-inherit flex items-center gap-3 border-b border-gray-200 pb-3 text-lg font-medium">
         <i class="fas fa-cog w-5 text-[#5c748a]"></i>
         Configuración
       </router-link>
-
-      <div class="flex items-center gap-3 border-b border-gray-200 pb-3 text-lg font-medium">
+      <router-link :to="{ name: 'Help' }"
+        class="no-underline text-inherit flex items-center gap-3 border-b border-gray-200 pb-3 text-lg font-medium">
         <i class="fas fa-circle-question w-5 text-[#5c748a]"></i>
         Ayuda
-      </div>
+      </router-link>
     </div>
   </div>
 </template>
