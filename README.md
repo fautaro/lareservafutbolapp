@@ -31,8 +31,8 @@ Permite a los usuarios **ver sus turnos pendientes, pasados y antiguos**, cancel
 
 1. **Clonar el repositorio:**
    ```bash
-   git clone https://github.com/usuario/mi-proyecto-reservas.git
-   cd mi-proyecto-reservas
+   git clone https://github.com/fautaro/lareservafutbolapp.git
+   
 2. **Instalar dependencias:**
    ```bash
     npm install
