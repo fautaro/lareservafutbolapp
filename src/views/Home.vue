@@ -3,10 +3,9 @@
 <template>
   <div class="relative min-h-screen">
     <!-- Loader -->
-    <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-white/80 z-50">
-      <div class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+    <div v-if="loading" class="absolute inset-0 flex items-center justify-center z-50">
+      <img :src="logo" alt="Logo" class="w-36 h-36 animate-bounce" />
     </div>
-
     <!-- Contenido Principal -->
     <transition name="fade" mode="out-in">
       <div v-if="!loading" key="main-content">
@@ -80,6 +79,7 @@
 
 <script>
 import CitySelectorDrawer from '../components/Home/CitySelectorDrawer.vue'
+import logo from '../assets/logo.svg'
 
 export default {
   components: {
@@ -87,6 +87,7 @@ export default {
   },
   data() {
     return {
+      logo,
       loading: true,
       ciudadSeleccionada: { id: 1, nombre: 'Viedma' },
       deporteSeleccionado: null,
@@ -117,20 +118,22 @@ export default {
       } catch (e) {
         console.error('Error cargando los datos:', e)
       } finally {
-        this.loading = false;
+        setTimeout(() => {
+          this.loading = false;
+        }, 3000);
       }
-    },
-    toggleDeporte(nombre) {
-      this.deporteSeleccionado =
-        this.deporteSeleccionado === nombre ? null : nombre;
-    },
-    onCitySelected(ciudad) {
-      this.ciudadSeleccionada = ciudad;
-    },
-    nuevaReserva(complejoId) {
-      this.$router.push({ name: 'NuevaReserva', query: { id: complejoId } })
     }
-    
+  },
+  toggleDeporte(nombre) {
+    this.deporteSeleccionado =
+      this.deporteSeleccionado === nombre ? null : nombre;
+  },
+  onCitySelected(ciudad) {
+    this.ciudadSeleccionada = ciudad;
+  },
+  nuevaReserva(complejoId) {
+    this.$router.push({ name: 'NuevaReserva', query: { id: complejoId } })
   }
+
 };
 </script>

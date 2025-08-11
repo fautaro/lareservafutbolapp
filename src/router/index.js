@@ -5,7 +5,7 @@ import MisReservas from '../views/misReservas.vue';
 import nuevaReserva from '../views/nuevaReserva.vue';
 import Menu from '../views/Menu.vue';
 import UserProfile from '../views/User/UserProfile.Vue';
-import ConfigUser from '../views/User/ConfigUser.vue';
+import ConfigUser from '../views/user/ConfigUser.vue';
 import Help from '../views/User/Help.Vue';
 
 const routes = [
