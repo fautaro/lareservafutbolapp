@@ -3,12 +3,13 @@
   <div class="relative min-h-screen flex flex-col bg-gray-50 overflow-x-hidden"
     style='font-family: Inter, "Noto Sans", sans-serif;'>
     <!-- Contenido dinámico de la vista -->
-<main class="flex-1 overflow-y-auto pb-28" style="padding-top: max(12px, env(safe-area-inset-top, 0px));">
+    <main class="flex-1 overflow-y-auto pb-28" style="padding-top: max(12px, env(safe-area-inset-top, 0px));">
       <router-view />
     </main>
 
     <!-- Footer fijo -->
-    <div class="fixed bottom-0 left-0 right-0 z-50 flex gap-2 border-t border-[#eaedf1] bg-gray-50 px-4 pt-2" style="padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px) * 0.4);">
+    <div class="fixed bottom-0 left-0 right-0 z-50 flex gap-2 border-t border-[#eaedf1] bg-gray-50 px-4 pt-2"
+      style="padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px) * 0.4);">
       <router-link to="/" class="just flex flex-1 flex-col items-center justify-end gap-1"
         :class="route.name === 'Home' ? 'text-[#101518]' : 'text-[#5c748a]'">
         <div class="flex h-8 items-center justify-center">
