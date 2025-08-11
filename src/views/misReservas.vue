@@ -121,7 +121,6 @@
             </section>
         </transition-group>
 
-        <!-- MODAL ÚNICO -->
         <teleport to="body">
             <div v-if="showModal" class="fixed inset-0 z-[999] grid place-items-center p-4">
                 <div class="absolute inset-0 bg-black/50" @click="closeModal"></div>
@@ -154,6 +153,8 @@
 </template>
 
 <script>
+import { startLoader, stopLoader } from '../services/globalLoader'
+
 export default {
     name: 'Reservas',
     data() {
@@ -163,46 +164,42 @@ export default {
                 { id: 2, complejo: 'Club Parque Sur', cancha: 'Cancha 2', fecha: '05/01/2026', hora: '20:30', estado: 'Pendiente' },
             ],
             turnosAntiguos: [
-                {
-                    id: 201,
-                    complejo: 'Polideportivo Oeste',
-                    cancha: 'Cancha 4',
-                    fecha: '10/10/2025',
-                    hora: '19:00',
-                    estado: 'Finalizado',
-                    resultado: '1 - 3',
-                },
-                {
-                    id: 202,
-                    complejo: 'Club Central',
-                    cancha: 'Cancha 2',
-                    fecha: '02/11/2025',
-                    hora: '21:00',
-                    estado: 'Finalizado',
-                    resultado: '2 - 2',
-                }],
+                { id: 201, complejo: 'Polideportivo Oeste', cancha: 'Cancha 4', fecha: '10/10/2025', hora: '19:00', estado: 'Finalizado', resultado: '1 - 3' },
+                { id: 202, complejo: 'Club Central', cancha: 'Cancha 2', fecha: '02/11/2025', hora: '21:00', estado: 'Finalizado', resultado: '2 - 2' },
+            ],
             showMenuIndex: null,
             showModal: false,
             selectedId: null,
-
-            // loader por card
             cancellingId: null,
             showSuccess: false,
             successTimer: null,
+            _loaderTimer: null,
         }
     },
+
+    mounted() {
+        this.loadData() 
+    },
+
     computed: {
-        sinTurnos() {
-            return this.turnos.length === 0
-        },
-        turnoSeleccionado() {
-            return this.turnos.find(t => t.id === this.selectedId) || null
-        },
+        sinTurnos() { return this.turnos.length === 0 },
+        turnoSeleccionado() { return this.turnos.find(t => t.id === this.selectedId) || null },
     },
+
     beforeUnmount() {
-        if (this.toastTimer) clearTimeout(this.toastTimer)
+        if (this._loaderTimer) clearTimeout(this._loaderTimer)
+        if (this.successTimer) clearTimeout(this.successTimer)
     },
+
     methods: {
+        loadData() {
+            startLoader()
+            this._loaderTimer = setTimeout(() => {
+                stopLoader()
+                this._loaderTimer = null
+            }, 1000) 
+        },
+
         toggleMenu(i) {
             if (this.cancellingId !== null) return
             this.showMenuIndex = this.showMenuIndex === i ? null : i
@@ -212,9 +209,8 @@ export default {
             this.showModal = true
             this.showMenuIndex = null
         },
-        closeModal() {
-            this.showModal = false
-        },
+        closeModal() { this.showModal = false },
+
         confirmCancel() {
             const id = this.selectedId
             this.showModal = false
