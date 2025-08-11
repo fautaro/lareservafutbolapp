@@ -24,7 +24,7 @@
                 <div class="flex items-center w-full max-w-xs p-4 text-sm text-white rounded-lg shadow-lg" role="alert"
                     style="background-color: #1DB954;">
                     <i class="fas fa-check-circle text-white me-2"></i>
-                    <div>La reserva ha sido cancelada correctamente.</div>
+                    <div>La reserva ha sido cancelada.</div>
                 </div>
             </div>
         </transition>
@@ -34,7 +34,7 @@
         <div v-if="turnos.length === 0" class="rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-600">
             <div class="flex items-center gap-2">
                 <i class="fas fa-info-circle text-gray-500"></i>
-                <span>No hay turnos reservados actualmente.</span>
+                <span>No hay turnos reservados.</span>
             </div>
         </div>
 

@@ -14,9 +14,7 @@
                         class="block w-full px-3 py-2 text-sm text-gray-900 border rounded-lg appearance-none bg-white disabled:bg-gray-100 disabled:cursor-not-allowed focus:ring-blue-500 focus:border-blue-500">
                         <option disabled value="">Seleccionar ciudad</option>
                         <option value="Viedma">Viedma</option>
-                        <option value="Buenos Aires">Buenos Aires</option>
-                        <option value="Córdoba">Córdoba</option>
-                        <option value="Mendoza">Mendoza</option>
+                        <option value="Patagones">Patagones</option>
                     </select>
 
                     <!-- INPUT para Teléfono y Contraseña -->
