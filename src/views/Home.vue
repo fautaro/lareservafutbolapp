@@ -3,7 +3,6 @@
 <template>
   <div class="relative min-h-screen">
     <!-- Contenido Principal -->
-    <transition name="fade" mode="out-in">
       <div v-if="!loading" key="main-content">
         <div class="flex items-center bg-gray-50 p-4 pb-2 justify-between">
           <h1 class="text-[#101518] text-3xl font-bold leading-tight tracking-[-0.025em]">
@@ -71,7 +70,6 @@
 
         <div class="h-5 bg-gray-50"></div>
       </div>
-    </transition>
   </div>
 </template>
 

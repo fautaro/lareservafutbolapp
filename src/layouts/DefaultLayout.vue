@@ -9,12 +9,16 @@
         <img :src="logo" alt="Logo" class="w-36 h-36 animate-bounce" />
       </div>
 
-      <router-view />
+      <router-view v-slot="{ Component, route }">
+        <transition name="fade" mode="out-in" appear>
+          <component :is="Component" :key="route.fullPath" />
+        </transition>
+      </router-view>
     </main>
 
     <!-- Footer fijo -->
     <div class="fixed bottom-0 left-0 right-0 z-40 flex gap-2 border-t border-[#eaedf1] bg-gray-50 px-4 pt-2"
-      :class="loading ?  'pointer-events-none opacity-50 select-none' : ''"
+      :class="loading ? 'pointer-events-none opacity-50 select-none' : ''"
       style="padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px) * 0.4);">
       <router-link to="/" class="just flex flex-1 flex-col items-center justify-end gap-1"
         :class="route.name === 'Home' ? 'text-[#101518]' : 'text-[#5c748a]'">
