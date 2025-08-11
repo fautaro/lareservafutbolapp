@@ -122,9 +122,8 @@ export default {
           this.loading = false;
         }, 3000);
       }
-    }
-  },
-  toggleDeporte(nombre) {
+    },
+      toggleDeporte(nombre) {
     this.deporteSeleccionado =
       this.deporteSeleccionado === nombre ? null : nombre;
   },
@@ -134,6 +133,6 @@ export default {
   nuevaReserva(complejoId) {
     this.$router.push({ name: 'NuevaReserva', query: { id: complejoId } })
   }
-
+  }
 };
 </script>
