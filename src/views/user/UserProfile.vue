@@ -1,3 +1,12 @@
+    <style>
+        .btn-logout {
+            background-color: #EB5757;
+        }
+
+        .btn-logout:hover {
+            background-color: #D94444;
+        }
+    </style>
 <template>
     <div class="max-w-4xl mx-auto text-[#101518] font-sans space-y-8">
         <!-- Título -->
@@ -70,14 +79,13 @@
         </section>
         <!-- Botón cerrar sesión -->
         <div class="pt-6">
-            <button @click="cerrarSesion"
-                class="w-full sm:w-auto px-5 py-2 text-sm font-medium text-white rounded-lg transition focus:outline-none focus:ring-4"
-                style="background-color: #EB5757;" @mouseover="hovering = true" @mouseleave="hovering = false"
-                :style="{ backgroundColor: hovering ? '#D94444' : '#EB5757' }">
-                Cerrar sesión
-            </button>
+            <div class="pt-6">
+                <button @click="cerrarSesion"
+                    class="btn-logout w-full sm:w-auto px-5 py-2 text-sm font-medium text-white rounded-lg transition focus:outline-none focus:ring-4">
+                    Cerrar sesión
+                </button>
+            </div>
         </div>
-
     </div>
 </template>
 

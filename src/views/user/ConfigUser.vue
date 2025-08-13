@@ -1,3 +1,12 @@
+<style>
+.btn-guardar {
+  background-color: #2D9CDB;
+}
+
+.btn-guardar:hover {
+  background-color: #249BCF;
+}
+</style>
 <template>
     <div class="p-4 min-h-screen text-[#101518] font-sans">
         <!-- Título -->
@@ -44,17 +53,12 @@
                         :class="form.notificaciones ? 'translate-x-5' : ''"></div>
                 </label>
             </div>
-
         </div>
-
         <!-- Botón guardar -->
         <button type="button" :disabled="!hasChanges" @click="guardarCambios"
-            class="w-full mt-10 text-white font-medium py-2 rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
-            style="background-color: #2D9CDB;" @mouseover="hoverAzul = true" @mouseleave="hoverAzul = false"
-            :style="{ backgroundColor: hoverAzul ? '#249BCF' : '#2D9CDB' }">
+            class="btn-guardar w-full mt-10 text-white font-medium py-2 rounded transition disabled:opacity-50 disabled:cursor-not-allowed">
             Guardar cambios
         </button>
-
         <transition name="fade">
             <div v-if="showSuccess" class="fixed bottom-20 inset-x-0 flex justify-center z-50 px-4">
                 <div class="flex items-center w-full max-w-xs p-4 text-sm text-white rounded-lg shadow-lg" role="alert"
@@ -64,8 +68,6 @@
                 </div>
             </div>
         </transition>
-
-
     </div>
 </template>
 
