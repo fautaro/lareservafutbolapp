@@ -1,4 +1,5 @@
 <template>
+    <div class="nueva-reserva-wrapper">
     <!-- Botón de cerrar -->
     <div class="absolute top-4 right-4 z-10">
         <div @click="onCerrarClick" class="text-gray-500 hover:text-red-500 transition-colors">
@@ -85,6 +86,8 @@
             No hay canchas disponibles para los horarios seleccionados.
         </div>
     </div>
+        </div>
+
 </template>
 
 <script>
