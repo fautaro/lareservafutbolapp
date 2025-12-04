@@ -57,8 +57,6 @@ const error = ref(null);
 
 // Manejar redirección si viene con código de autorización
 onMounted(() => {
-  // El SDK de Auth0 maneja automáticamente el callback
-  // Si el usuario ya está autenticado, redirigir a home
 });
 
 const loginWithAuth0 = async () => {
