@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-green-50 p-4" style="font-family: Inter, 'Noto Sans', sans-serif;">
+  <div class="min-h-screen flex items-center justify-center p-4" style="font-family: Inter, 'Noto Sans', sans-serif; background-color: #F9FAFB;">
     <div class="w-full max-w-md">
       <!-- Card principal -->
       <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
@@ -42,8 +42,6 @@
     </div>
   </div>
 </template>
-
-
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useAuth0 } from '@auth0/auth0-vue';
