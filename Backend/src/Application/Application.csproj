@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Complejos\Commands\" />
     <Folder Include="DTOs\" />
   </ItemGroup>
 
