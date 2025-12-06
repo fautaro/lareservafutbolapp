@@ -38,5 +38,6 @@
     <PackageVersion Include="Respawn" Version="6.2.1" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.35.0" />
     <PackageVersion Include="Testcontainers.MsSql" Version="3.9.0" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 </Project>
