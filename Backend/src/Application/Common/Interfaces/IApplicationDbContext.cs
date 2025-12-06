@@ -9,6 +9,7 @@ public interface IApplicationDbContext
     DbSet<Usuario> Usuarios { get; }
     DbSet<Ciudad> Ciudades { get; }
     DbSet<Complejo> Complejos { get; }
+    DbSet<Deporte> Deportes { get; }
     DbSet<TipoCancha> TipoCanchas { get; }
     DbSet<Cancha> Canchas { get; }
     DbSet<Reserva> Reservas { get; }

@@ -16,6 +16,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<Usuario> Usuarios => Set<Usuario>();
     public DbSet<Ciudad> Ciudades => Set<Ciudad>();
     public DbSet<Complejo> Complejos => Set<Complejo>();
+    public DbSet<Deporte> Deportes => Set<Deporte>();
     public DbSet<TipoCancha> TipoCanchas => Set<TipoCancha>();
     public DbSet<Cancha> Canchas => Set<Cancha>();
     public DbSet<Reserva> Reservas => Set<Reserva>();
@@ -59,6 +60,15 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             b.Property(x => x.Nombre).HasMaxLength(100).IsRequired();
         });
 
+        modelBuilder.Entity<Deporte>(b =>
+        {
+            b.ToTable("Deporte");
+            b.Property(x => x.Nombre).HasMaxLength(100).IsRequired();
+            b.Property(x => x.Icon).HasMaxLength(200);
+            b.Property(x => x.BgClass).HasMaxLength(100);
+            b.Property(x => x.TextClass).HasMaxLength(100);
+        });
+
         modelBuilder.Entity<Complejo>(b =>
         {
             b.ToTable("Complejo");
@@ -68,6 +78,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             b.Property(x => x.Precio).HasColumnType("decimal(10,2)");
             b.Property(x => x.Imagen);
             b.Property(x => x.Estado).HasDefaultValue(true);
+            b.Property(x => x.Categoria).HasMaxLength(100);
+            b.Property(x => x.DeportePillBg).HasMaxLength(100);
+            b.Property(x => x.DeportePillText).HasMaxLength(100);
 
             b.Property(x => x.FechaCreacion)
              .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -81,6 +94,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
              .WithMany(u => u.ComplejosComoDueno)
              .HasForeignKey(x => x.DuenoId)
              .OnDelete(DeleteBehavior.Restrict);
+
+            b.HasOne(x => x.Deporte)
+             .WithMany(d => d.Complejos)
+             .HasForeignKey(x => x.DeporteId)
+             .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<TipoCancha>(b =>

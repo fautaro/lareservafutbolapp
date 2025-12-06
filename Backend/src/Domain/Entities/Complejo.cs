@@ -19,10 +19,20 @@ public class Complejo
     public long DuenoId { get; set; }
     public Usuario? Dueno { get; set; }
 
+    public long? DeporteId { get; set; }
+    public Deporte? Deporte { get; set; }
+
     [Column(TypeName = "decimal(10,2)")]
     public decimal? Precio { get; set; }
 
     public string? Imagen { get; set; }
+
+    [MaxLength(100)]
+    public string? Categoria { get; set; }
+    [MaxLength(100)]
+    public string? DeportePillBg { get; set; }
+    [MaxLength(100)]
+    public string? DeportePillText { get; set; }
 
     public bool Estado { get; set; } = true;
 
