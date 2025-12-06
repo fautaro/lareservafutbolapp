@@ -1,6 +1,5 @@
 ﻿using System.Runtime.InteropServices;
 using LaReservaBackend.Domain.Constants;
-using LaReservaBackend.Domain.Entities;
 using LaReservaBackend.Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -47,8 +46,9 @@ public class ApplicationDbContextInitialiser
         }
         catch (Exception ex)
         {
+            // Log error but do not rethrow to avoid breaking design-time tools (e.g. NSwag) or builds when DB is not available.
             _logger.LogError(ex, "An error occurred while initialising the database.");
-            throw;
+            // Swallow exception intentionally.
         }
     }
 
@@ -60,8 +60,9 @@ public class ApplicationDbContextInitialiser
         }
         catch (Exception ex)
         {
+            // Log error but do not rethrow to avoid breaking design-time tools (e.g. NSwag) or builds when DB is not available.
             _logger.LogError(ex, "An error occurred while seeding the database.");
-            throw;
+            // Swallow exception intentionally.
         }
     }
 
@@ -85,25 +86,6 @@ public class ApplicationDbContextInitialiser
             {
                 await _userManager.AddToRolesAsync(administrator, new [] { administratorRole.Name });
             }
-        }
-
-        // Default data
-        // Seed, if necessary
-        if (!_context.TodoLists.Any())
-        {
-            _context.TodoLists.Add(new TodoList
-            {
-                Title = "Todo List",
-                Items =
-                {
-                    new TodoItem { Title = "Make a todo list 📃" },
-                    new TodoItem { Title = "Check off the first item ✅" },
-                    new TodoItem { Title = "Realise you've already done two things on the list! 🤯"},
-                    new TodoItem { Title = "Reward yourself with a nice, long nap 🏆" },
-                }
-            });
-
-            await _context.SaveChangesAsync();
         }
     }
 }
