@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using LaReservaBackend.Domain.Entities;
+﻿using LaReservaBackend.Domain.Entities;
 
 namespace LaReservaBackend.Application.Common.Interfaces;
 

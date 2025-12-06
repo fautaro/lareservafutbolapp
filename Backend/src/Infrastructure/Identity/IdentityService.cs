@@ -2,7 +2,6 @@ using LaReservaBackend.Application.Common.Interfaces;
 using LaReservaBackend.Application.Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace LaReservaBackend.Infrastructure.Identity;
 

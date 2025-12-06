@@ -1,4 +1,3 @@
-using MediatR;
 using LaReservaBackend.Application.Complejos.Queries.GetComplejos;
 
 var builder = WebApplication.CreateBuilder(args);

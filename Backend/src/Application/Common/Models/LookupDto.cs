@@ -1,6 +1,4 @@
-﻿using LaReservaBackend.Domain.Entities;
-
-namespace LaReservaBackend.Application.Common.Models;
+﻿namespace LaReservaBackend.Application.Common.Models;
 
 public class LookupDto
 {

@@ -4,5 +4,5 @@ namespace LaReservaBackend.Application.Common.Interfaces;
 
 public interface IComplejosRepository
 {
- Task<List<ComplejoDTO>> GetComplejos(long? ciudadId = null, long? deporteId = null, long? complejoId = null);
+    Task<List<ComplejoDTO>> GetComplejos(long? ciudadId = null, long? deporteId = null, long? complejoId = null);
 }

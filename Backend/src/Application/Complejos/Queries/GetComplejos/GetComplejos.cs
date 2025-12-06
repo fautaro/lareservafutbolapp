@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
-
-namespace LaReservaBackend.Application.Complejos.Queries.GetComplejos;
+﻿namespace LaReservaBackend.Application.Complejos.Queries.GetComplejos;
 
 public class GetComplejosRequest : IRequest<GetComplejosResponse>
 {

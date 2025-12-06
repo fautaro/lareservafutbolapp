@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace LaReservaBackend.Application.Complejos.Queries.GetComplejos;
+﻿namespace LaReservaBackend.Application.Complejos.Queries.GetComplejos;
 
 public class GetComplejosResponse
 {
