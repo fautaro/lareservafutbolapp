@@ -24,66 +24,72 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     {
         base.OnModelCreating(modelBuilder);
 
-        // Tablas y restricciones
+        // TipoUsuario
         modelBuilder.Entity<TipoUsuario>(b =>
         {
-            b.ToTable("TipoUsuario");
+            b.ToTable("tipousuario");
+            b.Property(x => x.Id).HasColumnName("id");
+            b.Property(x => x.Nombre).HasColumnName("nombre").HasMaxLength(20).IsRequired();
             b.HasIndex(x => x.Nombre).IsUnique();
-            b.Property(x => x.Nombre).HasMaxLength(20).IsRequired();
         });
 
+        // Usuario
         modelBuilder.Entity<Usuario>(b =>
         {
-            b.ToTable("Usuario");
+            b.ToTable("usuario");
+            b.Property(x => x.Id).HasColumnName("id");
+            b.Property(x => x.Auth0Id).HasColumnName("auth0id").HasMaxLength(128).IsRequired();
+            b.Property(x => x.Nombre).HasColumnName("nombre").HasMaxLength(100).IsRequired();
+            b.Property(x => x.Email).HasColumnName("email").HasMaxLength(100).IsRequired();
+            b.Property(x => x.Telefono).HasColumnName("telefono").HasMaxLength(20);
+            b.Property(x => x.TipoUsuarioId).HasColumnName("tipousuarioid");
+            b.Property(x => x.FechaRegistro).HasColumnName("fecharegistro").HasDefaultValueSql("CURRENT_TIMESTAMP");
             b.HasIndex(x => x.Auth0Id).IsUnique();
             b.HasIndex(x => x.Email).IsUnique();
-
-            b.Property(x => x.Auth0Id).HasMaxLength(128).IsRequired();
-            b.Property(x => x.Nombre).HasMaxLength(100).IsRequired();
-            b.Property(x => x.Email).HasMaxLength(100).IsRequired();
-            b.Property(x => x.Telefono).HasMaxLength(20);
-
-            b.Property(x => x.FechaRegistro)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
             b.HasOne(x => x.TipoUsuario)
              .WithMany(t => t.Usuarios)
              .HasForeignKey(x => x.TipoUsuarioId)
              .OnDelete(DeleteBehavior.Restrict);
         });
 
+        // Ciudad
         modelBuilder.Entity<Ciudad>(b =>
         {
-            b.ToTable("Ciudad");
+            b.ToTable("ciudad");
+            b.Property(x => x.Id).HasColumnName("id");
+            b.Property(x => x.Nombre).HasColumnName("nombre").HasMaxLength(100).IsRequired();
             b.HasIndex(x => x.Nombre).IsUnique();
-            b.Property(x => x.Nombre).HasMaxLength(100).IsRequired();
         });
 
+        // Deporte
         modelBuilder.Entity<Deporte>(b =>
         {
-            b.ToTable("Deporte");
-            b.Property(x => x.Nombre).HasMaxLength(100).IsRequired();
-            b.Property(x => x.Icon).HasMaxLength(200);
-            b.Property(x => x.BgClass).HasMaxLength(100);
-            b.Property(x => x.TextClass).HasMaxLength(100);
+            b.ToTable("deporte");
+            b.Property(x => x.Id).HasColumnName("id");
+            b.Property(x => x.Nombre).HasColumnName("nombre").HasMaxLength(100).IsRequired();
+            b.Property(x => x.Icon).HasColumnName("icon").HasMaxLength(200);
+            b.Property(x => x.BgClass).HasColumnName("bgclass").HasMaxLength(100);
+            b.Property(x => x.TextClass).HasColumnName("textclass").HasMaxLength(100);
+            b.HasIndex(x => x.Nombre).IsUnique();
         });
 
+        // Complejo
         modelBuilder.Entity<Complejo>(b =>
         {
-            b.ToTable("Complejo");
-
-            b.Property(x => x.Nombre).HasMaxLength(100).IsRequired();
-            b.Property(x => x.Direccion).HasMaxLength(200);
-            b.Property(x => x.Precio).HasColumnType("decimal(10,2)");
-            b.Property(x => x.Imagen);
-            b.Property(x => x.Estado).HasDefaultValue(true);
-            b.Property(x => x.Categoria).HasMaxLength(100);
-            b.Property(x => x.DeportePillBg).HasMaxLength(100);
-            b.Property(x => x.DeportePillText).HasMaxLength(100);
-
-            b.Property(x => x.FechaCreacion)
-             .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
+            b.ToTable("complejo");
+            b.Property(x => x.Id).HasColumnName("id");
+            b.Property(x => x.Nombre).HasColumnName("nombre").HasMaxLength(100).IsRequired();
+            b.Property(x => x.Direccion).HasColumnName("direccion").HasMaxLength(200);
+            b.Property(x => x.CiudadId).HasColumnName("ciudadid");
+            b.Property(x => x.DuenoId).HasColumnName("duenoid");
+            b.Property(x => x.DeporteId).HasColumnName("deporteid");
+            b.Property(x => x.Precio).HasColumnName("precio").HasColumnType("decimal(10,2)");
+            b.Property(x => x.Imagen).HasColumnName("imagen");
+            b.Property(x => x.Categoria).HasColumnName("categoria").HasMaxLength(100);
+            b.Property(x => x.DeportePillBg).HasColumnName("deportepillbg").HasMaxLength(100);
+            b.Property(x => x.DeportePillText).HasColumnName("deportepilltext").HasMaxLength(100);
+            b.Property(x => x.Estado).HasColumnName("estado").HasDefaultValue(true);
+            b.Property(x => x.FechaCreacion).HasColumnName("fechacreacion").HasDefaultValueSql("CURRENT_TIMESTAMP");
             b.HasOne(x => x.Ciudad)
              .WithMany(c => c.Complejos)
              .HasForeignKey(x => x.CiudadId)
@@ -100,20 +106,26 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
              .OnDelete(DeleteBehavior.SetNull);
         });
 
+        // TipoCancha
         modelBuilder.Entity<TipoCancha>(b =>
         {
-            b.ToTable("TipoCancha");
+            b.ToTable("tipocancha");
+            b.Property(x => x.Id).HasColumnName("id");
+            b.Property(x => x.Nombre).HasColumnName("nombre").HasMaxLength(50).IsRequired();
             b.HasIndex(x => x.Nombre).IsUnique();
-            b.Property(x => x.Nombre).HasMaxLength(50).IsRequired();
         });
 
+        // Cancha
         modelBuilder.Entity<Cancha>(b =>
         {
-            b.ToTable("Cancha");
-            b.Property(x => x.Nombre).HasMaxLength(100).IsRequired();
-            b.Property(x => x.PrecioHora).HasColumnType("decimal(10,2)");
-            b.Property(x => x.Estado).HasDefaultValue(true);
-
+            b.ToTable("cancha");
+            b.Property(x => x.Id).HasColumnName("id");
+            b.Property(x => x.ComplejoId).HasColumnName("complejoid");
+            b.Property(x => x.TipoCanchaId).HasColumnName("tipocanchaid");
+            b.Property(x => x.Nombre).HasColumnName("nombre").HasMaxLength(100).IsRequired();
+            b.Property(x => x.PrecioHora).HasColumnName("preciohora").HasColumnType("decimal(10,2)");
+            b.Property(x => x.Estado).HasColumnName("estado").HasDefaultValue(true);
+            b.Property(x => x.Descripcion).HasColumnName("descripcion");
             b.HasOne(x => x.Complejo)
              .WithMany(c => c.Canchas)
              .HasForeignKey(x => x.ComplejoId)
@@ -125,22 +137,21 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
              .OnDelete(DeleteBehavior.Restrict);
         });
 
+        // Reserva
         modelBuilder.Entity<Reserva>(b =>
         {
-            b.ToTable("Reserva");
-            b.Property(x => x.Fecha).IsRequired();
-            b.Property(x => x.FechaFin).IsRequired();
-            b.Property(x => x.MedioPago).HasMaxLength(50);
-            b.Property(x => x.MontoTotal).HasColumnType("decimal(10,2)");
-
-            b.Property(x => x.FechaReserva)
-             .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-            // Mapear enum EstadoPago como string (varchar)
-            b.Property(x => x.EstadoPago)
-             .HasConversion<string>()
-             .HasMaxLength(20)
-             .HasDefaultValue(EstadoPago.pendiente);
+            b.ToTable("reserva");
+            b.Property(x => x.Id).HasColumnName("id");
+            b.Property(x => x.UsuarioId).HasColumnName("usuarioid");
+            b.Property(x => x.ComplejoId).HasColumnName("complejoid");
+            b.Property(x => x.CanchaId).HasColumnName("canchaid");
+            b.Property(x => x.Fecha).HasColumnName("fecha").IsRequired();
+            b.Property(x => x.FechaFin).HasColumnName("fechafin").IsRequired();
+            b.Property(x => x.MedioPago).HasColumnName("mediopago").HasMaxLength(50);
+            b.Property(x => x.MontoTotal).HasColumnName("montototal").HasColumnType("decimal(10,2)");
+            b.Property(x => x.EstadoPago).HasColumnName("estadopago").HasConversion<string>().HasMaxLength(20).HasDefaultValue(EstadoPago.pendiente);
+            b.Property(x => x.Confirmada).HasColumnName("confirmada").HasDefaultValue(false);
+            b.Property(x => x.FechaReserva).HasColumnName("fechareserva").HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             b.HasOne(x => x.Usuario)
              .WithMany(u => u.Reservas)
