@@ -2,8 +2,16 @@
 
 <template>
   <div class="relative min-h-screen">
+    <!-- Aviso de error -->
+    <div v-if="loadError" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+      <div class="bg-white rounded-lg shadow-lg p-6 text-center max-w-sm w-full">
+        <h2 class="text-xl font-bold mb-2 text-red-600">No se pudo cargar la información</h2>
+        <p class="mb-4">Ocurrió un inconveniente al obtener los datos. Por favor, intenta nuevamente.</p>
+        <button @click="retryLoad" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Reintentar</button>
+      </div>
+    </div>
     <!-- Contenido Principal -->
-      <div v-if="!loading" key="main-content">
+    <div v-if="!loading && !loadError" key="main-content">
         <div class="flex items-center bg-gray-50 p-4 pb-2 justify-between">
           <h1 class="text-[#101518] text-3xl font-bold leading-tight tracking-[-0.025em]">
             La reserva
@@ -92,6 +100,7 @@ export default {
       deporteSeleccionado: null,
       deportes: [],
       complejos: [],
+      loadError: false,
     }
   },
 
@@ -99,7 +108,6 @@ export default {
     this.loadData()
   },
 
-  // ...existing code...
   computed: {
     complejosFiltrados() {
       return this.complejos.filter(
@@ -113,17 +121,22 @@ export default {
   methods: {
     async loadData() {
       startLoader()
+      this.loadError = false
       try {
         const response = await fetch(API_ENDPOINTS.complejos.getAll())
         const data = await response.json()
-        
         this.deportes = data.deportes
         this.complejos = data.complejos
       } catch (e) {
         console.error('Error cargando los datos:', e)
+        this.loadError = true
       } finally {
         stopLoader()
       }
+    },
+    retryLoad() {
+      this.loadError = false
+      this.loadData()
     },
     toggleDeporte(nombre) {
       this.deporteSeleccionado = this.deporteSeleccionado === nombre ? null : nombre
