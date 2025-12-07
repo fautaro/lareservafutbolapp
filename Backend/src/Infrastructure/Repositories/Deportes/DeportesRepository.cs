@@ -13,7 +13,7 @@ public class DeportesRepository : IDeportesRepository
         _context = context;
     }
 
-    public async Task<List<DeporteDTO>> GetDeportes()
+    public async Task<List<DeporteDTO>> GetDeportes(CancellationToken cancellationToken)
     {
         return await _context.Deportes
             .Select(c => new DeporteDTO
@@ -24,6 +24,6 @@ public class DeportesRepository : IDeportesRepository
                 BgClass = c.BgClass ?? string.Empty,
                 TextClass = c.TextClass ?? string.Empty,
             })
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

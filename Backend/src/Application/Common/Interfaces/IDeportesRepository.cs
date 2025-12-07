@@ -4,5 +4,5 @@ using LaReservaBackend.Application.Common.Models.DTOs.Deportes;
 namespace LaReservaBackend.Application.Common.Interfaces;
 public interface IDeportesRepository
 {
-    Task<List<DeporteDTO>> GetDeportes();
+    Task<List<DeporteDTO>> GetDeportes(CancellationToken cancellationToken);
 }

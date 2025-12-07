@@ -17,10 +17,10 @@ public class ComplejosController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] GetComplejosRequestDTO? input)
+    public async Task<IActionResult> Post([FromBody] GetComplejosRequestDTO? input, CancellationToken cancellationToken)
     {
         var request = new GetComplejosRequest(input?.ComplejoId ?? 0, input?.DeporteId ?? 0);
-        var response = await _mediator.Send(request);
+        var response = await _mediator.Send(request, cancellationToken);
 
         return Ok(response);
     }

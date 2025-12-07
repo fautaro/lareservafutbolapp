@@ -29,8 +29,8 @@ public class GetComplejosHandler : IRequestHandler<GetComplejosRequest, GetCompl
 
     public async Task<GetComplejosResponse> Handle(GetComplejosRequest request, CancellationToken cancellationToken)
     {
-        var complejos = await _complejosRepository.GetComplejos(null, request.DeporteId != 0 ? request.DeporteId : null, request.ComplejoId != 0 ? request.ComplejoId : null);
-        var deportes = await _deportesRepository.GetDeportes();
+        var complejos = await _complejosRepository.GetComplejos(cancellationToken, request.DeporteId != 0 ? request.DeporteId : null, request.ComplejoId != 0 ? request.ComplejoId : null);
+        var deportes = await _deportesRepository.GetDeportes(cancellationToken);
 
         return new GetComplejosResponse
         {

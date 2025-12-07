@@ -13,7 +13,7 @@ public class ComplejosRepository : IComplejosRepository
         _context = context;
     }
 
-    public async Task<List<ComplejoDTO>> GetComplejos(long? ciudadId = null, long? deporteId = null, long? complejoId = null)
+    public async Task<List<ComplejoDTO>> GetComplejos(CancellationToken cancellationToken, long? ciudadId = null, long? deporteId = null, long? complejoId = null)
     {
         var query = _context.Complejos
             .Where(c => c.Estado)
@@ -40,6 +40,6 @@ public class ComplejosRepository : IComplejosRepository
                 DeportePillBg = c.DeportePillBg != null ? c.DeportePillBg : (c.Deporte != null ? c.Deporte.BgClass : null),
                 DeportePillText = c.DeportePillText != null ? c.DeportePillText : (c.Deporte != null ? c.Deporte.TextClass : null)
             })
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }
