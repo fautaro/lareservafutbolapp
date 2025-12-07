@@ -16,10 +16,10 @@ public class ComplejosController : Controller
         _mediator = mediator;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Post([FromBody] GetComplejosRequestDTO? input, CancellationToken cancellationToken)
+    [HttpGet]
+    public async Task<IActionResult> Get([FromQuery] int? complejoId, [FromQuery] int? deporteId, CancellationToken cancellationToken)
     {
-        var request = new GetComplejosRequest(input?.ComplejoId ?? 0, input?.DeporteId ?? 0);
+        var request = new GetComplejosRequest(complejoId ?? 0, deporteId ?? 0);
         var response = await _mediator.Send(request, cancellationToken);
 
         return Ok(response);

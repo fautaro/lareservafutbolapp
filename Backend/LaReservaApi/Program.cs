@@ -8,12 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// Configuración del DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
      .UseSnakeCaseNamingConvention());
 
-// Registrar la interfaz del DbContext
 builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
 // Registrar automáticamente todos los servicios de Application (MediatR handlers)
@@ -34,6 +32,12 @@ if (app.Environment.IsDevelopment())
  app.UseSwagger();
  app.UseSwaggerUI();
 }
+
+app.UseCors(builder =>
+    builder.WithOrigins("http://localhost:5173")
+           .AllowAnyHeader()
+           .AllowAnyMethod()
+);
 
 app.UseHttpsRedirection();
 

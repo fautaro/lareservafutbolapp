@@ -76,6 +76,7 @@
 <script>
 import CitySelectorDrawer from '../components/Home/CitySelectorDrawer.vue'
 import { useGlobalLoader, startLoader, stopLoader } from '../services/globalLoader' // ruta relativa
+import { API_ENDPOINTS } from '../config/apiConfig'
 
 export default {
   name: 'Home',
@@ -91,7 +92,6 @@ export default {
       deporteSeleccionado: null,
       deportes: [],
       complejos: [],
-      _loaderTimer: null,
     }
   },
 
@@ -99,9 +99,7 @@ export default {
     this.loadData()
   },
 
-  beforeUnmount() {
-    if (this._loaderTimer) clearTimeout(this._loaderTimer)
-  },
+  // ...existing code...
   computed: {
     complejosFiltrados() {
       return this.complejos.filter(
@@ -116,17 +114,15 @@ export default {
     async loadData() {
       startLoader()
       try {
-        const response = await fetch(`${import.meta.env.BASE_URL}data/data.json`)
+        const response = await fetch(API_ENDPOINTS.complejos.getAll())
         const data = await response.json()
+        
         this.deportes = data.deportes
         this.complejos = data.complejos
       } catch (e) {
         console.error('Error cargando los datos:', e)
       } finally {
-        this._loaderTimer = setTimeout(() => {
-          stopLoader()
-          this._loaderTimer = null
-        }, 1000)
+        stopLoader()
       }
     },
     toggleDeporte(nombre) {
