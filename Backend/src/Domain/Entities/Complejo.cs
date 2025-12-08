@@ -37,6 +37,7 @@ public class Complejo
     public bool Estado { get; set; } = true;
 
     public DateTime FechaCreacion { get; set; }
+    public int? MaxDiasDisponiblesReserva { get; set; }
 
     // Navegaciones
     public ICollection<Cancha> Canchas { get; set; } = new List<Cancha>();

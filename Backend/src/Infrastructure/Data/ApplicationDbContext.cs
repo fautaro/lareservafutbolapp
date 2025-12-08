@@ -90,6 +90,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             b.Property(x => x.DeportePillBg).HasColumnName("deportepillbg").HasMaxLength(100);
             b.Property(x => x.DeportePillText).HasColumnName("deportepilltext").HasMaxLength(100);
             b.Property(x => x.Estado).HasColumnName("estado").HasDefaultValue(true);
+            b.Property(x => x.MaxDiasDisponiblesReserva).HasColumnName("maxdiasdisponiblesreserva");
             b.Property(x => x.FechaCreacion).HasColumnName("fechacreacion").HasDefaultValueSql("CURRENT_TIMESTAMP");
             b.HasOne(x => x.Ciudad)
              .WithMany(c => c.Complejos)

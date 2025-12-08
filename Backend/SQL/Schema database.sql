@@ -44,7 +44,8 @@ CREATE TABLE IF NOT EXISTS Complejo (
     DeportePillBg VARCHAR(100),
     DeportePillText VARCHAR(100),
     Estado BOOLEAN DEFAULT TRUE,
-    FechaCreacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    FechaCreacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    MaxDiasDisponiblesReserva INTEGER
 );
 
 -- Tabla de tipos de cancha
