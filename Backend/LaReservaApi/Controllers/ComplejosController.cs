@@ -19,7 +19,7 @@ public class ComplejosController : Controller
     [HttpGet]
     public async Task<IActionResult> Get([FromQuery] int? complejoId, [FromQuery] int? deporteId, CancellationToken cancellationToken)
     {
-        var request = new GetComplejosRequest(complejoId ?? 0, deporteId ?? 0);
+        var request = new GetComplejos(complejoId ?? 0, deporteId ?? 0);
         var response = await _mediator.Send(request, cancellationToken);
 
         return Ok(response);

@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using LaReservaBackend.Application.Common.Interfaces;
+using LaReservaBackend.Application.Complejos.Queries.GetComplejos;
+
+namespace LaReservaBackend.Application.Reservas.Queries;
+public class GetHorariosDisponibles : IRequest<GetHorariosDisponiblesResponse>
+{
+    public int CanchaId { get; init; }
+
+    public GetHorariosDisponibles(int canchaId)
+    {
+        CanchaId = canchaId;
+    }
+
+    public class GetHorariosDisponiblesHandler : IRequestHandler<GetHorariosDisponibles, GetHorariosDisponiblesResponse>
+    {
+        private readonly IReservaRepository _reservaRepository;
+
+
+        public GetHorariosDisponiblesHandler(IReservaRepository reservaRepository)
+        {
+            _reservaRepository = reservaRepository;
+        }
+
+        public async Task<GetHorariosDisponiblesResponse> Handle(GetHorariosDisponibles request, CancellationToken cancellationToken)
+        {
+            await Task.Delay(100);
+            return new GetHorariosDisponiblesResponse();
+        }
+    }
+}

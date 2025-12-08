@@ -4,19 +4,19 @@ using MediatR;
 
 namespace LaReservaBackend.Application.Complejos.Queries.GetComplejos;
 
-public class GetComplejosRequest : IRequest<GetComplejosResponse>
+public class GetComplejos : IRequest<GetComplejosResponse>
 {
     public int ComplejoId { get; init; }
     public int DeporteId { get; init; }
 
-    public GetComplejosRequest(int complejoId, int deporteId)
+    public GetComplejos(int complejoId, int deporteId)
     {
         ComplejoId = complejoId;
         DeporteId = deporteId;
     }
 }
 
-public class GetComplejosHandler : IRequestHandler<GetComplejosRequest, GetComplejosResponse>
+public class GetComplejosHandler : IRequestHandler<GetComplejos, GetComplejosResponse>
 {
     private readonly IComplejosRepository _complejosRepository;
     private readonly IDeportesRepository _deportesRepository;
@@ -27,7 +27,7 @@ public class GetComplejosHandler : IRequestHandler<GetComplejosRequest, GetCompl
         _deportesRepository = deportesRepository;
     }
 
-    public async Task<GetComplejosResponse> Handle(GetComplejosRequest request, CancellationToken cancellationToken)
+    public async Task<GetComplejosResponse> Handle(GetComplejos request, CancellationToken cancellationToken)
     {
         var complejos = await _complejosRepository.GetComplejos(cancellationToken, request.DeporteId != 0 ? request.DeporteId : null, request.ComplejoId != 0 ? request.ComplejoId : null);
         var deportes = await _deportesRepository.GetDeportes(cancellationToken);
