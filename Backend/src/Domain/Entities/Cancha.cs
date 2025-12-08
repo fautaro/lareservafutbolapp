@@ -25,4 +25,5 @@ public class Cancha
 
     // Navegación
     public ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
+    public ICollection<HorarioCancha> HorariosCanchas { get; set; } = new List<HorarioCancha>();
 }

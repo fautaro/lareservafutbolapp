@@ -19,6 +19,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<TipoCancha> TipoCanchas => Set<TipoCancha>();
     public DbSet<Cancha> Canchas => Set<Cancha>();
     public DbSet<Reserva> Reservas => Set<Reserva>();
+    public DbSet<HorarioCancha> HorariosCanchas => Set<HorarioCancha>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -135,6 +136,26 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
              .WithMany(t => t.Canchas)
              .HasForeignKey(x => x.TipoCanchaId)
              .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        // HorarioCancha
+        modelBuilder.Entity<HorarioCancha>(b =>
+        {
+            b.ToTable("horario_cancha");
+            b.Property(x => x.Id).HasColumnName("id");
+            b.Property(x => x.CanchaId).HasColumnName("canchaid");
+            b.Property(x => x.DiaSemana).HasColumnName("dia_semana").IsRequired();
+            b.Property(x => x.HoraInicio).HasColumnName("hora_inicio").IsRequired();
+            b.Property(x => x.HoraFin).HasColumnName("hora_fin").IsRequired();
+            b.Property(x => x.Disponible).HasColumnName("disponible").HasDefaultValue(true);
+    
+            b.HasOne(x => x.Cancha)
+             .WithMany(c => c.HorariosCanchas)
+             .HasForeignKey(x => x.CanchaId)
+             .OnDelete(DeleteBehavior.Cascade);
+ 
+            b.HasIndex(x => new { x.CanchaId, x.DiaSemana, x.HoraInicio, x.HoraFin })
+     .IsUnique();
         });
 
         // Reserva
