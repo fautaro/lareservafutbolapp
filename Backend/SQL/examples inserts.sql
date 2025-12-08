@@ -1,6 +1,6 @@
--- Crear un usuario dueño de ejemplo (necesario para los complejos)
+-- Crear un usuario dueï¿½o de ejemplo (necesario para los complejos)
 INSERT INTO Usuario (Auth0Id, Nombre, Email, TipoUsuarioId)
-SELECT 'dueno-ejemplo-1', 'Dueño Ejemplo', 'dueno@ejemplo.com',
+SELECT 'dueno-ejemplo-1', 'Dueï¿½o Ejemplo', 'dueno@ejemplo.com',
        (SELECT Id FROM TipoUsuario WHERE Nombre = 'Dueno' LIMIT 1)
 WHERE NOT EXISTS (SELECT 1 FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1');
 
@@ -13,28 +13,47 @@ SELECT 'Patagones' WHERE NOT EXISTS (SELECT 1 FROM Ciudad WHERE Nombre = 'Patago
 
 -- Insertar deportes
 INSERT INTO Deporte (Nombre, Icon, BgClass, TextClass) VALUES
-('Fútbol', 'fas fa-futbol', 'bg-blue-600', 'text-white'),
-('Pádel', 'fas fa-table-tennis', 'bg-gray-200', 'text-black');
+('Fï¿½tbol', 'fas fa-futbol', 'bg-blue-600', 'text-white'),
+('Pï¿½del', 'fas fa-table-tennis', 'bg-gray-200', 'text-black');
 
 -- Insertar complejos
 INSERT INTO Complejo (Nombre, CiudadId, DuenoId, Precio, Imagen, Categoria, DeporteId, DeportePillBg, DeportePillText) VALUES
--- Complejos de Fútbol en ciudad 1 (Cañuelas)
-('La tranquera Complejo Deportivo', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 45000.00, 'https://www.infocanuelas.com/media/luz-verde-para-el-funcionamiento-de-gimnasios-y-canchas-de-futbol-5-21942.jpg', 'Fútbol 5', 1, 'bg-blue-100', 'text-blue-800'),
-('Tercer Tiempo', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 40000.00, 'https://i.ibb.co/FbyqzzWF/497928378-2885642464969002-7636997158516311138-n.jpg', 'Fútbol 5', 1, 'bg-blue-100', 'text-blue-800'),
-('La Scaloneta Futbol 5', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 45000.00, 'https://distritofutbol.com.ar/media-library/constitucion-9-n2dbvs6y-double-picture.jpg', 'Fútbol 5', 1, 'bg-blue-100', 'text-blue-800'),
-('De Rabona', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 35000.00, 'https://www.generallavalle.gob.ar/fotos/noticias/cancha-futbol-deportes-85.jpg', 'Fútbol 5', 1, 'bg-blue-100', 'text-blue-800'),
-('Sol de Mayo', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 50000.00, 'https://i.ibb.co/nN5FYsk2/c3be3e45-c03b-4996-9aec-202e9ccc0a4c.png', 'Fútbol 5', 1, 'bg-blue-100', 'text-blue-800'),
-('A un toque - Futbol 5', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 40000.00, 'https://www.hoysejuega.com/uploads/Modules/ImagenesComplejos/800_600_grun-3.jpg', 'Fútbol 5', 1, 'bg-blue-100', 'text-blue-800'),
+-- Complejos de Fï¿½tbol en ciudad 1 (Caï¿½uelas)
+('La tranquera Complejo Deportivo', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 45000.00, 'https://www.infocanuelas.com/media/luz-verde-para-el-funcionamiento-de-gimnasios-y-canchas-de-futbol-5-21942.jpg', 'Fï¿½tbol 5', 1, 'bg-blue-100', 'text-blue-800'),
+('Tercer Tiempo', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 40000.00, 'https://i.ibb.co/FbyqzzWF/497928378-2885642464969002-7636997158516311138-n.jpg', 'Fï¿½tbol 5', 1, 'bg-blue-100', 'text-blue-800'),
+('La Scaloneta Futbol 5', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 45000.00, 'https://distritofutbol.com.ar/media-library/constitucion-9-n2dbvs6y-double-picture.jpg', 'Fï¿½tbol 5', 1, 'bg-blue-100', 'text-blue-800'),
+('De Rabona', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 35000.00, 'https://www.generallavalle.gob.ar/fotos/noticias/cancha-futbol-deportes-85.jpg', 'Fï¿½tbol 5', 1, 'bg-blue-100', 'text-blue-800'),
+('Sol de Mayo', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 50000.00, 'https://i.ibb.co/nN5FYsk2/c3be3e45-c03b-4996-9aec-202e9ccc0a4c.png', 'Fï¿½tbol 5', 1, 'bg-blue-100', 'text-blue-800'),
+('A un toque - Futbol 5', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 40000.00, 'https://www.hoysejuega.com/uploads/Modules/ImagenesComplejos/800_600_grun-3.jpg', 'Fï¿½tbol 5', 1, 'bg-blue-100', 'text-blue-800'),
 
--- Complejos de Fútbol en ciudad 2 (Buenos Aires)
-('La vieja Bodega - Futbol 5', 2, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 48000.00, 'https://i.ibb.co/6cHpD7GK/Chat-GPT-Image-31-may-2025-11-25-48.png', 'Fútbol 5', 1, 'bg-blue-100', 'text-blue-800'),
-('Barsa Futbol 5', 2, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 48000.00, 'https://www.diarioel9dejulio.com.ar/wp-content/uploads/2012/04/cancha28.jpg', 'Fútbol 5', 1, 'bg-blue-100', 'text-blue-800'),
-('Barrilete Cósmico', 2, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 40000.00, 'https://i.ibb.co/N62JrpK5/barrilete.png', 'Fútbol 5', 1, 'bg-blue-100', 'text-blue-800'),
+-- Complejos de Fï¿½tbol en ciudad 2 (Buenos Aires)
+('La vieja Bodega - Futbol 5', 2, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 48000.00, 'https://i.ibb.co/6cHpD7GK/Chat-GPT-Image-31-may-2025-11-25-48.png', 'Fï¿½tbol 5', 1, 'bg-blue-100', 'text-blue-800'),
+('Barsa Futbol 5', 2, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 48000.00, 'https://www.diarioel9dejulio.com.ar/wp-content/uploads/2012/04/cancha28.jpg', 'Fï¿½tbol 5', 1, 'bg-blue-100', 'text-blue-800'),
+('Barrilete Cï¿½smico', 2, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 40000.00, 'https://i.ibb.co/N62JrpK5/barrilete.png', 'Fï¿½tbol 5', 1, 'bg-blue-100', 'text-blue-800'),
 
--- Complejos de Pádel en ciudad 1 (Cañuelas)
-('Los Aromos Padel', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 25000.00, 'https://i.ibb.co/xSGvpmCC/los-aromos.png', 'Pádel', 2, 'bg-green-100', 'text-green-800'),
-('Tercer Tiempo Pádel', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 30000.00, 'https://acdn-us.mitiendanube.com/stores/001/408/700/products/full-360-5-b1a2ca90efa7b1d7c917368620610522-1024-1024.jpeg', 'Pádel', 2, 'bg-green-100', 'text-green-800'),
-('1114 Pádel Club', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 25000.00, 'https://dalviansa.com/wp-content/uploads/2021/06/News_Cancha_de_padel_1.jpeg', 'Pádel', 2, 'bg-green-100', 'text-green-800'),
+-- Complejos de Pï¿½del en ciudad 1 (Caï¿½uelas)
+('Los Aromos Padel', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 25000.00, 'https://i.ibb.co/xSGvpmCC/los-aromos.png', 'Pï¿½del', 2, 'bg-green-100', 'text-green-800'),
+('Tercer Tiempo Pï¿½del', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 30000.00, 'https://acdn-us.mitiendanube.com/stores/001/408/700/products/full-360-5-b1a2ca90efa7b1d7c917368620610522-1024-1024.jpeg', 'Pï¿½del', 2, 'bg-green-100', 'text-green-800'),
+('1114 Pï¿½del Club', 1, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 25000.00, 'https://dalviansa.com/wp-content/uploads/2021/06/News_Cancha_de_padel_1.jpeg', 'Pï¿½del', 2, 'bg-green-100', 'text-green-800'),
 
--- Complejos de Pádel en ciudad 2 (Buenos Aires)
-('Guanches Padel', 2, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 25000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSR8SrBE9Fuf_xMnbvynk1slE2rBnlkwvYfuQ&s', 'Pádel', 2, 'bg-green-100', 'text-green-800');
+-- Complejos de Pï¿½del en ciudad 2 (Buenos Aires)
+('Guanches Padel', 2, (SELECT Id FROM Usuario WHERE Auth0Id = 'dueno-ejemplo-1'), 25000.00, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSR8SrBE9Fuf_xMnbvynk1slE2rBnlkwvYfuQ&s', 'Pï¿½del', 2, 'bg-green-100', 'text-green-800');
+
+
+INSERT INTO horario_cancha (canchaid, dia_semana, hora_inicio, hora_fin, disponible)
+SELECT 
+    c.id AS canchaid,
+    d.dia_semana,
+    h.hora_inicio,
+    h.hora_fin,
+    true
+FROM cancha c
+CROSS JOIN (
+    SELECT generate_series(1, 7) AS dia_semana
+) d
+CROSS JOIN (
+    SELECT 
+        make_time(h, 0, 0) AS hora_inicio,
+        make_time(h + 1, 0, 0) AS hora_fin
+    FROM generate_series(8, 22) h   -- 08:00 a 23:00
+) h;

@@ -78,3 +78,24 @@ CREATE TABLE IF NOT EXISTS Reserva (
     Confirmada BOOLEAN DEFAULT FALSE,
     FechaReserva TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS horario_cancha
+(
+    id BIGSERIAL PRIMARY KEY,
+    canchaid BIGINT NOT NULL,
+    dia_semana INTEGER NOT NULL,          -- 1=lunes ... 7=domingo
+    hora_inicio TIME NOT NULL,
+    hora_fin TIME NOT NULL,
+    disponible BOOLEAN DEFAULT true,
+    
+    CONSTRAINT horario_cancha_canchaid_fkey FOREIGN KEY (canchaid)
+        REFERENCES public.cancha (id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+
+    -- Evita duplicados en la misma cancha
+    CONSTRAINT horario_cancha_unico UNIQUE (canchaid, dia_semana, hora_inicio, hora_fin),
+
+    -- Evita rangos invertidos
+    CONSTRAINT horario_cancha_horario_valido CHECK (hora_fin > hora_inicio)
+);
