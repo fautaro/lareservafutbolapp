@@ -18,18 +18,17 @@ public class GetHorariosDisponibles : IRequest<GetHorariosDisponiblesResponse>
 
     public class GetHorariosDisponiblesHandler : IRequestHandler<GetHorariosDisponibles, GetHorariosDisponiblesResponse>
     {
-        private readonly IReservaRepository _reservaRepository;
+private readonly IReservaRepository _reservaRepository;
 
 
         public GetHorariosDisponiblesHandler(IReservaRepository reservaRepository)
-        {
-            _reservaRepository = reservaRepository;
-        }
+      {
+       _reservaRepository = reservaRepository;
+     }
 
         public async Task<GetHorariosDisponiblesResponse> Handle(GetHorariosDisponibles request, CancellationToken cancellationToken)
         {
-            await Task.Delay(100);
-            return new GetHorariosDisponiblesResponse();
-        }
+            return await _reservaRepository.GetHorariosDisponibles(request.CanchaId, cancellationToken);
+   }
     }
 }

@@ -12,6 +12,7 @@ public interface IApplicationDbContext
     DbSet<TipoCancha> TipoCanchas { get; }
     DbSet<Cancha> Canchas { get; }
     DbSet<Reserva> Reservas { get; }
+    DbSet<HorarioCancha> HorariosCanchas { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

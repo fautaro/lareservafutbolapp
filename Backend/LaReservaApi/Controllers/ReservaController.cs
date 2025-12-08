@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LaReservaBackend.Application.Complejos.Queries.GetComplejos;
+using LaReservaBackend.Application.Reservas.Queries;
+using LaReservaBackend.Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LaReservaApi.Controllers;
@@ -15,11 +18,13 @@ public class ReservaController : Controller
         _mediator = mediator;
     }
 
-    [HttpGet]
+    [HttpGet("HorariosDisponiblesCancha")]
     public async Task<IActionResult> GetHorariosDisponiblesCancha([FromQuery] int CanchaId, CancellationToken cancellationToken)
     {
-        await Task.Delay(100);
-        return Ok();
+        var request = new GetHorariosDisponibles(CanchaId);
+        var response = await _mediator.Send(request, cancellationToken);
+
+        return Ok(response);
 
     }
 }
