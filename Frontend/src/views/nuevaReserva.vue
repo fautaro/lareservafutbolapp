@@ -33,69 +33,85 @@
                 <p class="text-base text-gray-500">{{ complejo.direccion }}</p>
             </div>
 
-
-            <!-- Selector de días -->
-            <div class="mb-6">
-                <h3 class="text-base font-semibold text-gray-700 mb-2">Elegí un día</h3>
-                <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
-                    <button v-for="(dia, index) in diasDisponibles" :key="index"
-                        @click="seleccionarDia(dia.fechaExacta)" :class="[
-                            'w-[110px] h-[80px] flex-shrink-0 flex flex-col items-center justify-center rounded-xl text-center text-base font-semibold shadow-md p-3 transition-colors duration-200',
-                            dia.fechaExacta === diaSeleccionado ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'
-                        ]">
-                        <div class="text-sm leading-tight capitalize">
-                            {{ dia.dia }}
-                        </div>
-                        <div class="text-sm leading-tight">
-                            {{ dia.fecha }}
-                        </div>
-                    </button>
-                </div>
-            </div>
-
-
-            <!-- Selector de deportes -->
-            <div class="mb-6">
-                <h3 class="text-base font-semibold text-gray-700 mb-2">Canchas disponibles:</h3>
-                <div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-                    <button v-for="(deporte, index) in deportesFiltradosPorDia" :key="index"
-                        @click="seleccionarDeporte(deporte.tipo)" :class="[
-                            'flex items-center gap-2 text-sm px-4 py-2 rounded-full whitespace-nowrap transition-colors duration-200',
-                            deporte.tipo === deporteSeleccionado ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'
-                        ]">
-                        <i :class="deporte.icono" class="text-base"></i>
-                        {{ deporte.nombre }}
-                    </button>
-
-                </div>
-            </div>
-
-
-            <!-- Horarios disponibles -->
-            <div v-if="horarios.length" class="mb-6">
-                <h3 class="text-base font-semibold text-gray-700 mb-2">Horarios disponibles</h3>
-                <div class="flex flex-col gap-3">
-                    <div v-for="(hora, i) in horarios" :key="i"
-                        class="w-full h-[72px] px-4 py-3 rounded-xl bg-white shadow border border-gray-200 text-sm flex justify-between items-center transition-all hover:border-blue-300 cursor-pointer group">
-                        <span class="font-medium text-gray-700">{{ hora.rango }}</span>
-                        <div class="flex items-center gap-2">
-                            <span
-                                class="text-blue-600 font-semibold text-xs bg-blue-50 px-2 py-1 rounded">Disponible</span>
-                            <i
-                                class="fas fa-chevron-right text-gray-300 group-hover:text-blue-400 transition-colors"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div v-else-if="diaSeleccionado" class="my-10 text-center px-4">
+            <div v-if="loaded && rawHorariosData.length === 0" class="my-10 text-center px-4">
                 <div class="bg-gray-50 rounded-2xl p-8 border-2 border-dashed border-gray-200">
-                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-clock text-gray-400 text-2xl"></i>
+                    <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-calendar-times text-red-400 text-2xl"></i>
                     </div>
-                    <h4 class="text-gray-800 font-bold mb-1">No hay horarios disponibles</h4>
-                    <p class="text-gray-500 text-sm">Probá seleccionando otro día o deporte para ver más opciones.</p>
+                    <h4 class="text-gray-800 font-bold mb-1">Complejo sin disponibilidad</h4>
+                    <p class="text-gray-500 text-sm">Este complejo no tiene horarios cargados por el momento. Intentá
+                        con otro complejo cercano.</p>
+                    <button @click="$router.push({ name: 'Home' })"
+                        class="mt-4 text-blue-600 font-semibold text-sm hover:underline">
+                        Volver al inicio
+                    </button>
                 </div>
             </div>
+
+            <template v-else-if="loaded">
+                <!-- Selector de días -->
+                <div v-if="diasDisponibles.length" class="mb-6">
+                    <h3 class="text-base font-semibold text-gray-700 mb-2">Elegí un día</h3>
+                    <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+                        <button v-for="(dia, index) in diasDisponibles" :key="index"
+                            @click="seleccionarDia(dia.fechaExacta)" :class="[
+                                'w-[110px] h-[80px] flex-shrink-0 flex flex-col items-center justify-center rounded-xl text-center text-base font-semibold shadow-md p-3 transition-colors duration-200',
+                                dia.fechaExacta === diaSeleccionado ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'
+                            ]">
+                            <div class="text-sm leading-tight capitalize">
+                                {{ dia.dia }}
+                            </div>
+                            <div class="text-sm leading-tight">
+                                {{ dia.fecha }}
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Selector de deportes -->
+                <div v-if="deportesFiltradosPorDia.length" class="mb-6">
+                    <h3 class="text-base font-semibold text-gray-700 mb-2">Canchas disponibles:</h3>
+                    <div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+                        <button v-for="(deporte, index) in deportesFiltradosPorDia" :key="index"
+                            @click="seleccionarDeporte(deporte.tipo)" :class="[
+                                'flex items-center gap-2 text-sm px-4 py-2 rounded-full whitespace-nowrap transition-colors duration-200',
+                                deporte.tipo === deporteSeleccionado ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'
+                            ]">
+                            <i :class="deporte.icono" class="text-base"></i>
+                            {{ deporte.nombre }}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Horarios disponibles -->
+                <div v-if="horarios.length" class="mb-6">
+                    <h3 class="text-base font-semibold text-gray-700 mb-2">Horarios disponibles</h3>
+                    <div class="flex flex-col gap-3">
+                        <div v-for="(hora, i) in horarios" :key="i"
+                            class="w-full h-[72px] px-4 py-3 rounded-xl bg-white shadow border border-gray-200 text-sm flex justify-between items-center transition-all hover:border-blue-300 cursor-pointer group">
+                            <span class="font-medium text-gray-700">{{ hora.rango }}</span>
+                            <div class="flex items-center gap-2">
+                                <span
+                                    class="text-blue-600 font-semibold text-xs bg-blue-50 px-2 py-1 rounded">Disponible</span>
+                                <i
+                                    class="fas fa-chevron-right text-gray-300 group-hover:text-blue-400 transition-colors"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-else class="my-10 text-center px-4">
+                    <div class="bg-gray-50 rounded-2xl p-8 border-2 border-dashed border-gray-200">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-clock text-gray-400 text-2xl"></i>
+                        </div>
+                        <h4 class="text-gray-800 font-bold mb-1">No hay horarios disponibles</h4>
+                        <p class="text-gray-500 text-sm">Probá seleccionando otro día o deporte para ver más opciones.
+                        </p>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Skeleton Loading -->
             <div v-else class="my-10 text-center px-4 flex flex-col items-center">
                 <div class="animate-pulse flex flex-col items-center w-full">
                     <div class="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
@@ -122,10 +138,10 @@ export default {
             salidaConfirmada: false,
             deporteSeleccionado: 'futbol5',
             complejo: {
-                id: 1,
-                nombre: 'Tercer Tiempo',
-                direccion: 'Del Laurel 236, Viedma',
-                imagen: 'https://lh3.googleusercontent.com/p/AF1QipM9N9YYOEDzYw3ejjlq9tdIhq0KHZsmb2EFNFW1=w426-h240-k-no'
+                id: null,
+                nombre: '',
+                direccion: '',
+                imagen: ''
             },
             deportesDisponibles: [
                 { tipo: 'futbol5', nombre: 'Fútbol 5', icono: 'fas fa-futbol' },
@@ -135,7 +151,8 @@ export default {
             ],
             diasDisponibles: [],
             diaSeleccionado: null,
-            rawHorariosData: []
+            rawHorariosData: [],
+            loaded: false
         }
     },
     computed: {
@@ -181,6 +198,11 @@ export default {
                 const data = await response.json();
                 this.rawHorariosData = data.horariosPorDia;
 
+                // Actualizamos los datos del complejo con la info real de la API
+                if (data.complejo) {
+                    this.complejo = data.complejo;
+                }
+
                 // Generamos los días disponibles para el selector
                 this.diasDisponibles = this.rawHorariosData.map(d => {
                     const date = new Date(d.fecha);
@@ -198,6 +220,7 @@ export default {
             } catch (error) {
                 console.error("Error fetching schedules:", error);
             } finally {
+                this.loaded = true;
                 stopLoader();
             }
         },

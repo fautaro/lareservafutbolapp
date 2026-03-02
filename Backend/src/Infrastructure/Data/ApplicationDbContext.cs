@@ -173,6 +173,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             b.Property(x => x.MontoTotal).HasColumnName("montototal").HasColumnType("decimal(10,2)");
             b.Property(x => x.EstadoPago).HasColumnName("estadopago").HasConversion<string>().HasMaxLength(20).HasDefaultValue(EstadoPago.pendiente);
             b.Property(x => x.Confirmada).HasColumnName("confirmada").HasDefaultValue(false);
+            b.Property(x => x.Estado).HasColumnName("estado").HasConversion(v => ((char)v).ToString(), v => (EstadoReserva)v[0]).HasMaxLength(2).HasDefaultValue(EstadoReserva.Pendiente);
             b.Property(x => x.FechaReserva).HasColumnName("fechareserva").HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             b.HasOne(x => x.Usuario)

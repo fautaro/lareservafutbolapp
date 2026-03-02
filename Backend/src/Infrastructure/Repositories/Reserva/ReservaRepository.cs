@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LaReservaBackend.Application.Common.Interfaces;
 using LaReservaBackend.Application.Reservas.Queries;
+using LaReservaBackend.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace LaReservaBackend.Infrastructure.Repositories.Reserva;
@@ -109,8 +110,73 @@ public class ReservaRepository : IReservaRepository
 
         return new GetHorariosDisponiblesResponse
         {
+            Complejo = new ComplejoDetalleResponse
+            {
+                Id = complejo.Id,
+                Nombre = complejo.Nombre,
+                Direccion = complejo.Direccion ?? string.Empty,
+                Imagen = complejo.Imagen
+            },
             HorariosPorDia = horariosPorDia
         };
+    }
+
+    public async Task<GetUserReservationsResponse> GetUserReservations(long usuarioId, CancellationToken cancellationToken = default)
+    {
+        var now = DateTime.UtcNow;
+
+        var allReservas = await _context.Reservas
+            .Include(r => r.Complejo!)
+            .Include(r => r.Cancha!)
+                .ThenInclude(c => c.TipoCancha!)
+            .Where(r => r.UsuarioId == usuarioId && r.Estado == EstadoReserva.Confirmado)
+            .OrderByDescending(r => r.Fecha)
+            .ToListAsync(cancellationToken);
+
+        var pendientes = allReservas
+            .Where(r => r.Fecha >= now)
+            .Select(r => new ReservaDetalleResponse
+            {
+                Id = r.Id,
+                Complejo = r.Complejo?.Nombre ?? "Complejo",
+                Cancha = r.Cancha?.Nombre ?? "Cancha",
+                Deporte = r.Cancha?.TipoCancha?.Nombre ?? "Deporte",
+                Fecha = r.Fecha.ToString("dd/MM/yyyy"),
+                Hora = r.Fecha.ToString("HH:mm"),
+                Estado = r.Confirmada ? "Confirmado" : "Pendiente",
+                Confirmada = r.Confirmada
+            })
+            .ToList();
+
+        var antiguos = allReservas
+            .Where(r => r.Fecha < now)
+            .Select(r => new ReservaDetalleResponse
+            {
+                Id = r.Id,
+                Complejo = r.Complejo?.Nombre ?? "Complejo",
+                Cancha = r.Cancha?.Nombre ?? "Cancha",
+                Deporte = r.Cancha?.TipoCancha?.Nombre ?? "Deporte",
+                Fecha = r.Fecha.ToString("dd/MM/yyyy"),
+                Hora = r.Fecha.ToString("HH:mm"),
+                Estado = "Finalizado",
+                Confirmada = r.Confirmada
+            })
+            .ToList();
+
+        return new GetUserReservationsResponse
+        {
+            PartidosPendientes = pendientes,
+            TurnosAntiguos = antiguos
+        };
+    }
+
+    public async Task<bool> CancelReservation(long reservaId, CancellationToken cancellationToken = default)
+    {
+        var reserva = await _context.Reservas.FindAsync(new object[] { reservaId }, cancellationToken);
+        if (reserva == null) return false;
+
+        reserva.Estado = EstadoReserva.Eliminado;
+        return await _context.SaveChangesAsync(cancellationToken) > 0;
     }
 
     private int ObtenerDiaSemana(DayOfWeek dayOfWeek)

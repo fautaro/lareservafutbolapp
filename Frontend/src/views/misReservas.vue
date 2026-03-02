@@ -150,20 +150,20 @@
 </template>
 
 <script>
-import { startLoader, stopLoader } from '../services/globalLoader'
+import { startLoader, stopLoader } from '../services/globalLoader';
+import { useAuthUser } from '../composables/useAuthUser';
+import { API_ENDPOINTS } from '../config/apiConfig';
 
 export default {
     name: 'Reservas',
+    setup() {
+        const { user } = useAuthUser();
+        return { user };
+    },
     data() {
         return {
-            turnos: [
-                { id: 1, complejo: 'Complejo Deportivo Norte', cancha: 'Cancha 1', fecha: '01/01/2026', hora: '13:00', estado: 'Confirmado' },
-                { id: 2, complejo: 'Club Parque Sur', cancha: 'Cancha 2', fecha: '05/01/2026', hora: '20:30', estado: 'Pendiente' },
-            ],
-            turnosAntiguos: [
-                { id: 201, complejo: 'Polideportivo Oeste', cancha: 'Cancha 4', fecha: '10/10/2025', hora: '19:00', estado: 'Finalizado' },
-                { id: 202, complejo: 'Club Central', cancha: 'Cancha 2', fecha: '02/11/2025', hora: '21:00', estado: 'Finalizado' },
-            ],
+            turnos: [],
+            turnosAntiguos: [],
             showMenuIndex: null,
             showModal: false,
             selectedId: null,
@@ -189,12 +189,21 @@ export default {
     },
 
     methods: {
-        loadData() {
-            startLoader()
-            this._loaderTimer = setTimeout(() => {
-                stopLoader()
-                this._loaderTimer = null
-            }, 1000)
+        async loadData() {
+            startLoader();
+            try {
+                const userId = this.user?.sub || 1;
+                const response = await fetch(API_ENDPOINTS.reservas.getUserReservations(userId));
+                if (!response.ok) throw new Error('Error al cargar reservas');
+
+                const data = await response.json();
+                this.turnos = data.partidosPendientes;
+                this.turnosAntiguos = data.turnosAntiguos;
+            } catch (error) {
+                console.error("Error loading reservations:", error);
+            } finally {
+                stopLoader();
+            }
         },
 
         toggleMenu(i) {
@@ -208,20 +217,33 @@ export default {
         },
         closeModal() { this.showModal = false },
 
-        confirmCancel() {
-            const id = this.selectedId
-            this.showModal = false
-            this.cancellingId = id
+        async confirmCancel() {
+            const id = this.selectedId;
+            this.showModal = false;
+            this.cancellingId = id;
 
-            setTimeout(() => {
-                this.turnos = this.turnos.filter(t => t.id !== id)
-                this.cancellingId = null
-                this.selectedId = null
-                this.showSuccess = true
+            try {
+                const response = await fetch(API_ENDPOINTS.reservas.cancelReservation(id), {
+                    method: 'DELETE'
+                });
 
-                if (this.successTimer) clearTimeout(this.successTimer)
-                this.successTimer = setTimeout(() => (this.showSuccess = false), 3000)
-            }, 2000)
+                if (!response.ok) throw new Error('Error al cancelar reserva');
+
+                // Aplicamos el retraso visual para que se vea el loader de cancelación
+                setTimeout(() => {
+                    this.turnos = this.turnos.filter(t => t.id !== id);
+                    this.cancellingId = null;
+                    this.selectedId = null;
+                    this.showSuccess = true;
+
+                    if (this.successTimer) clearTimeout(this.successTimer);
+                    this.successTimer = setTimeout(() => (this.showSuccess = false), 3000);
+                }, 1000);
+
+            } catch (error) {
+                console.error("Error cancelling reservation:", error);
+                this.cancellingId = null;
+            }
         },
     },
 }

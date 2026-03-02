@@ -8,7 +8,16 @@ namespace LaReservaBackend.Application.Reservas.Queries;
 
 public class GetHorariosDisponiblesResponse
 {
+    public ComplejoDetalleResponse? Complejo { get; set; }
     public List<HorarioPorDia> HorariosPorDia { get; set; } = new();
+}
+
+public class ComplejoDetalleResponse
+{
+    public long Id { get; set; }
+    public string Nombre { get; set; } = string.Empty;
+    public string Direccion { get; set; } = string.Empty;
+    public string? Imagen { get; set; }
 }
 
 public class HorarioPorDia

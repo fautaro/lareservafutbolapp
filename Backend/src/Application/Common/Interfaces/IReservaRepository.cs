@@ -10,4 +10,6 @@ namespace LaReservaBackend.Application.Common.Interfaces;
 public interface IReservaRepository
 {
     Task<GetHorariosDisponiblesResponse> GetHorariosDisponibles(long complejoId, CancellationToken cancellationToken = default);
+    Task<GetUserReservationsResponse> GetUserReservations(long usuarioId, CancellationToken cancellationToken = default);
+    Task<bool> CancelReservation(long reservaId, CancellationToken cancellationToken = default);
 }

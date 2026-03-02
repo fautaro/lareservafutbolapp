@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using LaReservaBackend.Domain.Enums;
 
 namespace LaReservaBackend.Domain.Entities;
 public class Reserva
@@ -28,6 +29,8 @@ public class Reserva
     public EstadoPago EstadoPago { get; set; } = EstadoPago.pendiente;
 
     public bool Confirmada { get; set; } = false;
+
+    public EstadoReserva Estado { get; set; } = EstadoReserva.Pendiente;
 
     public DateTime FechaReserva { get; set; }
 }
