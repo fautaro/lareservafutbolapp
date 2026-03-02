@@ -114,9 +114,6 @@
                         <i class="fas fa-flag-checkered"></i>
                         {{ ta.estado }}
                     </p>
-                    <p class="text-sm font-semibold text-[#101518]">
-                        Resultado: {{ ta.resultado }}
-                    </p>
                 </div>
             </section>
         </transition-group>
@@ -164,8 +161,8 @@ export default {
                 { id: 2, complejo: 'Club Parque Sur', cancha: 'Cancha 2', fecha: '05/01/2026', hora: '20:30', estado: 'Pendiente' },
             ],
             turnosAntiguos: [
-                { id: 201, complejo: 'Polideportivo Oeste', cancha: 'Cancha 4', fecha: '10/10/2025', hora: '19:00', estado: 'Finalizado', resultado: '1 - 3' },
-                { id: 202, complejo: 'Club Central', cancha: 'Cancha 2', fecha: '02/11/2025', hora: '21:00', estado: 'Finalizado', resultado: '2 - 2' },
+                { id: 201, complejo: 'Polideportivo Oeste', cancha: 'Cancha 4', fecha: '10/10/2025', hora: '19:00', estado: 'Finalizado' },
+                { id: 202, complejo: 'Club Central', cancha: 'Cancha 2', fecha: '02/11/2025', hora: '21:00', estado: 'Finalizado' },
             ],
             showMenuIndex: null,
             showModal: false,
@@ -178,7 +175,7 @@ export default {
     },
 
     mounted() {
-        this.loadData() 
+        this.loadData()
     },
 
     computed: {
@@ -197,7 +194,7 @@ export default {
             this._loaderTimer = setTimeout(() => {
                 stopLoader()
                 this._loaderTimer = null
-            }, 1000) 
+            }, 1000)
         },
 
         toggleMenu(i) {

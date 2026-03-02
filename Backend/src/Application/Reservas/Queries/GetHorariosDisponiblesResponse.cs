@@ -23,4 +23,5 @@ public class HorarioDisponible
     public long HorarioCanchaId { get; set; }
     public TimeSpan HoraInicio { get; set; }
     public TimeSpan HoraFin { get; set; }
+    public string TipoCancha { get; set; } = string.Empty;
 }

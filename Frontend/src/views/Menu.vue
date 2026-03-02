@@ -1,4 +1,3 @@
-
 <template>
   <div class="p-4 h-full text-[#101518] space-y-8" style="font-family: Inter, 'Noto Sans', sans-serif;">
     <h1 class="text-4xl font-bold text-left mb-7">Menú</h1>
@@ -19,13 +18,15 @@
           <i class="fas fa-circle-question w-5 text-[#5c748a]"></i>
           Ayuda
         </router-link>
-        <button @click="logoutWithAuth0" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 mt-2">
+        <button @click="logoutWithAuth0"
+          class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 mt-2">
           <i class="fas fa-sign-out-alt mr-2"></i>
           Cerrar sesión
         </button>
       </template>
       <template v-else>
-        <button @click="loginWithAuth0" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">
+        <button @click="loginWithAuth0"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">
           <i class="fas fa-sign-in-alt mr-2"></i>
           Ingresar
         </button>
@@ -35,8 +36,8 @@
 </template>
 
 <script setup>
-import { useAuth0 } from '@auth0/auth0-vue';
-const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
-const loginWithAuth0 = () => loginWithRedirect();
+import { useAuthUser } from '../composables/useAuthUser';
+const { isAuthenticated, login, logout } = useAuthUser();
+const loginWithAuth0 = () => login();
 const logoutWithAuth0 = () => logout({ logoutParams: { returnTo: window.location.origin } });
 </script>

@@ -18,13 +18,12 @@ public class ReservaController : Controller
         _mediator = mediator;
     }
 
-    [HttpGet("HorariosDisponiblesCancha")]
-    public async Task<IActionResult> GetHorariosDisponiblesCancha([FromQuery] int CanchaId, CancellationToken cancellationToken)
+    [HttpGet("HorariosDisponiblesComplejo")]
+    public async Task<IActionResult> GetHorariosDisponiblesComplejo([FromQuery] int ComplejoId, CancellationToken cancellationToken)
     {
-        var request = new GetHorariosDisponibles(CanchaId);
+        var request = new GetHorariosDisponibles(ComplejoId);
         var response = await _mediator.Send(request, cancellationToken);
 
         return Ok(response);
-
     }
 }

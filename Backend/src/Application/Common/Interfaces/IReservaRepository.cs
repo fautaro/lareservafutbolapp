@@ -9,5 +9,5 @@ namespace LaReservaBackend.Application.Common.Interfaces;
 
 public interface IReservaRepository
 {
-    Task<GetHorariosDisponiblesResponse> GetHorariosDisponibles(long canchaId, CancellationToken cancellationToken = default);
+    Task<GetHorariosDisponiblesResponse> GetHorariosDisponibles(long complejoId, CancellationToken cancellationToken = default);
 }

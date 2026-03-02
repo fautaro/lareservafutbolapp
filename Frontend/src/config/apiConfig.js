@@ -6,7 +6,11 @@ export const API_CONFIG = {
 
 export const API_ENDPOINTS = {
   complejos: {
-    getAll: () => `${BASE_URL}/Complejos`
+    getAll: () => `${BASE_URL}/Complejos`,
+    getById: (id) => `${BASE_URL}/Complejos/${id}`
+  },
+  reservas: {
+    getHorariosDisponibles: (complejoId) => `${BASE_URL}/Reserva/HorariosDisponiblesComplejo?ComplejoId=${complejoId}`
   }
 }
 

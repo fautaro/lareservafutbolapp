@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import { useAuth0 } from '@auth0/auth0-vue';
+import { auth0Config } from '../config/auth0Config';
 import DefaultLayout from '../layouts/DefaultLayout.vue';
 import Home from '../views/Home.vue';
 import MisReservas from '../views/misReservas.vue';
@@ -82,12 +83,15 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (to.meta.requiresAuth) {
+    if (auth0Config.loginDisabled) {
+      return next();
+    }
     if (!isAuthenticated.value) {
       return next('/login');
     }
   }
 
-  if (to.path === '/login' && isAuthenticated.value) {
+  if (to.path === '/login' && (auth0Config.loginDisabled || isAuthenticated.value)) {
     return next('/');
   }
 

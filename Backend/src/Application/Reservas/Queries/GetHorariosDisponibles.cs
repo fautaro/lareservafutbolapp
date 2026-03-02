@@ -9,11 +9,11 @@ using LaReservaBackend.Application.Complejos.Queries.GetComplejos;
 namespace LaReservaBackend.Application.Reservas.Queries;
 public class GetHorariosDisponibles : IRequest<GetHorariosDisponiblesResponse>
 {
-    public int CanchaId { get; init; }
+    public int ComplejoId { get; init; }
 
-    public GetHorariosDisponibles(int canchaId)
+    public GetHorariosDisponibles(int complejoId)
     {
-        CanchaId = canchaId;
+        ComplejoId = complejoId;
     }
 
     public class GetHorariosDisponiblesHandler : IRequestHandler<GetHorariosDisponibles, GetHorariosDisponiblesResponse>
@@ -28,7 +28,7 @@ private readonly IReservaRepository _reservaRepository;
 
         public async Task<GetHorariosDisponiblesResponse> Handle(GetHorariosDisponibles request, CancellationToken cancellationToken)
         {
-            return await _reservaRepository.GetHorariosDisponibles(request.CanchaId, cancellationToken);
-   }
+            return await _reservaRepository.GetHorariosDisponibles(request.ComplejoId, cancellationToken);
+        }
     }
 }

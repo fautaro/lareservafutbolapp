@@ -1,5 +1,6 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center p-4" style="font-family: Inter, 'Noto Sans', sans-serif; background-color: #F9FAFB;">
+  <div class="min-h-screen flex items-center justify-center p-4"
+    style="font-family: Inter, 'Noto Sans', sans-serif; background-color: #F9FAFB;">
     <div class="w-full max-w-md">
       <!-- Card principal -->
       <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
@@ -19,22 +20,22 @@
           <div class="flex-1 border-t border-gray-200"></div>
           <div class="px-4">
             <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+              <path
+                d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
             </svg>
           </div>
           <div class="flex-1 border-t border-gray-200"></div>
         </div>
 
         <!-- Botón de login -->
-        <button
-          @click="loginWithAuth0" 
+        <button @click="loginWithAuth0"
           class="w-full text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] flex items-center justify-center gap-3 text-base"
           style="background: linear-gradient(to right, #2563eb, #1d4ed8);"
           @mouseover="$event.target.style.background = 'linear-gradient(to right, #1d4ed8, #1e40af)'"
-          @mouseout="$event.target.style.background = 'linear-gradient(to right, #2563eb, #1d4ed8)'"
-        >
+          @mouseout="$event.target.style.background = 'linear-gradient(to right, #2563eb, #1d4ed8)'">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
           </svg>
           Ingresar
         </button>
@@ -44,10 +45,10 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useAuth0 } from '@auth0/auth0-vue';
-import { useRouter, useRoute } from 'vue-router';
+import { useAuthUser } from '../composables/useAuthUser';
+import { auth0Config } from '../config/auth0Config';
 
-const { loginWithRedirect, isLoading: auth0IsLoading, error: auth0Error } = useAuth0();
+const { login: loginRedirect, isLoading: auth0IsLoading, error: auth0Error } = useAuthUser();
 const router = useRouter();
 const route = useRoute();
 const isLoading = ref(false);
@@ -61,8 +62,13 @@ const loginWithAuth0 = async () => {
   try {
     isLoading.value = true;
     error.value = null;
-    
-    await loginWithRedirect({
+
+    if (auth0Config.loginDisabled) {
+      router.push('/');
+      return;
+    }
+
+    await loginRedirect({
       appState: { returnTo: '/' }
     });
   } catch (err) {
@@ -85,9 +91,12 @@ const loginWithAuth0 = async () => {
 }
 
 @keyframes pulse-subtle {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.9;
   }
