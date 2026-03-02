@@ -16,8 +16,10 @@ public class Reserva
     public long CanchaId { get; set; }
     public Cancha? Cancha { get; set; }
 
+    [Column(TypeName = "timestamp without time zone")]
     public DateTime Fecha { get; set; }
 
+    [Column(TypeName = "timestamp without time zone")]
     public DateTime FechaFin { get; set; }
 
     [MaxLength(50)]
@@ -32,5 +34,6 @@ public class Reserva
 
     public EstadoReserva Estado { get; set; } = EstadoReserva.Pendiente;
 
+    [Column(TypeName = "timestamp without time zone")]
     public DateTime FechaReserva { get; set; }
 }

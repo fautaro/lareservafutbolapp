@@ -17,6 +17,7 @@ public class ReservaDetalleResponse
     public string Deporte { get; set; } = string.Empty;
     public string Fecha { get; set; } = string.Empty;
     public string Hora { get; set; } = string.Empty;
+    public string HoraFin { get; set; } = string.Empty;
     public string Estado { get; set; } = string.Empty;
     public bool Confirmada { get; set; }
 }

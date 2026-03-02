@@ -79,13 +79,30 @@
                 </div>
 
                 <!-- contenido -->
-                <p class="text-base font-semibold">{{ t.complejo }}</p>
-                <p class="text-sm text-gray-700">{{ t.cancha }} · {{ t.fecha }} · {{ t.hora }}</p>
-                <p class="mt-2 inline-flex items-center gap-2 text-lg font-medium"
-                    :class="t.estado === 'Confirmado' ? 'text-green-700' : 'text-yellow-700'">
-                    <i :class="t.estado === 'Confirmado' ? 'fas fa-circle-check' : 'fas fa-hourglass-half'"></i>
-                    {{ t.estado }}
-                </p>
+                <div class="pr-8">
+                    <h3 class="text-base font-bold text-gray-900 mb-2 leading-tight">{{ t.complejo }}</h3>
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 text-gray-600">
+                            <i class="fas fa-futbol text-[10px] w-4 mt-0.5"></i>
+                            <span class="text-sm font-medium">{{ t.cancha }}</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-gray-600">
+                            <i class="fas fa-calendar-day text-[10px] w-4 mt-0.5"></i>
+                            <span class="text-sm">{{ t.fecha }}</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-gray-600">
+                            <i class="fas fa-clock text-[10px] w-4 mt-0.5"></i>
+                            <span class="text-sm">{{ t.hora }} a {{ t.horaFin }} hs</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 pt-2 border-t border-blue-200/50 flex justify-between items-center">
+                    <p class="inline-flex items-center gap-2 text-xs font-bold"
+                        :class="t.estado === 'Confirmado' ? 'text-green-700' : 'text-amber-700'">
+                        <i :class="t.estado === 'Confirmado' ? 'fas fa-check-circle' : 'fas fa-hourglass-half'"></i>
+                        {{ t.estado }}
+                    </p>
+                </div>
             </section>
         </transition-group>
 
@@ -105,42 +122,67 @@
         <!-- Lista con transición -->
         <transition-group v-else name="fade" tag="div">
             <section v-for="ta in turnosAntiguos" :key="ta.id"
-                class="relative rounded-xl bg-gray-200 p-4 shadow-sm mb-4 text-left space-y-1">
-                <p class="text-base font-semibold">{{ ta.complejo }}</p>
-                <p class="text-sm text-gray-700">{{ ta.cancha }} · {{ ta.fecha }} · {{ ta.hora }}</p>
-
-                <div class="mt-2 flex items-center justify-between">
-                    <p class="inline-flex items-center gap-2 text-sm font-medium text-gray-700">
+                class="relative rounded-xl bg-gray-50 border border-gray-100 p-4 shadow-sm mb-4 text-left">
+                <div class="pr-2">
+                    <h3 class="text-sm font-bold text-gray-600 mb-2 leading-tight">{{ ta.complejo }}</h3>
+                    <div class="space-y-0.5 opacity-75">
+                        <div class="flex items-center gap-2 text-xs text-gray-500">
+                            <i class="fas fa-futbol text-[9px] w-3 text-center"></i> <span>{{ ta.cancha }}</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-gray-500">
+                            <i class="fas fa-calendar text-[9px] w-3 text-center"></i> <span>{{ ta.fecha }}</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-gray-500">
+                            <i class="fas fa-clock text-[9px] w-3 text-center"></i> <span>{{ ta.hora }} a {{ ta.horaFin
+                            }} hs</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2 pt-2 border-t border-gray-100 flex items-center justify-between">
+                    <p
+                        class="inline-flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                         <i class="fas fa-flag-checkered"></i>
-                        {{ ta.estado }}
+                        FINALIZADO
                     </p>
                 </div>
             </section>
         </transition-group>
 
         <teleport to="body">
-            <div v-if="showModal" class="fixed inset-0 z-[999] grid place-items-center p-4">
-                <div class="absolute inset-0 bg-black/50" @click="closeModal"></div>
+            <div v-if="showModal" class="fixed inset-0 z-[2100] grid place-items-center p-4">
+                <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="closeModal"></div>
 
-                <div class="relative w-full max-w-sm rounded-lg bg-white p-6 shadow-xl">
-                    <h3 class="text-lg font-semibold">¿Seguro que desea cancelar?</h3>
+                <div class="relative w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl animate-slide-up">
+                    <div
+                        class="w-14 h-14 bg-red-50 rounded-full flex items-center justify-center text-red-500 mx-auto mb-4">
+                        <i class="fas fa-trash-can text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-center text-gray-900">¿Cancelar reserva?</h3>
+                    <p class="text-sm text-gray-500 text-center mt-1">Se perderá el turno seleccionado.</p>
 
-                    <div v-if="turnoSeleccionado" class="mt-3 text-sm text-gray-700 space-y-1">
-                        <p><strong>Complejo:</strong> {{ turnoSeleccionado.complejo }}</p>
-                        <p><strong>Turno:</strong> {{ turnoSeleccionado.cancha }} · {{ turnoSeleccionado.fecha }} · {{
-                            turnoSeleccionado.hora }}</p>
+                    <div v-if="turnoSeleccionado"
+                        class="mt-5 bg-gray-50 rounded-xl p-4 border border-gray-100 space-y-2 text-left">
+                        <p class="text-[10px] uppercase font-black text-gray-400 tracking-widest">Detalles</p>
+                        <p class="text-sm font-bold text-gray-800 leading-tight">{{ turnoSeleccionado.complejo }}</p>
+                        <div class="text-xs text-gray-600 space-y-1">
+                            <div class="flex items-center gap-2"><i class="fas fa-futbol w-3 text-center"></i> {{
+                                turnoSeleccionado.cancha }}</div>
+                            <div class="flex items-center gap-2"><i class="fas fa-calendar-day w-3 text-center"></i> {{
+                                turnoSeleccionado.fecha }}</div>
+                            <div class="flex items-center gap-2"><i class="fas fa-clock w-3 text-center"></i> {{
+                                turnoSeleccionado.hora }} a {{ turnoSeleccionado.horaFin }} hs</div>
+                        </div>
                     </div>
 
-                    <div class="mt-5 flex justify-end gap-3">
+                    <div class="mt-8 flex flex-col gap-2">
                         <button
-                            class="rounded-lg bg-[#EB5757] px-4 py-2 text-sm font-medium text-white hover:brightness-95 focus:outline-none"
+                            class="w-full py-4 bg-red-600 text-white font-black rounded-xl shadow-lg shadow-red-100 active:scale-95 transition-all"
                             @click="confirmCancel">
-                            Confirmar
+                            SÍ, CANCELAR TURNO
                         </button>
-                        <button
-                            class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200"
+                        <button class="w-full py-3 text-sm font-bold text-gray-400 hover:text-gray-600"
                             @click="closeModal">
-                            Cerrar
+                            No, volver atrás
                         </button>
                     </div>
                 </div>

@@ -30,6 +30,9 @@ public class HorarioPorDia
 public class HorarioDisponible
 {
     public long HorarioCanchaId { get; set; }
+    public long CanchaId { get; set; }
+    public string CanchaNombre { get; set; } = string.Empty;
+    public decimal PrecioHora { get; set; }
     public TimeSpan HoraInicio { get; set; }
     public TimeSpan HoraFin { get; set; }
     public string TipoCancha { get; set; } = string.Empty;

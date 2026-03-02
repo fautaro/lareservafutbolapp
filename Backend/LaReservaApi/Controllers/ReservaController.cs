@@ -46,4 +46,17 @@ public class ReservaController : Controller
 
         return NoContent();
     }
+
+    [HttpPost("CreateReserva")]
+    public async Task<IActionResult> CreateReserva([FromBody] CreateReservaCommand command, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(command, cancellationToken);
+
+        if (result == -1)
+        {
+            return BadRequest(new { message = "El horario ya no está disponible." });
+        }
+
+        return Ok(new { id = result });
+    }
 }
