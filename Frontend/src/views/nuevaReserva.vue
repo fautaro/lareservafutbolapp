@@ -42,16 +42,6 @@
                 <p class="text-gray-500 text-lg mb-8 max-w-xs">Tu turno ha sido agendado con éxito. Ya podés verlo en
                     tus
                     reservas.</p>
-                <div class="w-full max-w-xs space-y-4">
-                    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100 flex flex-col gap-1 items-start">
-                        <span class="text-[10px] uppercase font-black text-gray-400 tracking-widest">Complejo</span>
-                        <span class="text-sm font-bold text-gray-800">{{ complejo.nombre }}</span>
-                    </div>
-                    <button @click="$router.push({ name: 'MisReservas' })"
-                        class="w-full py-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-2xl shadow-xl shadow-green-100 transition-all transform active:scale-95">
-                        VER MIS RESERVAS
-                    </button>
-                </div>
             </div>
         </Transition>
 
@@ -236,7 +226,7 @@
                                         <span
                                             class="text-xs text-gray-400 font-extrabold uppercase tracking-widest">Horario</span>
                                         <span class="font-bold text-indigo-700 text-base">{{ horarioSeleccionado?.rango
-                                        }}</span>
+                                            }}</span>
                                     </div>
                                 </div>
 
@@ -250,7 +240,7 @@
                                         <span
                                             class="text-xs text-gray-400 font-extrabold uppercase tracking-widest">Cancha</span>
                                         <span class="font-bold text-gray-800 text-base">{{ getFullCanchaNombre()
-                                        }}</span>
+                                            }}</span>
                                     </div>
                                 </div>
 
@@ -278,7 +268,7 @@
                                         <span
                                             class="text-xs text-gray-400 font-extrabold uppercase tracking-widest">Pago</span>
                                         <span class="font-bold text-gray-800 text-base">{{ getMedioPagoNombre()
-                                            }}</span>
+                                        }}</span>
                                     </div>
                                 </div>
                             </div>

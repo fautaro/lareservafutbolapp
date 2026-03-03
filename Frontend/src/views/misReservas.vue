@@ -56,20 +56,22 @@
             <div class="tabs-container flex overflow-x-auto scroll-smooth p-1 pb-3 px-3 gap-2">
                 <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id"
                     class="flex-shrink-0 py-4 px-6 text-xs font-bold uppercase tracking-widest transition-all duration-300 relative rounded-xl flex items-center justify-center gap-2"
-                    :class="activeTab === tab.id ? 'text-blue-600 bg-blue-50/50' : 'text-slate-400 hover:text-slate-600'">
+                    :class="activeTab === tab.id ? 'text-[#2D9CDB] bg-[#2D9CDB]/5' : 'text-slate-400 hover:text-slate-600'">
                     {{ tab.label }}
                     <!-- Contador numérico -->
                     <span v-if="getTabCount(tab.id) > 0"
-                        class="flex items-center justify-center min-w-[17px] h-[17px] px-1 text-[9px] font-black rounded-full transition-colors"
-                        :class="activeTab === tab.id ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'">
-                        {{ getTabCount(tab.id) }}
-                    </span>
+                        class="inline-flex items-center justify-center w-5 h-5 text-[11px] font-black rounded-full transition-colors leading-[0]"
+                        :class="activeTab === tab.id ? 'bg-[#2D9CDB] text-white' : 'bg-slate-200 text-slate-500'">
+                        {{ getTabCount(tab.id) }}</span>
                     <div v-if="activeTab === tab.id"
-                        class="absolute bottom-1 left-1/2 -translate-x-1/2 w-6 h-1 bg-blue-600 rounded-full tab-indicator">
+                        class="absolute bottom-1 left-1/2 -translate-x-1/2 w-6 h-1 bg-[#2D9CDB] rounded-full tab-indicator">
                     </div>
                 </button>
             </div>
         </div>
+
+        <!-- Capa invisible para cerrar menús al hacer clic fuera -->
+        <div v-if="showMenuId" class="fixed inset-0 z-40" @click="showMenuId = null"></div>
 
         <div class="px-2 pt-8 sm:px-4">
             <!-- Toast de Éxito -->
@@ -104,102 +106,133 @@
 
                             <div v-if="cancellingId === t.id"
                                 class="absolute inset-0 z-40 grid place-items-center bg-white/90 backdrop-blur-sm rounded-[28px]">
-                                <i class="fas fa-circle-notch animate-spin text-blue-600 text-2xl"></i>
+                                <i class="fas fa-circle-notch animate-spin text-[#2D9CDB] text-2xl"></i>
                             </div>
 
-                            <!-- Header: Complejo & Menu -->
-                            <div class="flex justify-between items-center mb-5">
-                                <div class="flex items-center gap-3 min-w-0">
-                                    <div
-                                        class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 shrink-0 border border-slate-100/50">
-                                        <i class="fas fa-building text-xs"></i>
-                                    </div>
-                                    <h3 class="text-lg font-bold text-slate-900 truncate tracking-tight">{{ t.complejo
-                                    }}</h3>
-                                </div>
-                                <div class="relative">
-                                    <button @click.stop="toggleMenu(t.id)"
-                                        class="w-9 h-9 flex items-center justify-center text-slate-300 hover:text-slate-600 hover:bg-slate-50 rounded-xl transition-all">
-                                        <i class="fas fa-ellipsis-v text-xs"></i>
-                                    </button>
-                                    <transition name="fade">
-                                        <div v-if="showMenuId === t.id"
-                                            class="absolute right-0 mt-2 w-48 bg-white border border-slate-100 rounded-2xl shadow-2xl z-50 overflow-hidden ring-1 ring-slate-200/50">
-                                            <button @click.stop="openModal(t.id)"
-                                                class="w-full px-5 py-4 text-left text-xs font-bold text-red-500 hover:bg-red-50 flex items-center gap-3 transition-colors">
-                                                <i class="fas fa-trash-alt"></i>
-                                                CANCELAR RESERVA
-                                            </button>
+                            <!-- Blur wrapper for card content -->
+                            <div :class="{ 'blur-[2px] opacity-40 scale-[0.98] pointer-events-none': showMenuId === t.id }"
+                                class="transition-all duration-500">
+                                <!-- Header: Complejo -->
+                                <div class="flex justify-between items-center mb-5 pr-10">
+                                    <div class="flex items-center gap-3 min-w-0">
+                                        <div
+                                            class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 shrink-0 border border-slate-100/50">
+                                            <i class="fas fa-building text-xs"></i>
                                         </div>
-                                    </transition>
+                                        <h3 class="text-lg font-bold text-slate-900 truncate tracking-tight">{{
+                                            t.complejo
+                                            }}</h3>
+                                    </div>
+                                </div>
+
+                                <!-- Body: Compact Rows -->
+                                <div class="flex flex-col gap-2.5 mb-6">
+                                    <!-- Cancha -->
+                                    <div class="flex items-center gap-4 py-1">
+                                        <div
+                                            class="w-9 h-9 rounded-full bg-[#2D9CDB]/5 flex items-center justify-center text-[#2D9CDB] border border-[#2D9CDB]/20 shrink-0">
+                                            <i class="fas fa-futbol text-xs"></i>
+                                        </div>
+                                        <div class="flex flex-col text-left">
+                                            <span
+                                                class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Cancha</span>
+                                            <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.cancha
+                                                }}</span>
+                                            <span
+                                                class="text-[10px] font-medium text-slate-300 uppercase tracking-wider leading-none mt-0.5">{{
+                                                    t.deporte }}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Fecha -->
+                                    <div class="flex items-center gap-4 py-1">
+                                        <div
+                                            class="w-9 h-9 rounded-full bg-indigo-50/50 flex items-center justify-center text-indigo-500 border border-indigo-100/30 shrink-0">
+                                            <i class="fas fa-calendar-day text-xs"></i>
+                                        </div>
+                                        <div class="flex flex-col text-left">
+                                            <span
+                                                class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Fecha</span>
+                                            <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.fecha
+                                                }}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Hora -->
+                                    <div class="flex items-center gap-4 py-1">
+                                        <div
+                                            class="w-9 h-9 rounded-full bg-emerald-50/50 flex items-center justify-center text-emerald-500 border border-emerald-100/30 shrink-0">
+                                            <i class="fas fa-clock text-xs"></i>
+                                        </div>
+                                        <div class="flex flex-col text-left">
+                                            <span
+                                                class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Hora</span>
+                                            <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.hora }}
+                                                hs</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Footer -->
+                                <div class="flex items-center justify-between pt-5 border-t border-slate-50 gap-4">
+                                    <div class="flex flex-col text-left">
+                                        <span
+                                            class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Medio
+                                            de Pago</span>
+                                        <span
+                                            class="text-xs font-bold text-slate-600 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">
+                                            {{ t.medioPago }}
+                                        </span>
+                                    </div>
+                                    <div class="flex flex-col text-right">
+                                        <span
+                                            class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Total</span>
+                                        <span class="text-xl font-bold text-[#2D9CDB] leading-none">${{
+                                            t.precio.toLocaleString('es-AR') }}</span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Body: Compact Rows -->
-                            <div class="flex flex-col gap-2.5 mb-6">
-                                <!-- Cancha -->
-                                <div class="flex items-center gap-4 py-1">
-                                    <div
-                                        class="w-9 h-9 rounded-full bg-blue-50/50 flex items-center justify-center text-blue-500 border border-blue-100/30 shrink-0">
-                                        <i class="fas fa-futbol text-xs"></i>
-                                    </div>
-                                    <div class="flex flex-col text-left">
-                                        <span
-                                            class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Cancha</span>
-                                        <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.cancha
-                                            }}</span>
-                                        <span
-                                            class="text-[10px] font-medium text-slate-300 uppercase tracking-wider leading-none mt-0.5">{{
-                                                t.deporte }}</span>
-                                    </div>
-                                </div>
+                            <!-- Menu: Extracted from blur wrapper to stay clear -->
+                            <div class="absolute top-7 right-7 z-50">
+                                <button @click.stop="toggleMenu(t.id)"
+                                    class="w-9 h-9 flex items-center justify-center text-slate-300 hover:text-slate-600 hover:bg-slate-50 rounded-xl transition-all"
+                                    :class="{ 'text-[#2D9CDB] bg-[#2D9CDB]/5 shadow-sm': showMenuId === t.id }">
+                                    <i class="fas fa-ellipsis-v text-xs"></i>
+                                </button>
+                                <transition name="fade">
+                                    <div v-if="showMenuId === t.id"
+                                        class="absolute right-0 mt-2 w-52 bg-white border border-slate-100 rounded-3xl shadow-2xl z-50 overflow-hidden ring-1 ring-slate-200/50 py-1">
+                                        <button
+                                            class="w-full px-5 py-3.5 text-left text-[11px] font-bold text-slate-600 hover:bg-slate-50 flex items-center gap-3 transition-colors">
+                                            <i class="fas fa-share-alt text-slate-400 w-4"></i>
+                                            Compartir
+                                        </button>
+                                        <button
+                                            class="w-full px-5 py-3.5 text-left text-[11px] font-bold text-slate-600 hover:bg-slate-50 flex items-center gap-3 transition-colors">
+                                            <i class="fas fa-calendar-plus text-slate-400 w-4"></i>
+                                            Agregar al calendario
+                                        </button>
+                                        <button
+                                            class="w-full px-5 py-3.5 text-left text-[11px] font-bold text-slate-600 hover:bg-slate-50 flex items-center gap-3 transition-colors">
+                                            <i class="fas fa-location-arrow text-slate-400 w-4"></i>
+                                            Como llego
+                                        </button>
+                                        <button
+                                            class="w-full px-5 py-3.5 text-left text-[11px] font-bold text-slate-600 hover:bg-slate-50 flex items-center gap-3 transition-colors">
+                                            <i class="fas fa-phone-alt text-slate-400 w-4"></i>
+                                            Teléfono Complejo
+                                        </button>
 
-                                <!-- Fecha -->
-                                <div class="flex items-center gap-4 py-1">
-                                    <div
-                                        class="w-9 h-9 rounded-full bg-indigo-50/50 flex items-center justify-center text-indigo-500 border border-indigo-100/30 shrink-0">
-                                        <i class="fas fa-calendar-day text-xs"></i>
-                                    </div>
-                                    <div class="flex flex-col text-left">
-                                        <span
-                                            class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Fecha</span>
-                                        <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.fecha
-                                            }}</span>
-                                    </div>
-                                </div>
+                                        <div class="h-px bg-slate-100 mx-3 my-1"></div>
 
-                                <!-- Hora -->
-                                <div class="flex items-center gap-4 py-1">
-                                    <div
-                                        class="w-9 h-9 rounded-full bg-emerald-50/50 flex items-center justify-center text-emerald-500 border border-emerald-100/30 shrink-0">
-                                        <i class="fas fa-clock text-xs"></i>
+                                        <button @click.stop="openModal(t.id)"
+                                            class="w-full px-5 py-4 text-left text-[11px] font-extrabold text-red-500 hover:bg-red-50 flex items-center gap-3 transition-colors text-xs">
+                                            <i class="fas fa-trash-alt w-4"></i>
+                                            CANCELAR RESERVA
+                                        </button>
                                     </div>
-                                    <div class="flex flex-col text-left">
-                                        <span
-                                            class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Hora</span>
-                                        <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.hora }}
-                                            hs</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Footer -->
-                            <div class="flex items-center justify-between pt-5 border-t border-slate-50 gap-4">
-                                <div class="flex flex-col text-left">
-                                    <span
-                                        class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Medio
-                                        de Pago</span>
-                                    <span
-                                        class="text-xs font-bold text-slate-600 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">
-                                        {{ t.medioPago }}
-                                    </span>
-                                </div>
-                                <div class="flex flex-col text-right">
-                                    <span
-                                        class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Total</span>
-                                    <span class="text-xl font-bold text-[#2D9CDB] leading-none">${{
-                                        t.precio.toLocaleString('es-AR') }}</span>
-                                </div>
+                                </transition>
                             </div>
                         </div>
                     </transition-group>
@@ -216,7 +249,7 @@
                         <h3 class="font-bold text-slate-800">Sin partidos próximos</h3>
                         <p class="text-sm text-slate-400 max-w-[200px] mx-auto mt-1">¡Reservá hoy y empezá a jugar!</p>
                         <button @click="$router.push({ name: 'Home' })"
-                            class="mt-6 px-6 py-3 bg-blue-600 text-white rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl shadow-blue-100 transition-all active:scale-95">
+                            class="mt-6 px-6 py-3 bg-[#2D9CDB] text-white rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl shadow-[#2D9CDB]/20 transition-all active:scale-95">
                             Explorar Canchas
                         </button>
                     </div>
@@ -225,99 +258,130 @@
                         <div v-for="t in confirmadas" :key="t.id"
                             class="reserva-card relative rounded-[28px] bg-white border border-slate-100 p-7 shadow-sm hover:shadow-md animate-slide-up">
 
-                            <!-- Header: Complejo & Menu -->
-                            <div class="flex justify-between items-center mb-5">
-                                <div class="flex items-center gap-3 min-w-0">
-                                    <div
-                                        class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 shrink-0 border border-slate-100/50">
-                                        <i class="fas fa-building text-xs"></i>
-                                    </div>
-                                    <h3 class="text-lg font-bold text-slate-900 truncate tracking-tight">{{ t.complejo
-                                        }}</h3>
-                                </div>
-                                <div class="relative">
-                                    <button @click.stop="toggleMenu(t.id)"
-                                        class="w-9 h-9 flex items-center justify-center text-slate-300 hover:text-slate-600 hover:bg-slate-50 rounded-xl transition-all">
-                                        <i class="fas fa-ellipsis-v text-xs"></i>
-                                    </button>
-                                    <transition name="fade">
-                                        <div v-if="showMenuId === t.id"
-                                            class="absolute right-0 mt-2 w-48 bg-white border border-slate-100 rounded-2xl shadow-2xl z-50 overflow-hidden ring-1 ring-slate-200/50">
-                                            <button @click.stop="openModal(t.id)"
-                                                class="w-full px-5 py-4 text-left text-xs font-bold text-red-500 hover:bg-red-50 flex items-center gap-3 transition-colors">
-                                                <i class="fas fa-trash-alt"></i>
-                                                CANCELAR TURNO
-                                            </button>
+                            <!-- Blur wrapper for card content -->
+                            <div :class="{ 'blur-[2px] opacity-40 scale-[0.98] pointer-events-none': showMenuId === t.id }"
+                                class="transition-all duration-500">
+                                <!-- Header: Complejo -->
+                                <div class="flex justify-between items-center mb-5 pr-10">
+                                    <div class="flex items-center gap-3 min-w-0">
+                                        <div
+                                            class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 shrink-0 border border-slate-100/50">
+                                            <i class="fas fa-building text-xs"></i>
                                         </div>
-                                    </transition>
+                                        <h3 class="text-lg font-bold text-slate-900 truncate tracking-tight">{{
+                                            t.complejo
+                                            }}</h3>
+                                    </div>
+                                </div>
+
+                                <!-- Body: Compact Rows -->
+                                <div class="flex flex-col gap-2.5 mb-6">
+                                    <!-- Cancha -->
+                                    <div class="flex items-center gap-4 py-1">
+                                        <div
+                                            class="w-9 h-9 rounded-full bg-[#2D9CDB]/5 flex items-center justify-center text-[#2D9CDB] border border-[#2D9CDB]/20 shrink-0">
+                                            <i class="fas fa-futbol text-xs"></i>
+                                        </div>
+                                        <div class="flex flex-col text-left">
+                                            <span
+                                                class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Cancha</span>
+                                            <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.cancha
+                                                }}</span>
+                                            <span
+                                                class="text-[10px] font-medium text-slate-300 uppercase tracking-wider leading-none mt-0.5">{{
+                                                    t.deporte }}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Fecha -->
+                                    <div class="flex items-center gap-4 py-1">
+                                        <div
+                                            class="w-9 h-9 rounded-full bg-indigo-50/50 flex items-center justify-center text-indigo-500 border border-indigo-100/30 shrink-0">
+                                            <i class="fas fa-calendar-day text-xs"></i>
+                                        </div>
+                                        <div class="flex flex-col text-left">
+                                            <span
+                                                class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Fecha</span>
+                                            <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.fecha
+                                                }}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Hora -->
+                                    <div class="flex items-center gap-4 py-1">
+                                        <div
+                                            class="w-9 h-9 rounded-full bg-emerald-50/50 flex items-center justify-center text-emerald-500 border border-emerald-100/30 shrink-0">
+                                            <i class="fas fa-clock text-xs"></i>
+                                        </div>
+                                        <div class="flex flex-col text-left">
+                                            <span
+                                                class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Hora</span>
+                                            <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.hora }}
+                                                hs</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Footer -->
+                                <div class="flex items-center justify-between pt-5 border-t border-slate-50 gap-4">
+                                    <div class="flex flex-col text-left">
+                                        <span
+                                            class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Medio
+                                            de Pago</span>
+                                        <span
+                                            class="text-xs font-bold text-slate-600 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">
+                                            {{ t.medioPago }}
+                                        </span>
+                                    </div>
+                                    <div class="flex flex-col text-right">
+                                        <span
+                                            class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Total</span>
+                                        <span class="text-xl font-bold text-[#2D9CDB] leading-none">${{
+                                            t.precio.toLocaleString('es-AR') }}</span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Body: Compact Rows -->
-                            <div class="flex flex-col gap-2.5 mb-6">
-                                <!-- Cancha -->
-                                <div class="flex items-center gap-4 py-1">
-                                    <div
-                                        class="w-9 h-9 rounded-full bg-blue-50/50 flex items-center justify-center text-blue-500 border border-blue-100/30 shrink-0">
-                                        <i class="fas fa-futbol text-xs"></i>
-                                    </div>
-                                    <div class="flex flex-col text-left">
-                                        <span
-                                            class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Cancha</span>
-                                        <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.cancha
-                                        }}</span>
-                                        <span
-                                            class="text-[10px] font-medium text-slate-300 uppercase tracking-wider leading-none mt-0.5">{{
-                                                t.deporte }}</span>
-                                    </div>
-                                </div>
+                            <!-- Menu: Extracted from blur wrapper to stay clear -->
+                            <div class="absolute top-7 right-7 z-50">
+                                <button @click.stop="toggleMenu(t.id)"
+                                    class="w-9 h-9 flex items-center justify-center text-slate-300 hover:text-slate-600 hover:bg-slate-50 rounded-xl transition-all"
+                                    :class="{ 'text-[#2D9CDB] bg-[#2D9CDB]/5 shadow-sm': showMenuId === t.id }">
+                                    <i class="fas fa-ellipsis-v text-xs"></i>
+                                </button>
+                                <transition name="fade">
+                                    <div v-if="showMenuId === t.id"
+                                        class="absolute right-0 mt-2 w-52 bg-white border border-slate-100 rounded-3xl shadow-2xl z-50 overflow-hidden ring-1 ring-slate-200/50 py-1">
+                                        <button
+                                            class="w-full px-5 py-3.5 text-left text-[11px] font-bold text-slate-600 hover:bg-slate-50 flex items-center gap-3 transition-colors">
+                                            <i class="fas fa-share-alt text-slate-400 w-4"></i>
+                                            Compartir
+                                        </button>
+                                        <button
+                                            class="w-full px-5 py-3.5 text-left text-[11px] font-bold text-slate-600 hover:bg-slate-50 flex items-center gap-3 transition-colors">
+                                            <i class="fas fa-calendar-plus text-slate-400 w-4"></i>
+                                            Agregar al calendario
+                                        </button>
+                                        <button
+                                            class="w-full px-5 py-3.5 text-left text-[11px] font-bold text-slate-600 hover:bg-slate-50 flex items-center gap-3 transition-colors">
+                                            <i class="fas fa-location-arrow text-slate-400 w-4"></i>
+                                            Como llego
+                                        </button>
+                                        <button
+                                            class="w-full px-5 py-3.5 text-left text-[11px] font-bold text-slate-600 hover:bg-slate-50 flex items-center gap-3 transition-colors">
+                                            <i class="fas fa-phone-alt text-slate-400 w-4"></i>
+                                            Teléfono Complejo
+                                        </button>
 
-                                <!-- Fecha -->
-                                <div class="flex items-center gap-4 py-1">
-                                    <div
-                                        class="w-9 h-9 rounded-full bg-indigo-50/50 flex items-center justify-center text-indigo-500 border border-indigo-100/30 shrink-0">
-                                        <i class="fas fa-calendar-day text-xs"></i>
-                                    </div>
-                                    <div class="flex flex-col text-left">
-                                        <span
-                                            class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Fecha</span>
-                                        <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.fecha
-                                        }}</span>
-                                    </div>
-                                </div>
+                                        <div class="h-px bg-slate-100 mx-3 my-1"></div>
 
-                                <!-- Hora -->
-                                <div class="flex items-center gap-4 py-1">
-                                    <div
-                                        class="w-9 h-9 rounded-full bg-emerald-50/50 flex items-center justify-center text-emerald-500 border border-emerald-100/30 shrink-0">
-                                        <i class="fas fa-clock text-xs"></i>
+                                        <button @click.stop="openModal(t.id)"
+                                            class="w-full px-5 py-4 text-left text-[11px] font-extrabold text-red-500 hover:bg-red-50 flex items-center gap-3 transition-colors text-xs">
+                                            <i class="fas fa-trash-alt w-4"></i>
+                                            CANCELAR TURNO
+                                        </button>
                                     </div>
-                                    <div class="flex flex-col text-left">
-                                        <span
-                                            class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Hora</span>
-                                        <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.hora }}
-                                            hs</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Footer -->
-                            <div class="flex items-center justify-between pt-5 border-t border-slate-50 gap-4">
-                                <div class="flex flex-col text-left">
-                                    <span
-                                        class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Medio
-                                        de Pago</span>
-                                    <span
-                                        class="text-xs font-bold text-slate-600 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">
-                                        {{ t.medioPago }}
-                                    </span>
-                                </div>
-                                <div class="flex flex-col text-right">
-                                    <span
-                                        class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Total</span>
-                                    <span class="text-xl font-bold text-[#2D9CDB] leading-none">${{
-                                        t.precio.toLocaleString('es-AR') }}</span>
-                                </div>
+                                </transition>
                             </div>
                         </div>
                     </transition-group>
@@ -358,7 +422,7 @@
                                         }}</span>
                                     <span
                                         class="text-[10px] font-medium text-slate-300 uppercase tracking-wider leading-none mt-0.5">{{
-                                        ta.deporte }}</span>
+                                            ta.deporte }}</span>
                                 </div>
                             </div>
 
@@ -400,7 +464,7 @@
                                 <span
                                     class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Total</span>
                                 <span class="text-lg font-bold text-slate-400">${{ ta.precio.toLocaleString('es-AR')
-                                }}</span>
+                                    }}</span>
                             </div>
                         </div>
                     </div>
@@ -431,7 +495,7 @@
                                 turnoSeleccionado.complejo }}</p>
                             <div class="flex justify-center">
                                 <span
-                                    class="text-[10px] font-bold text-blue-600 bg-blue-100/40 px-3 py-1 rounded-lg border border-blue-200/50 uppercase tracking-widest">
+                                    class="text-[10px] font-bold text-[#2D9CDB] bg-[#2D9CDB]/5 px-3 py-1 rounded-lg border border-[#2D9CDB]/20 uppercase tracking-widest">
                                     {{ turnoSeleccionado.cancha }}
                                 </span>
                             </div>
