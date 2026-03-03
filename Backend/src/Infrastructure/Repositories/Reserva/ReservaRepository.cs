@@ -131,9 +131,9 @@ public class ReservaRepository : IReservaRepository
             .Select(r => new ReservaDetalleResponse
             {
                 Id = r.Id,
-                Complejo = r.Complejo?.Nombre ?? "Complejo",
-                Cancha = r.Cancha?.Nombre ?? "Cancha",
-                Deporte = r.Cancha?.TipoCancha?.Nombre ?? "Deporte",
+                Complejo = r.Complejo != null ? r.Complejo.Nombre : "Complejo",
+                Cancha = r.Cancha != null ? r.Cancha.Nombre : "Cancha",
+                Deporte = (r.Cancha != null && r.Cancha.TipoCancha != null) ? r.Cancha.TipoCancha.Nombre : "Deporte",
                 Fecha = r.Fecha.ToString("dd/MM/yyyy"),
                 Hora = r.Fecha.ToString("HH:mm"),
                 HoraFin = r.FechaFin.ToString("HH:mm"),
@@ -147,9 +147,9 @@ public class ReservaRepository : IReservaRepository
             .Select(r => new ReservaDetalleResponse
             {
                 Id = r.Id,
-                Complejo = r.Complejo?.Nombre ?? "Complejo",
-                Cancha = r.Cancha?.Nombre ?? "Cancha",
-                Deporte = r.Cancha?.TipoCancha?.Nombre ?? "Deporte",
+                Complejo = r.Complejo != null ? r.Complejo.Nombre : "Complejo",
+                Cancha = r.Cancha != null ? r.Cancha.Nombre : "Cancha",
+                Deporte = (r.Cancha != null && r.Cancha.TipoCancha != null) ? r.Cancha.TipoCancha.Nombre : "Deporte",
                 Fecha = r.Fecha.ToString("dd/MM/yyyy"),
                 Hora = r.Fecha.ToString("HH:mm"),
                 HoraFin = r.FechaFin.ToString("HH:mm"),
@@ -191,6 +191,32 @@ public class ReservaRepository : IReservaRepository
         _context.Reservas.Add(reserva);
         await _context.SaveChangesAsync(cancellationToken);
         return reserva.Id;
+    }
+
+    public async Task<ReservaDetalleResponse?> GetNextReserva(long usuarioId, CancellationToken cancellationToken = default)
+    {
+        var now = DateTime.Now;
+        var proxima = await _context.Reservas
+            .Include(r => r.Complejo!)
+            .Include(r => r.Cancha!)
+                .ThenInclude(c => c.TipoCancha!)
+            .Where(r => r.UsuarioId == usuarioId && r.Estado == EstadoReserva.Confirmado && r.Fecha >= now)
+            .OrderBy(r => r.Fecha)
+            .Select(r => new ReservaDetalleResponse
+            {
+                Id = r.Id,
+                Complejo = r.Complejo != null ? r.Complejo.Nombre : "Complejo",
+                Cancha = r.Cancha != null ? r.Cancha.Nombre : "Cancha",
+                Deporte = (r.Cancha != null && r.Cancha.TipoCancha != null) ? r.Cancha.TipoCancha.Nombre : "Deporte",
+                Fecha = r.Fecha.ToString("dd/MM/yyyy"),
+                Hora = r.Fecha.ToString("HH:mm"),
+                HoraFin = r.FechaFin.ToString("HH:mm"),
+                Estado = r.Confirmada ? "Confirmado" : "Pendiente",
+                Confirmada = r.Confirmada
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return proxima;
     }
 
     private int ObtenerDiaSemana(DayOfWeek dayOfWeek)

@@ -14,4 +14,5 @@ public interface IReservaRepository
     Task<GetUserReservationsResponse> GetUserReservations(long usuarioId, CancellationToken cancellationToken = default);
     Task<bool> CancelReservation(long reservaId, CancellationToken cancellationToken = default);
     Task<long> CreateReservation(LaReservaBackend.Domain.Entities.Reserva reserva, CancellationToken cancellationToken = default);
+    Task<ReservaDetalleResponse?> GetNextReserva(long usuarioId, CancellationToken cancellationToken = default);
 }

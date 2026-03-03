@@ -10,6 +10,7 @@ export const API_ENDPOINTS = {
     getById: (id) => `${BASE_URL}/Complejos/${id}`
   },
   reservas: {
+    getNext: (usuarioId) => `${BASE_URL}/Reserva/GetNext?UsuarioId=${usuarioId}`,
     getHorariosDisponibles: (complejoId) => `${BASE_URL}/Reserva/HorariosDisponiblesComplejo?ComplejoId=${complejoId}`,
     getUserReservations: (usuarioId) => `${BASE_URL}/Reserva/UserReservations?UsuarioId=${usuarioId}`,
     cancelReservation: (id) => `${BASE_URL}/Reserva/CancelReservation/${id}`,

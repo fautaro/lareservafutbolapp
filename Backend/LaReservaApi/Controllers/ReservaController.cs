@@ -59,4 +59,13 @@ public class ReservaController : Controller
 
         return Ok(new { id = result });
     }
+
+    [HttpGet("GetNext")]
+    public async Task<IActionResult> GetNext([FromQuery] long UsuarioId, CancellationToken cancellationToken)
+    {
+        var request = new GetNextReserva(UsuarioId);
+        var response = await _mediator.Send(request, cancellationToken);
+
+        return Ok(response);
+    }
 }

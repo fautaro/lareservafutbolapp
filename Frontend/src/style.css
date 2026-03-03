@@ -1,7 +1,23 @@
-@import 'flowbite';
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --brand-green: #1db954;
+  /* r29 g185 b84 */
+  --brand-dark: #121212;
+  /* r18 g18 b18 */
+  --brand-blue: #2d9cdb;
+  /* r45 g156 b219 */
+  --brand-gray: #b3b3b3;
+  /* r179 g179 b179 */
+}
+
+body {
+  background-color: #f8fafc;
+  color: var(--brand-dark);
+}
 
 .card {
   padding: 2em;
@@ -25,10 +41,12 @@
 .v-leave-to {
   opacity: 0;
 }
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.25s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
