@@ -17,6 +17,7 @@ public class CreateReservaCommand : IRequest<long>
     public TimeSpan HoraInicio { get; set; }
     public TimeSpan HoraFin { get; set; }
     public decimal MontoTotal { get; set; }
+    public int MedioPagoId { get; set; }
 }
 
 public class CreateReservaHandler : IRequestHandler<CreateReservaCommand, long>
@@ -43,6 +44,7 @@ public class CreateReservaHandler : IRequestHandler<CreateReservaCommand, long>
             Fecha = fechaInicio,
             FechaFin = fechaFin,
             MontoTotal = request.MontoTotal,
+            MedioPagoId = request.MedioPagoId,
             Estado = EstadoReserva.Confirmado,
             FechaReserva = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified),
             Confirmada = true,

@@ -20,6 +20,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<Cancha> Canchas => Set<Cancha>();
     public DbSet<Reserva> Reservas => Set<Reserva>();
     public DbSet<HorarioCancha> HorariosCanchas => Set<HorarioCancha>();
+    public DbSet<MedioPago> MedioPagos => Set<MedioPago>();
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -159,6 +161,22 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
      .IsUnique();
         });
 
+        // MedioPago
+        modelBuilder.Entity<MedioPago>(b =>
+        {
+            b.ToTable("mediopago");
+            b.Property(x => x.Id).HasColumnName("id");
+            b.Property(x => x.Nombre).HasColumnName("nombre").HasMaxLength(50).IsRequired();
+            b.Property(x => x.Codigo).HasColumnName("codigo").HasMaxLength(20).IsRequired();
+            b.Property(x => x.Descripcion).HasColumnName("descripcion");
+            b.Property(x => x.Icono).HasColumnName("icono").HasMaxLength(50);
+            b.Property(x => x.Orden).HasColumnName("orden").HasDefaultValue(0);
+            b.Property(x => x.Activo).HasColumnName("activo").HasDefaultValue(true);
+            b.Property(x => x.RequiereComprobante).HasColumnName("requiere_comprobante").HasDefaultValue(false);
+            b.Property(x => x.FechaCreacion).HasColumnName("fechacreacion").HasDefaultValueSql("CURRENT_TIMESTAMP");
+            b.HasIndex(x => x.Codigo).IsUnique();
+        });
+
         // Reserva
         modelBuilder.Entity<Reserva>(b =>
         {
@@ -169,7 +187,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             b.Property(x => x.CanchaId).HasColumnName("canchaid");
             b.Property(x => x.Fecha).HasColumnName("fecha").IsRequired();
             b.Property(x => x.FechaFin).HasColumnName("fechafin").IsRequired();
-            b.Property(x => x.MedioPago).HasColumnName("mediopago").HasMaxLength(50);
+            b.Property(x => x.MedioPagoId).HasColumnName("mediopagoid");
             b.Property(x => x.MontoTotal).HasColumnName("montototal").HasColumnType("decimal(10,2)");
             b.Property(x => x.EstadoPago).HasColumnName("estadopago").HasConversion<string>().HasMaxLength(20).HasDefaultValue(EstadoPago.pendiente);
             b.Property(x => x.Confirmada).HasColumnName("confirmada").HasDefaultValue(false);
@@ -190,6 +208,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
              .WithMany(c => c.Reservas)
              .HasForeignKey(x => x.CanchaId)
              .OnDelete(DeleteBehavior.Restrict);
+
+            b.HasOne(x => x.MedioPago)
+             .WithMany(m => m.Reservas)
+             .HasForeignKey(x => x.MedioPagoId)
+             .OnDelete(DeleteBehavior.Restrict);
+
         });
     }
 }

@@ -100,59 +100,105 @@
 
                     <transition-group v-else name="fade" tag="div" class="space-y-4">
                         <div v-for="t in porConfirmar" :key="t.id"
-                            class="reserva-card relative rounded-2xl bg-white border border-slate-100 p-6 shadow-sm animate-slide-up">
+                            class="reserva-card relative rounded-[28px] bg-white border border-slate-100 p-7 shadow-sm hover:shadow-md animate-slide-up">
 
                             <div v-if="cancellingId === t.id"
-                                class="absolute inset-0 z-40 grid place-items-center bg-white/90 backdrop-blur-sm rounded-2xl">
+                                class="absolute inset-0 z-40 grid place-items-center bg-white/90 backdrop-blur-sm rounded-[28px]">
                                 <i class="fas fa-circle-notch animate-spin text-blue-600 text-2xl"></i>
                             </div>
 
-                            <div class="flex justify-between items-start mb-5 pb-4 border-b border-slate-50">
-                                <div class="space-y-1 text-left">
-                                    <h3 class="text-lg font-bold text-slate-900 truncate max-w-[200px]">{{ t.complejo }}
-                                    </h3>
-                                    <span class="text-[13px] font-bold text-blue-600 uppercase tracking-widest">{{
-                                        t.cancha }}</span>
-                                </div>
-                                <div
-                                    class="bg-amber-50 text-amber-600 px-3 py-1 rounded-full flex items-center gap-1.5">
-                                    <i class="fas fa-clock text-[10px]"></i>
-                                    <span class="text-[10px] font-bold">REVISIÓN</span>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-4 text-left">
-                                    <div class="flex flex-col">
-                                        <span
-                                            class="text-[9px] uppercase font-bold text-slate-300 tracking-wider">Fecha</span>
-                                        <span class="text-sm font-bold text-slate-800">{{ t.fecha }}</span>
+                            <!-- Header: Complejo & Menu -->
+                            <div class="flex justify-between items-center mb-5">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 shrink-0 border border-slate-100/50">
+                                        <i class="fas fa-building text-xs"></i>
                                     </div>
-                                    <div class="w-px h-6 bg-slate-100"></div>
-                                    <div class="flex flex-col">
-                                        <span
-                                            class="text-[9px] uppercase font-bold text-slate-300 tracking-wider">Turno</span>
-                                        <span class="text-sm font-bold text-slate-800">{{ t.hora }} hs</span>
-                                    </div>
+                                    <h3 class="text-lg font-bold text-slate-900 truncate tracking-tight">{{ t.complejo
+                                    }}</h3>
                                 </div>
-                                <!-- Menú de Opciones -->
                                 <div class="relative">
                                     <button @click.stop="toggleMenu(t.id)"
-                                        class="w-8 h-8 flex items-center justify-center text-slate-400 hover:bg-slate-50 rounded-full transition-all">
-                                        <i class="fas fa-ellipsis-v text-sm"></i>
+                                        class="w-9 h-9 flex items-center justify-center text-slate-300 hover:text-slate-600 hover:bg-slate-50 rounded-xl transition-all">
+                                        <i class="fas fa-ellipsis-v text-xs"></i>
                                     </button>
-
-                                    <!-- Dropdown Menu -->
                                     <transition name="fade">
                                         <div v-if="showMenuId === t.id"
-                                            class="absolute right-0 mt-2 w-48 bg-white border border-slate-100 rounded-xl shadow-xl z-50 overflow-hidden">
+                                            class="absolute right-0 mt-2 w-48 bg-white border border-slate-100 rounded-2xl shadow-2xl z-50 overflow-hidden ring-1 ring-slate-200/50">
                                             <button @click.stop="openModal(t.id)"
-                                                class="w-full px-4 py-3 text-left text-xs font-bold text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors">
-                                                <i class="fas fa-trash-can"></i>
+                                                class="w-full px-5 py-4 text-left text-xs font-bold text-red-500 hover:bg-red-50 flex items-center gap-3 transition-colors">
+                                                <i class="fas fa-trash-alt"></i>
                                                 CANCELAR RESERVA
                                             </button>
                                         </div>
                                     </transition>
+                                </div>
+                            </div>
+
+                            <!-- Body: Compact Rows -->
+                            <div class="flex flex-col gap-2.5 mb-6">
+                                <!-- Cancha -->
+                                <div class="flex items-center gap-4 py-1">
+                                    <div
+                                        class="w-9 h-9 rounded-full bg-blue-50/50 flex items-center justify-center text-blue-500 border border-blue-100/30 shrink-0">
+                                        <i class="fas fa-futbol text-xs"></i>
+                                    </div>
+                                    <div class="flex flex-col text-left">
+                                        <span
+                                            class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Cancha</span>
+                                        <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.cancha
+                                            }}</span>
+                                        <span
+                                            class="text-[10px] font-medium text-slate-300 uppercase tracking-wider leading-none mt-0.5">{{
+                                                t.deporte }}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Fecha -->
+                                <div class="flex items-center gap-4 py-1">
+                                    <div
+                                        class="w-9 h-9 rounded-full bg-indigo-50/50 flex items-center justify-center text-indigo-500 border border-indigo-100/30 shrink-0">
+                                        <i class="fas fa-calendar-day text-xs"></i>
+                                    </div>
+                                    <div class="flex flex-col text-left">
+                                        <span
+                                            class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Fecha</span>
+                                        <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.fecha
+                                            }}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Hora -->
+                                <div class="flex items-center gap-4 py-1">
+                                    <div
+                                        class="w-9 h-9 rounded-full bg-emerald-50/50 flex items-center justify-center text-emerald-500 border border-emerald-100/30 shrink-0">
+                                        <i class="fas fa-clock text-xs"></i>
+                                    </div>
+                                    <div class="flex flex-col text-left">
+                                        <span
+                                            class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Hora</span>
+                                        <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.hora }}
+                                            hs</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="flex items-center justify-between pt-5 border-t border-slate-50 gap-4">
+                                <div class="flex flex-col text-left">
+                                    <span
+                                        class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Medio
+                                        de Pago</span>
+                                    <span
+                                        class="text-xs font-bold text-slate-600 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">
+                                        {{ t.medioPago }}
+                                    </span>
+                                </div>
+                                <div class="flex flex-col text-right">
+                                    <span
+                                        class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Total</span>
+                                    <span class="text-xl font-bold text-[#2D9CDB] leading-none">${{
+                                        t.precio.toLocaleString('es-AR') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -177,54 +223,100 @@
 
                     <transition-group v-else name="fade" tag="div" class="space-y-4">
                         <div v-for="t in confirmadas" :key="t.id"
-                            class="reserva-card relative rounded-2xl bg-white border border-slate-100 p-6 shadow-sm animate-slide-up">
+                            class="reserva-card relative rounded-[28px] bg-white border border-slate-100 p-7 shadow-sm hover:shadow-md animate-slide-up">
 
-                            <div class="flex justify-between items-start mb-5 pb-4 border-b border-slate-50">
-                                <div class="space-y-1 text-left">
-                                    <h3 class="text-lg font-bold text-slate-900 truncate max-w-[200px]">{{ t.complejo
-                                    }}</h3>
-                                    <span class="text-[13px] font-bold text-blue-600 uppercase tracking-widest">{{
-                                        t.cancha }}</span>
-                                </div>
-                                <div
-                                    class="bg-green-50 text-green-600 px-3 py-1 rounded-full flex items-center gap-1.5">
-                                    <i class="fas fa-check-circle text-[10px]"></i>
-                                    <span class="text-[10px] font-bold">LISTO</span>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-4 text-left">
-                                    <div class="flex flex-col">
-                                        <span
-                                            class="text-[9px] uppercase font-bold text-slate-300 tracking-wider">Fecha</span>
-                                        <span class="text-sm font-bold text-slate-800">{{ t.fecha }}</span>
+                            <!-- Header: Complejo & Menu -->
+                            <div class="flex justify-between items-center mb-5">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 shrink-0 border border-slate-100/50">
+                                        <i class="fas fa-building text-xs"></i>
                                     </div>
-                                    <div class="w-px h-6 bg-slate-100"></div>
-                                    <div class="flex flex-col">
-                                        <span
-                                            class="text-[9px] uppercase font-bold text-slate-300 tracking-wider">Turno</span>
-                                        <span class="text-sm font-bold text-slate-800">{{ t.hora }} hs</span>
-                                    </div>
+                                    <h3 class="text-lg font-bold text-slate-900 truncate tracking-tight">{{ t.complejo
+                                        }}</h3>
                                 </div>
-                                <!-- Menú de Opciones -->
                                 <div class="relative">
                                     <button @click.stop="toggleMenu(t.id)"
-                                        class="w-8 h-8 flex items-center justify-center text-slate-400 hover:bg-slate-50 rounded-full transition-all">
-                                        <i class="fas fa-ellipsis-v text-sm"></i>
+                                        class="w-9 h-9 flex items-center justify-center text-slate-300 hover:text-slate-600 hover:bg-slate-50 rounded-xl transition-all">
+                                        <i class="fas fa-ellipsis-v text-xs"></i>
                                     </button>
-
-                                    <!-- Dropdown Menu -->
                                     <transition name="fade">
                                         <div v-if="showMenuId === t.id"
-                                            class="absolute right-0 mt-2 w-48 bg-white border border-slate-100 rounded-xl shadow-xl z-50 overflow-hidden">
+                                            class="absolute right-0 mt-2 w-48 bg-white border border-slate-100 rounded-2xl shadow-2xl z-50 overflow-hidden ring-1 ring-slate-200/50">
                                             <button @click.stop="openModal(t.id)"
-                                                class="w-full px-4 py-3 text-left text-xs font-bold text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors">
-                                                <i class="fas fa-ban"></i>
-                                                CANCELAR RESERVA
+                                                class="w-full px-5 py-4 text-left text-xs font-bold text-red-500 hover:bg-red-50 flex items-center gap-3 transition-colors">
+                                                <i class="fas fa-trash-alt"></i>
+                                                CANCELAR TURNO
                                             </button>
                                         </div>
                                     </transition>
+                                </div>
+                            </div>
+
+                            <!-- Body: Compact Rows -->
+                            <div class="flex flex-col gap-2.5 mb-6">
+                                <!-- Cancha -->
+                                <div class="flex items-center gap-4 py-1">
+                                    <div
+                                        class="w-9 h-9 rounded-full bg-blue-50/50 flex items-center justify-center text-blue-500 border border-blue-100/30 shrink-0">
+                                        <i class="fas fa-futbol text-xs"></i>
+                                    </div>
+                                    <div class="flex flex-col text-left">
+                                        <span
+                                            class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Cancha</span>
+                                        <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.cancha
+                                        }}</span>
+                                        <span
+                                            class="text-[10px] font-medium text-slate-300 uppercase tracking-wider leading-none mt-0.5">{{
+                                                t.deporte }}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Fecha -->
+                                <div class="flex items-center gap-4 py-1">
+                                    <div
+                                        class="w-9 h-9 rounded-full bg-indigo-50/50 flex items-center justify-center text-indigo-500 border border-indigo-100/30 shrink-0">
+                                        <i class="fas fa-calendar-day text-xs"></i>
+                                    </div>
+                                    <div class="flex flex-col text-left">
+                                        <span
+                                            class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Fecha</span>
+                                        <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.fecha
+                                        }}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Hora -->
+                                <div class="flex items-center gap-4 py-1">
+                                    <div
+                                        class="w-9 h-9 rounded-full bg-emerald-50/50 flex items-center justify-center text-emerald-500 border border-emerald-100/30 shrink-0">
+                                        <i class="fas fa-clock text-xs"></i>
+                                    </div>
+                                    <div class="flex flex-col text-left">
+                                        <span
+                                            class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Hora</span>
+                                        <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.hora }}
+                                            hs</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="flex items-center justify-between pt-5 border-t border-slate-50 gap-4">
+                                <div class="flex flex-col text-left">
+                                    <span
+                                        class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Medio
+                                        de Pago</span>
+                                    <span
+                                        class="text-xs font-bold text-slate-600 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">
+                                        {{ t.medioPago }}
+                                    </span>
+                                </div>
+                                <div class="flex flex-col text-right">
+                                    <span
+                                        class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Total</span>
+                                    <span class="text-xl font-bold text-[#2D9CDB] leading-none">${{
+                                        t.precio.toLocaleString('es-AR') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -232,7 +324,7 @@
                 </div>
 
                 <!-- TAB 3: HISTORIAL -->
-                <div v-else-if="activeTab === 'historial'" key="historial" class="space-y-3">
+                <div v-else-if="activeTab === 'historial'" key="historial" class="space-y-4">
                     <div v-if="turnosAntiguos.length === 0"
                         class="flex flex-col items-center justify-center py-24 text-center opacity-30">
                         <i class="fas fa-history text-4xl mb-4"></i>
@@ -240,35 +332,75 @@
                     </div>
 
                     <div v-for="ta in turnosAntiguos" :key="ta.id"
-                        class="reserva-card relative rounded-2xl bg-white border border-slate-100 p-6 shadow-sm animate-slide-up">
+                        class="reserva-card relative rounded-[28px] bg-white border border-slate-100 p-7 shadow-sm opacity-80 filter grayscale-[0.2]">
 
-                        <div class="flex justify-between items-start mb-5 pb-4 border-b border-slate-50">
-                            <div class="space-y-1 text-left">
-                                <h3 class="text-lg font-bold text-slate-900 truncate max-w-[200px]">{{ ta.complejo }}
-                                </h3>
-                                <span class="text-[13px] font-bold text-blue-600 uppercase tracking-widest">{{ ta.cancha
-                                    }}</span>
-                            </div>
+                        <!-- Header Historial: Complejo -->
+                        <div class="flex items-center gap-3 mb-5">
                             <div
-                                class="bg-slate-50 text-slate-400 px-3 py-1 rounded-full flex items-center gap-1.5 opacity-60">
-                                <i class="fas fa-history text-[10px]"></i>
-                                <span class="text-[10px] font-bold">PASADA</span>
+                                class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-300 shrink-0 border border-slate-100/50">
+                                <i class="fas fa-building text-xs"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-500 truncate tracking-tight">{{ ta.complejo }}</h3>
+                        </div>
+
+                        <!-- Body Historial: Compact Rows -->
+                        <div class="flex flex-col gap-2.5 mb-6">
+                            <!-- Cancha -->
+                            <div class="flex items-center gap-4 py-1">
+                                <div
+                                    class="w-9 h-9 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100 shrink-0">
+                                    <i class="fas fa-futbol text-xs"></i>
+                                </div>
+                                <div class="flex flex-col text-left">
+                                    <span
+                                        class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Cancha</span>
+                                    <span class="text-sm font-bold text-slate-500 truncate leading-tight">{{ ta.cancha
+                                        }}</span>
+                                    <span
+                                        class="text-[10px] font-medium text-slate-300 uppercase tracking-wider leading-none mt-0.5">{{
+                                        ta.deporte }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Fecha -->
+                            <div class="flex items-center gap-4 py-1">
+                                <div
+                                    class="w-9 h-9 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100 shrink-0">
+                                    <i class="fas fa-calendar-day text-xs"></i>
+                                </div>
+                                <div class="flex flex-col text-left">
+                                    <span
+                                        class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Fecha</span>
+                                    <span class="text-sm font-bold text-slate-500 leading-tight">{{ ta.fecha }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Hora -->
+                            <div class="flex items-center gap-4 py-1">
+                                <div
+                                    class="w-9 h-9 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100 shrink-0">
+                                    <i class="fas fa-clock text-xs"></i>
+                                </div>
+                                <div class="flex flex-col text-left">
+                                    <span
+                                        class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Hora</span>
+                                    <span class="text-sm font-bold text-slate-500 leading-tight">{{ ta.hora }} hs</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4 text-left">
-                                <div class="flex flex-col">
-                                    <span
-                                        class="text-[9px] uppercase font-bold text-slate-300 tracking-wider">Fecha</span>
-                                    <span class="text-sm font-bold text-slate-800">{{ ta.fecha }}</span>
-                                </div>
-                                <div class="w-px h-6 bg-slate-100"></div>
-                                <div class="flex flex-col">
-                                    <span
-                                        class="text-[9px] uppercase font-bold text-slate-300 tracking-wider">Turno</span>
-                                    <span class="text-sm font-bold text-slate-800">{{ ta.hora }} hs</span>
-                                </div>
+                        <!-- Footer Historial -->
+                        <div class="flex items-center justify-between pt-5 border-t border-slate-50 gap-4">
+                            <div class="flex flex-col text-left">
+                                <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Medio
+                                    de Pago</span>
+                                <span class="text-xs font-bold text-slate-400">{{ ta.medioPago }}</span>
+                            </div>
+                            <div class="flex flex-col text-right">
+                                <span
+                                    class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Total</span>
+                                <span class="text-lg font-bold text-slate-400">${{ ta.precio.toLocaleString('es-AR')
+                                }}</span>
                             </div>
                         </div>
                     </div>

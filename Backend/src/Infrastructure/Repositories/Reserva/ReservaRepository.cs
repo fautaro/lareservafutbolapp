@@ -122,6 +122,7 @@ public class ReservaRepository : IReservaRepository
             .Include(r => r.Complejo!)
             .Include(r => r.Cancha!)
                 .ThenInclude(c => c.TipoCancha!)
+            .Include(r => r.MedioPago!)
             .Where(r => r.UsuarioId == usuarioId && r.Estado == EstadoReserva.Confirmado)
             .OrderByDescending(r => r.Fecha)
             .ToListAsync(cancellationToken);
@@ -138,6 +139,9 @@ public class ReservaRepository : IReservaRepository
                 Hora = r.Fecha.ToString("HH:mm"),
                 HoraFin = r.FechaFin.ToString("HH:mm"),
                 Estado = r.Confirmada ? "Confirmado" : "Pendiente",
+                MedioPago = r.MedioPago != null ? r.MedioPago.Nombre : "No especificado",
+                RequiereComprobante = r.MedioPago != null && r.MedioPago.RequiereComprobante,
+                Precio = r.MontoTotal ?? 0,
                 Confirmada = r.Confirmada
             })
             .ToList();
@@ -154,6 +158,9 @@ public class ReservaRepository : IReservaRepository
                 Hora = r.Fecha.ToString("HH:mm"),
                 HoraFin = r.FechaFin.ToString("HH:mm"),
                 Estado = "Finalizado",
+                MedioPago = r.MedioPago != null ? r.MedioPago.Nombre : "No especificado",
+                RequiereComprobante = r.MedioPago != null && r.MedioPago.RequiereComprobante,
+                Precio = r.MontoTotal ?? 0,
                 Confirmada = r.Confirmada
             })
             .ToList();
@@ -174,7 +181,7 @@ public class ReservaRepository : IReservaRepository
         return await _context.SaveChangesAsync(cancellationToken) > 0;
     }
 
-    public async Task<long> CreateReservation(Domain.Entities.Reserva reserva, CancellationToken cancellationToken = default)
+    public async Task<long> CreateReservation(LaReservaBackend.Domain.Entities.Reserva reserva, CancellationToken cancellationToken = default)
     {
         // Verificar disponibilidad de último momento
         var existeSobreposicion = await _context.Reservas
@@ -200,6 +207,7 @@ public class ReservaRepository : IReservaRepository
             .Include(r => r.Complejo!)
             .Include(r => r.Cancha!)
                 .ThenInclude(c => c.TipoCancha!)
+            .Include(r => r.MedioPago!)
             .Where(r => r.UsuarioId == usuarioId && r.Estado == EstadoReserva.Confirmado && r.Fecha >= now)
             .OrderBy(r => r.Fecha)
             .Select(r => new ReservaDetalleResponse
@@ -212,6 +220,9 @@ public class ReservaRepository : IReservaRepository
                 Hora = r.Fecha.ToString("HH:mm"),
                 HoraFin = r.FechaFin.ToString("HH:mm"),
                 Estado = r.Confirmada ? "Confirmado" : "Pendiente",
+                MedioPago = r.MedioPago != null ? r.MedioPago.Nombre : "No especificado",
+                RequiereComprobante = r.MedioPago != null && r.MedioPago.RequiereComprobante,
+                Precio = r.MontoTotal ?? 0,
                 Confirmada = r.Confirmada
             })
             .FirstOrDefaultAsync(cancellationToken);

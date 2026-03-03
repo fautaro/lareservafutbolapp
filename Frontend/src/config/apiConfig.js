@@ -18,6 +18,9 @@ export const API_ENDPOINTS = {
   },
   usuarios: {
     getProfile: (id) => `${BASE_URL}/Usuario/${id}`
+  },
+  medioPagos: {
+    getAll: () => `${BASE_URL}/MedioPago`
   }
 }
 

@@ -19,5 +19,8 @@ public class ReservaDetalleResponse
     public string Hora { get; set; } = string.Empty;
     public string HoraFin { get; set; } = string.Empty;
     public string Estado { get; set; } = string.Empty;
+    public string MedioPago { get; set; } = string.Empty;
+    public bool RequiereComprobante { get; set; }
+    public decimal Precio { get; set; }
     public bool Confirmada { get; set; }
 }

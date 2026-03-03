@@ -22,8 +22,8 @@ public class Reserva
     [Column(TypeName = "timestamp without time zone")]
     public DateTime FechaFin { get; set; }
 
-    [MaxLength(50)]
-    public string? MedioPago { get; set; }
+    public int? MedioPagoId { get; set; }
+    public MedioPago? MedioPago { get; set; }
 
     [Column(TypeName = "decimal(10,2)")]
     public decimal? MontoTotal { get; set; }

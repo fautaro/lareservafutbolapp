@@ -126,18 +126,42 @@
                     </div>
                 </div>
 
+                <!-- Selector de Medio de Pago -->
+                <div v-if="mediosPago.length" class="mb-6">
+                    <h3 class="text-base font-semibold text-gray-700 mb-2">Elegí el medio de pago:</h3>
+                    <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar flex-nowrap">
+                        <button v-for="mp in mediosPago" :key="mp.id" @click="medioPagoSeleccionadoId = mp.id" :class="[
+                            'min-w-[120px] px-4 py-3 rounded-xl text-sm font-bold border-2 transition-all duration-200 whitespace-nowrap text-center flex-shrink-0 flex flex-col items-center gap-1',
+                            mp.id === medioPagoSeleccionadoId ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 bg-white text-gray-600'
+                        ]">
+                            <i :class="mp.icono || 'fas fa-wallet'" class="text-base mb-1"></i>
+                            {{ mp.nombre }}
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Horarios disponibles -->
                 <div v-if="horarios.length" class="mb-6">
                     <h3 class="text-base font-semibold text-gray-700 mb-2">Horarios disponibles</h3>
                     <div class="flex flex-col gap-3">
                         <div v-for="(hora, i) in horarios" :key="i" @click="preConfirmarReserva(hora)"
-                            class="w-full h-[72px] px-4 py-3 rounded-xl bg-white shadow border border-gray-200 text-sm flex justify-between items-center transition-all hover:border-blue-300 cursor-pointer group">
-                            <span class="font-medium text-gray-700">{{ hora.rango }}</span>
-                            <div class="flex items-center gap-2">
-                                <span
-                                    class="text-blue-600 font-semibold text-xs bg-blue-50 px-2 py-1 rounded">Disponible</span>
-                                <i
-                                    class="fas fa-chevron-right text-gray-300 group-hover:text-blue-400 transition-colors"></i>
+                            class="w-full h-20 px-5 py-4 rounded-2xl bg-white shadow-sm border border-gray-100 flex justify-between items-center transition-all hover:border-blue-400 hover:shadow-md cursor-pointer group active:scale-[0.98]">
+                            <div class="flex flex-col">
+                                <span class="text-base font-bold text-gray-900 leading-tight">{{ hora.rango }}</span>
+                                <span class="text-xs text-blue-500 font-semibold mt-0.5">Disponible</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="text-right flex flex-col">
+                                    <span class="text-lg font-bold text-[#2D9CDB]">${{
+                                        hora.precioHora?.toLocaleString('es-AR') }}</span>
+                                    <span class="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">por
+                                        turno</span>
+                                </div>
+                                <div
+                                    class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-blue-50 transition-colors">
+                                    <i
+                                        class="fas fa-chevron-right text-gray-300 group-hover:text-[#2D9CDB] text-xs"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -231,7 +255,7 @@
                                 </div>
 
                                 <!-- Precio -->
-                                <div class="flex items-center gap-3 py-2">
+                                <div class="flex items-center gap-3 py-2 border-b border-gray-50">
                                     <div
                                         class="w-9 h-9 bg-red-50 rounded-lg flex items-center justify-center text-red-600 flex-shrink-0">
                                         <i class="fas fa-money-bill-wave text-xs"></i>
@@ -241,6 +265,20 @@
                                             class="text-xs text-gray-400 font-extrabold uppercase tracking-widest">Precio</span>
                                         <span class="font-bold text-gray-900 text-base">${{
                                             horarioSeleccionado?.precioHora?.toLocaleString('es-AR') }}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Medio de Pago Summary -->
+                                <div class="flex items-center gap-3 py-2">
+                                    <div
+                                        class="w-9 h-9 bg-purple-50 rounded-lg flex items-center justify-center text-purple-600 flex-shrink-0">
+                                        <i :class="getMedioPagoIcono()" class="text-xs"></i>
+                                    </div>
+                                    <div class="flex-1 flex justify-between items-center">
+                                        <span
+                                            class="text-xs text-gray-400 font-extrabold uppercase tracking-widest">Pago</span>
+                                        <span class="font-bold text-gray-800 text-base">{{ getMedioPagoNombre()
+                                            }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -318,6 +356,8 @@ export default {
             diasDisponibles: [],
             diaSeleccionado: null,
             rawHorariosData: [],
+            mediosPago: [],
+            medioPagoSeleccionadoId: null,
             loaded: false,
             reservaExitosa: false
         }
@@ -401,6 +441,15 @@ export default {
                     this.diaSeleccionado = this.diasDisponibles[0].fechaExacta;
                     this.resetSelection();
                 }
+
+                // Fetch Medios de Pago
+                const mpResponse = await fetch(API_ENDPOINTS.medioPagos.getAll());
+                if (mpResponse.ok) {
+                    this.mediosPago = await mpResponse.json();
+                    if (this.mediosPago.length > 0) {
+                        this.medioPagoSeleccionadoId = this.mediosPago[0].id;
+                    }
+                }
             } catch (error) {
                 console.error("Error fetching schedules:", error);
             } finally {
@@ -460,6 +509,12 @@ export default {
             const deporte = this.getDeporteNombre();
             return cancha ? `${cancha.nombre} (${deporte})` : deporte;
         },
+        getMedioPagoNombre() {
+            return this.mediosPago.find(m => m.id === this.medioPagoSeleccionadoId)?.nombre || 'No seleccionado';
+        },
+        getMedioPagoIcono() {
+            return this.mediosPago.find(m => m.id === this.medioPagoSeleccionadoId)?.icono || 'fas fa-wallet';
+        },
         async confirmarReservaFinal() {
             startLoader();
             try {
@@ -470,7 +525,8 @@ export default {
                     fecha: this.diaSeleccionado,
                     horaInicio: this.horarioSeleccionado.horaInicio,
                     horaFin: this.horarioSeleccionado.horaFin,
-                    montoTotal: this.horarioSeleccionado.precioHora
+                    montoTotal: this.horarioSeleccionado.precioHora,
+                    medioPagoId: this.medioPagoSeleccionadoId
                 };
 
                 const response = await fetch(API_ENDPOINTS.reservas.create, {
