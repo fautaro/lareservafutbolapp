@@ -1,5 +1,5 @@
-using LaReservaBackend.Application.DependencyInjection;
 using LaReservaBackend.Application.Common.Interfaces;
+using LaReservaBackend.Application.DependencyInjection;
 using LaReservaBackend.Infrastructure.Data;
 using LaReservaBackend.Infrastructure.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -29,8 +29,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
- app.UseSwagger();
- app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseCors(builder =>

@@ -151,12 +151,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             b.Property(x => x.HoraInicio).HasColumnName("hora_inicio").IsRequired();
             b.Property(x => x.HoraFin).HasColumnName("hora_fin").IsRequired();
             b.Property(x => x.Disponible).HasColumnName("disponible").HasDefaultValue(true);
-    
+
             b.HasOne(x => x.Cancha)
              .WithMany(c => c.HorariosCanchas)
              .HasForeignKey(x => x.CanchaId)
              .OnDelete(DeleteBehavior.Cascade);
- 
+
             b.HasIndex(x => new { x.CanchaId, x.DiaSemana, x.HoraInicio, x.HoraFin })
      .IsUnique();
         });

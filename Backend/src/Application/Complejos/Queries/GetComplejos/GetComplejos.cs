@@ -1,6 +1,4 @@
 ﻿using LaReservaBackend.Application.Common.Interfaces;
-using LaReservaBackend.Application.Common.Models.DTOs.Deportes;
-using MediatR;
 
 namespace LaReservaBackend.Application.Complejos.Queries.GetComplejos;
 

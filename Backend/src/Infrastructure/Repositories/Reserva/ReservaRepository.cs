@@ -1,7 +1,6 @@
 ﻿using LaReservaBackend.Application.Common.Interfaces;
 using LaReservaBackend.Application.Reservas.Queries;
 using LaReservaBackend.Domain.Enums;
-using LaReservaBackend.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace LaReservaBackend.Infrastructure.Repositories.Reserva;
@@ -26,7 +25,7 @@ public class ReservaRepository : IReservaRepository
             return new GetHorariosDisponiblesResponse();
         }
 
-        var maxDias = complejo.MaxDiasDisponiblesReserva ?? 7; 
+        var maxDias = complejo.MaxDiasDisponiblesReserva ?? 7;
         var canchasIds = complejo.Canchas.Select(c => c.Id).ToList();
         var fechaInicio = DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Unspecified);
         var fechaFin = fechaInicio.AddDays(maxDias);
@@ -40,9 +39,9 @@ public class ReservaRepository : IReservaRepository
 
         // Obtener todas las reservas confirmadas de todas las canchas del complejo
         var reservasConfirmadas = await _context.Reservas
-            .Where(r => canchasIds.Contains(r.CanchaId) 
-                && r.Confirmada 
-                && r.Fecha >= fechaInicio 
+            .Where(r => canchasIds.Contains(r.CanchaId)
+                && r.Confirmada
+                && r.Fecha >= fechaInicio
                 && r.Fecha < fechaFin)
             .Select(r => new { r.CanchaId, r.Fecha, r.FechaFin })
             .ToListAsync(cancellationToken);
@@ -56,50 +55,51 @@ public class ReservaRepository : IReservaRepository
 
             var horariosDisponibles = new List<HorarioDisponible>();
 
-        foreach (var horario in horariosCanchas.Where(h => h.DiaSemana == diaSemana))
-        {
-            var fechaHoraInicio = fechaActual.Date + horario.HoraInicio;
-            var fechaHoraFin = fechaActual.Date + horario.HoraFin;
-
-            // Verificar si el horario ya pasó (si es hoy)
-            if (fechaActual.Date == DateTime.Today && fechaHoraInicio <= DateTime.Now)
+            foreach (var horario in horariosCanchas.Where(h => h.DiaSemana == diaSemana))
             {
-                continue;
+                var fechaHoraInicio = fechaActual.Date + horario.HoraInicio;
+                var fechaHoraFin = fechaActual.Date + horario.HoraFin;
+
+                // Verificar si el horario ya pasó (si es hoy)
+                if (fechaActual.Date == DateTime.Today && fechaHoraInicio <= DateTime.Now)
+                {
+                    continue;
+                }
+
+                // Verificar si este horario específico de esta cancha está libre
+                var estaReservado = reservasConfirmadas.Any(r =>
+                    r.CanchaId == horario.CanchaId &&
+                    ((fechaHoraInicio >= r.Fecha && fechaHoraInicio < r.FechaFin) ||
+                     (fechaHoraFin > r.Fecha && fechaHoraFin <= r.FechaFin) ||
+                     (fechaHoraInicio <= r.Fecha && fechaHoraFin >= r.FechaFin))
+                );
+
+                if (!estaReservado)
+                {
+                    horariosDisponibles.Add(new HorarioDisponible
+                    {
+                        HorarioCanchaId = horario.Id,
+                        CanchaId = horario.CanchaId,
+                        CanchaNombre = horario.Cancha?.Nombre ?? "Cancha",
+                        PrecioHora = horario.Cancha?.PrecioHora ?? 0,
+                        HoraInicio = horario.HoraInicio,
+                        HoraFin = horario.HoraFin,
+                        TipoCancha = horario.Cancha?.TipoCancha?.Nombre ?? "Deporte"
+                    });
+                }
             }
 
-            // Verificar si este horario específico de esta cancha está libre
-            var estaReservado = reservasConfirmadas.Any(r => 
-                r.CanchaId == horario.CanchaId && 
-                ((fechaHoraInicio >= r.Fecha && fechaHoraInicio < r.FechaFin) ||
-                 (fechaHoraFin > r.Fecha && fechaHoraFin <= r.FechaFin) ||
-                 (fechaHoraInicio <= r.Fecha && fechaHoraFin >= r.FechaFin))
-            );
-
-            if (!estaReservado)
+            if (horariosDisponibles.Any())
             {
-                horariosDisponibles.Add(new HorarioDisponible
+                horariosPorDia.Add(new HorarioPorDia
                 {
-                    HorarioCanchaId = horario.Id,
-                    CanchaId = horario.CanchaId,
-                    CanchaNombre = horario.Cancha?.Nombre ?? "Cancha",
-                    PrecioHora = horario.Cancha?.PrecioHora ?? 0,
-                    HoraInicio = horario.HoraInicio,
-                    HoraFin = horario.HoraFin,
-                    TipoCancha = horario.Cancha?.TipoCancha?.Nombre ?? "Deporte"
+                    Fecha = fechaActual,
+                    DiaSemana = diaSemana,
+                    Horarios = horariosDisponibles.OrderBy(h => h.CanchaNombre).ThenBy(h => h.HoraInicio).ToList()
                 });
             }
         }
 
-        if (horariosDisponibles.Any())
-        {
-            horariosPorDia.Add(new HorarioPorDia
-            {
-                Fecha = fechaActual,
-                DiaSemana = diaSemana,
-                Horarios = horariosDisponibles.OrderBy(h => h.CanchaNombre).ThenBy(h => h.HoraInicio).ToList()
-            });
-        }    }
-        
 
         return new GetHorariosDisponiblesResponse
         {
@@ -185,7 +185,7 @@ public class ReservaRepository : IReservaRepository
     {
         // Verificar disponibilidad de último momento
         var existeSobreposicion = await _context.Reservas
-            .AnyAsync(r => 
+            .AnyAsync(r =>
                 r.CanchaId == reserva.CanchaId &&
                 r.Estado != EstadoReserva.Eliminado &&
                 ((reserva.Fecha >= r.Fecha && reserva.Fecha < r.FechaFin) ||

@@ -1,8 +1,6 @@
 using LaReservaBackend.Application.Usuarios.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace LaReservaApi.Controllers;
 

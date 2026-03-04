@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using LaReservaBackend.Domain.Enums;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LaReservaBackend.Domain.Entities;
 public class Reserva

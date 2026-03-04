@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using LaReservaBackend.Domain.Common;
 
 namespace LaReservaBackend.Domain.Entities;
 

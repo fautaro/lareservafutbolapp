@@ -1,5 +1,3 @@
-using System;
-
 namespace LaReservaBackend.Application.Usuarios.Queries;
 
 public class GetUserProfileResponse

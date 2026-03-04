@@ -1,10 +1,6 @@
 using LaReservaBackend.Application.Common.Interfaces;
 using LaReservaBackend.Domain.Entities;
 using LaReservaBackend.Domain.Enums;
-using MediatR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace LaReservaBackend.Application.Reservas.Commands;
 

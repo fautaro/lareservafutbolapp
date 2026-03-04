@@ -1,5 +1,4 @@
-﻿using LaReservaApi.Models.Complejos;
-using LaReservaBackend.Application.Complejos.Queries.GetComplejos;
+﻿using LaReservaBackend.Application.Complejos.Queries.GetComplejos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

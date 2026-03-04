@@ -1,6 +1,5 @@
-﻿using LaReservaBackend.Application.Reservas.Queries;
-using LaReservaBackend.Application.Reservas.Commands;
-using LaReservaBackend.Domain.Entities;
+﻿using LaReservaBackend.Application.Reservas.Commands;
+using LaReservaBackend.Application.Reservas.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

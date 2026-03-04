@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace LaReservaBackend.Application.Reservas.Queries;
 
 public class GetUserReservationsResponse

@@ -1,7 +1,4 @@
 using LaReservaBackend.Application.Common.Interfaces;
-using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace LaReservaBackend.Application.Reservas.Queries;
 

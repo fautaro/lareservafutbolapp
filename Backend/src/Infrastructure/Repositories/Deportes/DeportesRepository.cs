@@ -1,5 +1,4 @@
 ﻿using LaReservaBackend.Application.Common.Interfaces;
-using LaReservaBackend.Application.Common.Models.DTOs.Complejos;
 using LaReservaBackend.Application.Common.Models.DTOs.Deportes;
 using Microsoft.EntityFrameworkCore;
 
