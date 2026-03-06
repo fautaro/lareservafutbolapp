@@ -1,4 +1,4 @@
-const BASE_URL = 'https://localhost:7116/api'
+const BASE_URL = 'https://fautaro.bsite.net/api'
 
 export const API_CONFIG = {
   baseURL: BASE_URL
