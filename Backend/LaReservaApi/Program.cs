@@ -14,10 +14,18 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
-// Registrar automáticamente todos los servicios de Application (MediatR handlers)
-builder.Services.AddApplication();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173", "http://localhost:5174", "https://fautaro.github.io")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
 
-// Registrar automáticamente todos los repositorios de Infrastructure
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -33,11 +41,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(builder =>
-    builder.WithOrigins("http://localhost:5173")
-           .AllowAnyHeader()
-           .AllowAnyMethod()
-);
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 

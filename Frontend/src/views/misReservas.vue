@@ -47,15 +47,15 @@
         <div
             class="bg-white rounded-[24px] shadow-md sticky top-4 z-40 overflow-hidden mx-1 pb-2 border border-slate-100/50">
             <!-- Título -->
-            <div class="px-7 pt-8 pb-5">
+            <div class="px-4 pt-8 pb-5">
                 <h1 class="text-3xl font-bold tracking-tight text-slate-900 leading-none">Mis Reservas</h1>
                 <p class="text-slate-400 text-sm font-medium mt-2">Gestioná tus turnos y seguí tu historial.</p>
             </div>
 
             <!-- Tabs Selector -->
-            <div class="tabs-container flex overflow-x-auto scroll-smooth p-1 pb-3 px-3 gap-2">
+            <div class="tabs-container flex overflow-x-auto scroll-smooth p-1 pb-3 px-2 gap-2">
                 <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id"
-                    class="flex-shrink-0 py-4 px-6 text-xs font-bold uppercase tracking-widest transition-all duration-300 relative rounded-xl flex items-center justify-center gap-2"
+                    class="flex-shrink-0 py-4 px-4 text-xs font-bold uppercase tracking-widest transition-all duration-300 relative rounded-xl flex items-center justify-center gap-2"
                     :class="activeTab === tab.id ? 'text-[#2D9CDB] bg-[#2D9CDB]/5' : 'text-slate-400 hover:text-slate-600'">
                     {{ tab.label }}
                     <!-- Contador numérico -->
@@ -73,7 +73,7 @@
         <!-- Capa invisible para cerrar menús al hacer clic fuera -->
         <div v-if="showMenuId" class="fixed inset-0 z-40" @click="showMenuId = null"></div>
 
-        <div class="px-2 pt-8 sm:px-4">
+        <div class="px-1 pt-8 sm:px-2">
             <!-- Toast de Éxito -->
             <transition name="fade">
                 <div v-if="showSuccess"
@@ -102,7 +102,8 @@
 
                     <transition-group v-else name="fade" tag="div" class="space-y-4">
                         <div v-for="t in porConfirmar" :key="t.id"
-                            class="reserva-card relative rounded-[28px] bg-white border border-slate-100 p-7 shadow-sm hover:shadow-md animate-slide-up">
+                            class="reserva-card relative rounded-[28px] bg-white border border-slate-100 p-5 shadow-sm hover:shadow-md animate-slide-up"
+                            :class="{ 'z-50': showMenuId === t.id }">
 
                             <div v-if="cancellingId === t.id"
                                 class="absolute inset-0 z-40 grid place-items-center bg-white/90 backdrop-blur-sm rounded-[28px]">
@@ -121,7 +122,7 @@
                                         </div>
                                         <h3 class="text-lg font-bold text-slate-900 truncate tracking-tight">{{
                                             t.complejo
-                                            }}</h3>
+                                        }}</h3>
                                     </div>
                                 </div>
 
@@ -137,7 +138,7 @@
                                             <span
                                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Cancha</span>
                                             <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.cancha
-                                                }}</span>
+                                            }}</span>
                                             <span
                                                 class="text-[10px] font-medium text-slate-300 uppercase tracking-wider leading-none mt-0.5">{{
                                                     t.deporte }}</span>
@@ -154,7 +155,7 @@
                                             <span
                                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Fecha</span>
                                             <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.fecha
-                                                }}</span>
+                                            }}</span>
                                         </div>
                                     </div>
 
@@ -256,7 +257,8 @@
 
                     <transition-group v-else name="fade" tag="div" class="space-y-4">
                         <div v-for="t in confirmadas" :key="t.id"
-                            class="reserva-card relative rounded-[28px] bg-white border border-slate-100 p-7 shadow-sm hover:shadow-md animate-slide-up">
+                            class="reserva-card relative rounded-[28px] bg-white border border-slate-100 p-5 shadow-sm hover:shadow-md animate-slide-up"
+                            :class="{ 'z-50': showMenuId === t.id }">
 
                             <!-- Blur wrapper for card content -->
                             <div :class="{ 'blur-[2px] opacity-40 scale-[0.98] pointer-events-none': showMenuId === t.id }"
@@ -270,7 +272,7 @@
                                         </div>
                                         <h3 class="text-lg font-bold text-slate-900 truncate tracking-tight">{{
                                             t.complejo
-                                            }}</h3>
+                                        }}</h3>
                                     </div>
                                 </div>
 
@@ -286,7 +288,7 @@
                                             <span
                                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Cancha</span>
                                             <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.cancha
-                                                }}</span>
+                                            }}</span>
                                             <span
                                                 class="text-[10px] font-medium text-slate-300 uppercase tracking-wider leading-none mt-0.5">{{
                                                     t.deporte }}</span>
@@ -303,7 +305,7 @@
                                             <span
                                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Fecha</span>
                                             <span class="text-sm font-bold text-slate-700 leading-tight">{{ t.fecha
-                                                }}</span>
+                                            }}</span>
                                         </div>
                                     </div>
 
@@ -396,7 +398,7 @@
                     </div>
 
                     <div v-for="ta in turnosAntiguos" :key="ta.id"
-                        class="reserva-card relative rounded-[28px] bg-white border border-slate-100 p-7 shadow-sm opacity-80 filter grayscale-[0.2]">
+                        class="reserva-card relative rounded-[28px] bg-white border border-slate-100 p-5 shadow-sm opacity-80 filter grayscale-[0.2]">
 
                         <!-- Header Historial: Complejo -->
                         <div class="flex items-center gap-3 mb-5">
@@ -419,7 +421,7 @@
                                     <span
                                         class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Cancha</span>
                                     <span class="text-sm font-bold text-slate-500 truncate leading-tight">{{ ta.cancha
-                                        }}</span>
+                                    }}</span>
                                     <span
                                         class="text-[10px] font-medium text-slate-300 uppercase tracking-wider leading-none mt-0.5">{{
                                             ta.deporte }}</span>
@@ -464,7 +466,7 @@
                                 <span
                                     class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-1">Total</span>
                                 <span class="text-lg font-bold text-slate-400">${{ ta.precio.toLocaleString('es-AR')
-                                    }}</span>
+                                }}</span>
                             </div>
                         </div>
                     </div>
@@ -511,7 +513,7 @@
                                     <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Fecha
                                         del turno</span>
                                     <span class="text-base font-bold text-slate-800">{{ turnoSeleccionado.fecha
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </div>
 
@@ -636,26 +638,37 @@ export default {
             this.showModal = false;
             this.cancellingId = id;
 
+            startLoader();
+
             try {
+                // LLAMADA AL BACKEND PARA CANCELAR EL TURNO DEFINITIVAMENTE
                 const response = await fetch(API_ENDPOINTS.reservas.cancelReservation(id), {
-                    method: 'DELETE'
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' }
                 });
 
-                if (!response.ok) throw new Error('Error al cancelar reserva');
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Error del servidor: ${errorText}`);
+                }
 
-                setTimeout(() => {
-                    this.turnos = this.turnos.filter(t => t.id !== id);
-                    this.cancellingId = null;
-                    this.selectedId = null;
-                    this.showSuccess = true;
+                // Pausa mínima para fluidez visual y luego recargamos los datos desde backend
+                await new Promise(resolve => setTimeout(resolve, 300));
+                await this.loadData();
 
-                    if (this.successTimer) clearTimeout(this.successTimer);
-                    this.successTimer = setTimeout(() => (this.showSuccess = false), 3000);
-                }, 1000);
+                this.cancellingId = null;
+                this.selectedId = null;
+                this.showSuccess = true;
+
+                if (this.successTimer) clearTimeout(this.successTimer);
+                this.successTimer = setTimeout(() => (this.showSuccess = false), 3000);
 
             } catch (error) {
-                console.error("Error cancelling reservation:", error);
+                console.error("Error al cancelar turno en el backend:", error);
                 this.cancellingId = null;
+                alert('No se pudo cancelar el turno. Verificá tu conexión o intentá nuevamente.');
+            } finally {
+                stopLoader();
             }
         },
 

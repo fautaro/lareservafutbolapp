@@ -23,7 +23,7 @@
 
       <!-- TOP NAVIGATION BAR (SLIM & CLEAN) -->
       <nav
-        class="sticky top-4 z-50 bg-white/95 backdrop-blur-md shadow-sm border border-slate-100 mx-2 rounded-2xl px-6 py-3 flex items-center justify-between">
+        class="sticky top-4 z-50 bg-white/95 backdrop-blur-md shadow-sm border border-slate-100 mx-2 rounded-2xl px-3 py-3 flex items-center justify-between">
         <div class="flex flex-col items-center gap-1 min-w-[80px]">
           <svg class="h-8 w-auto" viewBox="0 0 52 40" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 0.19043V39.8487H30.8524L24.8072 29.1348H10.1606V0.19043H0Z" fill="#2D9CDB" />
@@ -39,14 +39,14 @@
       </nav>
 
       <!-- DISCOVERY SECTION: SPORTS -->
-      <section class="mt-10 px-6">
+      <section class="mt-10 px-1">
         <div class="flex items-center justify-between mb-2">
           <h2 class="text-base font-bold text-slate-900 tracking-tight">Categorías</h2>
           <button v-if="deporteSeleccionado" @click="deporteSeleccionado = null"
             class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Ver todos</button>
         </div>
 
-        <div class="tabs-container flex overflow-x-auto scroll-smooth gap-4 pt-1 pb-6 -mx-6 px-6 no-scrollbar">
+        <div class="tabs-container flex overflow-x-auto scroll-smooth gap-4 pt-1 pb-6 -mx-1 px-1 no-scrollbar">
           <button v-for="deporte in deportes" :key="deporte.id" @click="toggleDeporte(deporte.nombre)"
             class="flex-shrink-0 w-28 h-28 rounded-[24px] transition-all duration-300 flex flex-col items-center justify-center gap-3 border text-center shadow-sm"
             :class="deporteSeleccionado === deporte.nombre
@@ -66,7 +66,7 @@
 
 
       <!-- MAIN FEED: COMPLEXES -->
-      <section class="mt-2 px-6">
+      <section class="mt-2 px-1">
         <div class="flex items-center justify-between mb-6">
           <div class="space-y-0.5">
             <h2 class="text-xl font-bold text-slate-900 tracking-tight">
@@ -98,7 +98,7 @@
                   </span>
                 </div>
 
-                <div class="absolute bottom-5 left-6 right-6 flex items-end justify-between">
+                <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between">
                   <div class="space-y-1">
                     <h3 class="text-2xl font-bold text-white tracking-tight drop-shadow-md">{{ complejo.nombre }}</h3>
                     <div class="flex items-center gap-1.5 text-white/90">
@@ -110,7 +110,7 @@
               </div>
 
               <!-- Footer Details -->
-              <div class="px-6 py-5 flex items-center justify-between bg-white border-t border-slate-50">
+              <div class="px-5 py-5 flex items-center justify-between bg-white border-t border-slate-50">
                 <div class="flex items-center gap-4">
                   <div class="flex flex-col">
                     <span

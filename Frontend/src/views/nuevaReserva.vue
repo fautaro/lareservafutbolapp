@@ -1,28 +1,28 @@
 <template>
-    <div class="nueva-reserva-wrapper text-[#101518]" style="font-family: Inter, 'Noto Sans', sans-serif;">
+    <div class="nueva-reserva-wrapper min-h-screen bg-slate-50 text-slate-800"
+        style="font-family: Inter, 'Noto Sans', sans-serif;">
         <!-- Botón de cerrar -->
         <div class="absolute top-4 right-4 z-10">
-            <div @click="onCerrarClick" class="text-gray-500 hover:text-red-500 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
+            <div @click="onCerrarClick"
+                class="w-10 h-10 bg-white/80 backdrop-blur shadow-sm border border-slate-100 rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer">
+                <i class="fas fa-times text-lg"></i>
             </div>
         </div>
         <!-- Modal de confirmación al salir -->
         <div v-if="mostrarModalConfirmacion"
-            class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[999] p-4">
-            <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl text-center space-y-4 animate-slide-up">
-                <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto text-red-500">
+            class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-[999] p-4">
+            <div class="bg-white rounded-[28px] p-8 max-w-sm w-full shadow-2xl text-center space-y-4 animate-slide-up">
+                <div
+                    class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto text-red-500 shadow-inner">
                     <i class="fas fa-exclamation-triangle text-2xl"></i>
                 </div>
-                <h2 class="text-xl font-bold text-gray-800">¿Querés salir?</h2>
-                <p class="text-sm text-gray-500">Se perderán los datos de tu reserva actual.</p>
-                <div class="flex gap-3 pt-2">
+                <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">¿Querés salir?</h2>
+                <p class="text-sm font-medium text-slate-500">Se perderán los datos de tu reserva actual.</p>
+                <div class="flex gap-3 pt-4">
                     <button @click="mostrarModalConfirmacion = false"
-                        class="flex-1 py-3 bg-gray-100 rounded-xl font-semibold text-gray-600 hover:bg-gray-200 transition-colors">Volver</button>
+                        class="flex-1 py-3.5 bg-slate-50 rounded-xl font-bold text-slate-600 hover:bg-slate-100 border border-slate-100 transition-all">Cancelar</button>
                     <button @click="volverAInicio"
-                        class="flex-1 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors">Salir</button>
+                        class="flex-1 py-3.5 bg-red-500 text-white rounded-xl font-bold shadow-lg shadow-red-500/30 hover:bg-red-600 transition-all">Salir</button>
                 </div>
             </div>
         </div>
@@ -38,18 +38,25 @@
                     </div>
                     <div class="absolute inset-0 w-32 h-32 bg-green-400 rounded-full opacity-0 animate-ping-once"></div>
                 </div>
-                <h2 class="text-3xl font-black text-gray-900 mb-2">¡Reserva confirmada!</h2>
+                <h2 class="text-3xl font-extrabold text-gray-900 mb-2">¡Reserva confirmada!</h2>
                 <p class="text-gray-500 text-lg mb-8 max-w-xs">Tu turno ha sido agendado con éxito. Ya podés verlo en
                     tus
                     reservas.</p>
             </div>
         </Transition>
 
-        <div class="w-full sm:px-2 pt-6 pb-20">
+        <div class="px-1 pt-16 sm:px-2 pb-24">
             <!-- Datos del complejo -->
-            <div class="mb-6">
-                <h1 class="text-2xl font-bold text-gray-900">{{ complejo.nombre }}</h1>
-                <p class="text-base text-gray-500">{{ complejo.direccion }}</p>
+            <div class="mb-6 px-3">
+                <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 leading-none pr-4 mb-4">{{
+                    complejo.nombre
+                }}</h1>
+                <div
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#2D9CDB]/10 text-[#2D9CDB] mb-3">
+                    <i class="fas fa-location-dot text-[10px]"></i>
+                    <span class="text-[10px] font-black uppercase tracking-widest">{{ complejo.direccion }}</span>
+                </div>
+
             </div>
 
             <div v-if="loaded && rawHorariosData.length === 0" class="my-10 text-center px-4">
@@ -69,18 +76,19 @@
 
             <template v-else-if="loaded">
                 <!-- Selector de días -->
-                <div v-if="diasDisponibles.length" class="mb-6">
-                    <h3 class="text-base font-semibold text-gray-700 mb-2">Elegí un día</h3>
-                    <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+                <div v-if="diasDisponibles.length" class="mb-6 px-1 border-t border-slate-200/50 pt-5">
+                    <h3 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-3 px-2">Elegí un día
+                    </h3>
+                    <div class="flex gap-2.5 overflow-x-auto pb-4 pt-2 px-2 no-scrollbar">
                         <button v-for="(dia, index) in diasDisponibles" :key="index"
                             @click="seleccionarDia(dia.fechaExacta)" :class="[
-                                'w-[110px] h-[80px] flex-shrink-0 flex flex-col items-center justify-center rounded-xl text-center text-base font-semibold shadow-md p-3 transition-colors duration-200',
-                                dia.fechaExacta === diaSeleccionado ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'
+                                'w-[105px] h-[85px] flex-shrink-0 flex flex-col items-center justify-center rounded-[20px] text-center shadow-sm border transition-all duration-300',
+                                dia.fechaExacta === diaSeleccionado ? 'bg-[#2D9CDB] text-white border-[#2D9CDB] shadow-md shadow-[#2D9CDB]/20 transform scale-[1.03]' : 'bg-white text-slate-600 border-slate-100 hover:border-slate-300'
                             ]">
-                            <div class="text-sm leading-tight capitalize">
+                            <div class="text-[11px] font-bold uppercase tracking-widest mb-1">
                                 {{ dia.dia }}
                             </div>
-                            <div class="text-sm leading-tight">
+                            <div class="text-lg font-black leading-none">
                                 {{ dia.fecha }}
                             </div>
                         </button>
@@ -88,73 +96,83 @@
                 </div>
 
                 <!-- Selector de deportes -->
-                <div v-if="deportesFiltradosPorDia.length" class="mb-6">
-                    <h3 class="text-base font-semibold text-gray-700 mb-2">Elegí el deporte:</h3>
-                    <div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-                        <button v-for="(deporte, index) in deportesFiltradosPorDia" :key="index"
+                <div v-if="deportesFiltradosPorDia.length" class="mb-6 px-1 border-t border-slate-200/50 pt-5">
+                    <h3 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-3 px-2">Elegí el
+                        deporte</h3>
+                    <transition-group name="fade" tag="div" class="flex gap-2.5 overflow-x-auto pb-4 px-2 no-scrollbar">
+                        <button v-for="deporte in deportesFiltradosPorDia" :key="deporte.tipo"
                             @click="seleccionarDeporte(deporte.tipo)" :class="[
-                                'flex items-center gap-2 text-sm px-4 py-2 rounded-full whitespace-nowrap transition-colors duration-200',
-                                deporte.tipo === deporteSeleccionado ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'
+                                'flex items-center gap-2 text-xs font-bold px-5 py-3 rounded-full whitespace-nowrap transition-all duration-300 border shadow-sm',
+                                deporte.tipo === deporteSeleccionado ? 'bg-[#2D9CDB] text-white border-[#2D9CDB] shadow-md shadow-[#2D9CDB]/20 transform scale-[1.03]' : 'bg-white text-slate-500 border-slate-100 hover:border-slate-300'
                             ]">
-                            <i :class="deporte.icono" class="text-base"></i>
+                            <i :class="deporte.icono" class="text-sm"></i>
                             {{ deporte.nombre }}
                         </button>
-                    </div>
+                    </transition-group>
                 </div>
 
                 <!-- Selector de Canchas -->
-                <div v-if="canchasFiltradas.length" class="mb-6">
-                    <h3 class="text-base font-semibold text-gray-700 mb-2">Elegí la cancha:</h3>
-                    <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar flex-nowrap">
+                <div v-if="canchasFiltradas.length" class="mb-6 px-1 border-t border-slate-200/50 pt-5">
+                    <h3 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-3 px-2">Elegí la
+                        cancha</h3>
+                    <transition-group name="fade" tag="div"
+                        class="flex gap-2.5 overflow-x-auto pb-4 px-2 no-scrollbar flex-nowrap">
                         <button v-for="cancha in canchasFiltradas" :key="cancha.id"
                             @click="seleccionarCancha(cancha.id)" :class="[
-                                'min-w-[140px] px-4 py-3 rounded-xl text-sm font-bold border-2 transition-all duration-200 whitespace-nowrap text-center flex-shrink-0',
-                                cancha.id === canchaSeleccionadaId ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 bg-white text-gray-600'
+                                'min-w-[140px] px-5 py-3.5 rounded-[20px] text-xs font-bold border transition-all duration-300 whitespace-nowrap text-center flex-shrink-0 shadow-sm',
+                                cancha.id === canchaSeleccionadaId ? 'border-[#2D9CDB] bg-[#2D9CDB]/5 text-[#2D9CDB]' : 'border-slate-100 bg-white text-slate-500 hover:border-slate-300'
                             ]">
                             {{ cancha.nombre }}
                         </button>
-                    </div>
+                    </transition-group>
                 </div>
 
                 <!-- Selector de Medio de Pago -->
-                <div v-if="mediosPago.length" class="mb-6">
-                    <h3 class="text-base font-semibold text-gray-700 mb-2">Elegí el medio de pago:</h3>
-                    <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar flex-nowrap">
+                <div v-if="mediosPago.length" class="mb-6 px-1 border-t border-slate-200/50 pt-5">
+                    <h3 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-3 px-2">Elegí el medio
+                        de pago</h3>
+                    <div class="flex gap-2.5 overflow-x-auto pb-4 px-2 no-scrollbar flex-nowrap">
                         <button v-for="mp in mediosPago" :key="mp.id" @click="medioPagoSeleccionadoId = mp.id" :class="[
-                            'min-w-[120px] px-4 py-3 rounded-xl text-sm font-bold border-2 transition-all duration-200 whitespace-nowrap text-center flex-shrink-0 flex flex-col items-center gap-1',
-                            mp.id === medioPagoSeleccionadoId ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-gray-200 bg-white text-gray-600'
+                            'min-w-[120px] px-4 py-4 rounded-[20px] text-xs font-bold border transition-all duration-300 whitespace-nowrap text-center flex-shrink-0 flex flex-col items-center gap-2 shadow-sm',
+                            mp.id === medioPagoSeleccionadoId ? 'border-[#2D9CDB] bg-[#2D9CDB]/5 text-[#2D9CDB]' : 'border-slate-100 bg-white text-slate-500 hover:border-slate-300'
                         ]">
-                            <i :class="mp.icono || 'fas fa-wallet'" class="text-base mb-1"></i>
+                            <i :class="mp.icono || 'fas fa-wallet'" class="text-base"></i>
                             {{ mp.nombre }}
                         </button>
                     </div>
                 </div>
 
                 <!-- Horarios disponibles -->
-                <div v-if="horarios.length" class="mb-6">
-                    <h3 class="text-base font-semibold text-gray-700 mb-2">Horarios disponibles</h3>
-                    <div class="flex flex-col gap-3">
-                        <div v-for="(hora, i) in horarios" :key="i" @click="preConfirmarReserva(hora)"
-                            class="w-full h-20 px-5 py-4 rounded-2xl bg-white shadow-sm border border-gray-100 flex justify-between items-center transition-all hover:border-blue-400 hover:shadow-md cursor-pointer group active:scale-[0.98]">
-                            <div class="flex flex-col">
-                                <span class="text-base font-bold text-gray-900 leading-tight">{{ hora.rango }}</span>
-                                <span class="text-xs text-blue-500 font-semibold mt-0.5">Disponible</span>
+                <div v-if="horarios.length" class="mb-6 px-1 border-t border-slate-200/50 pt-5">
+                    <h3 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-3 px-2">Horarios
+                        disponibles
+                    </h3>
+                    <transition-group name="fade" tag="div" class="flex flex-col gap-3 px-2">
+                        <div v-for="hora in horarios"
+                            :key="diaSeleccionado + '-' + hora.canchaId + '-' + hora.horaInicio"
+                            @click="preConfirmarReserva(hora)"
+                            class="w-full px-5 py-4 rounded-[24px] bg-white shadow-sm border border-slate-100 flex justify-between items-center transition-all active:shadow-md active:border-[#2D9CDB]/40 cursor-pointer group active:scale-[0.98]">
+                            <div class="flex flex-col text-left">
+                                <span class="text-base font-bold text-slate-900 leading-tight">{{ hora.rango }}</span>
+                                <span
+                                    class="text-[10px] text-[#2D9CDB] font-extrabold uppercase tracking-widest mt-1">Disponible</span>
                             </div>
                             <div class="flex items-center gap-4">
                                 <div class="text-right flex flex-col">
-                                    <span class="text-lg font-bold text-[#2D9CDB]">${{
+                                    <span class="text-lg font-black text-[#2D9CDB] leading-none">${{
                                         hora.precioHora?.toLocaleString('es-AR') }}</span>
-                                    <span class="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">por
+                                    <span
+                                        class="text-[9px] text-slate-400 uppercase font-black tracking-widest mt-1.5">por
                                         turno</span>
                                 </div>
                                 <div
-                                    class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-blue-50 transition-colors">
+                                    class="w-9 h-9 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center group-active:bg-[#2D9CDB]/10 group-active:border-[#2D9CDB]/20 transition-all">
                                     <i
-                                        class="fas fa-chevron-right text-gray-300 group-hover:text-[#2D9CDB] text-xs"></i>
+                                        class="fas fa-chevron-right text-slate-300 group-active:text-[#2D9CDB] text-xs"></i>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </transition-group>
                 </div>
 
                 <!-- Mensaje cuando no hay horarios en la cancha seleccionada -->
@@ -171,89 +189,88 @@
 
                 <!-- Modal de Pre-confirmación de Reserva -->
                 <div v-if="mostrarConfirmacionReserva"
-                    class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center z-[1000] p-0 sm:p-4 transition-all duration-300">
+                    class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center z-[1000] p-0 sm:p-4 transition-all duration-300">
                     <div
-                        class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden transform transition-all animate-slide-up">
+                        class="bg-white w-full max-w-md rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden transform transition-all animate-slide-up">
                         <!-- Header Card -->
-                        <div class="bg-blue-600 p-5 text-white relative">
+                        <div class="bg-white px-6 pt-7 pb-5 border-b border-slate-100 text-slate-900 relative">
                             <button @click="mostrarConfirmacionReserva = false"
-                                class="absolute top-4 right-4 text-white/80 hover:text-white">
-                                <i class="fas fa-times text-xl"></i>
+                                class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 bg-slate-50 w-9 h-9 rounded-full flex items-center justify-center border border-slate-100 transition-colors">
+                                <i class="fas fa-times text-sm"></i>
                             </button>
-                            <h2 class="text-xl font-bold mb-0.5">Confirmar Turno</h2>
-                            <p class="text-blue-100 text-xs">Casi listo, revisá los datos de tu reserva</p>
+                            <h2 class="text-2xl font-extrabold tracking-tight mb-1">Confirmar Turno</h2>
+                            <p class="text-slate-400 text-xs font-bold tracking-widest uppercase">Revisá los detalles
+                            </p>
                         </div>
 
                         <!-- Detalles -->
-                        <div class="p-5 space-y-4">
+                        <div class="p-6 space-y-5">
                             <!-- Sección Complejo (Centrada) -->
                             <div class="flex flex-col items-center text-center">
                                 <div
-                                    class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 shadow-sm mb-2">
-                                    <i class="fas fa-building text-xl"></i>
+                                    class="w-14 h-14 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-center text-slate-400 shadow-sm mb-3">
+                                    <i class="fas fa-building text-2xl"></i>
                                 </div>
-                                <h3 class="text-xl font-black text-gray-900 leading-tight mb-0.5">{{ complejo.nombre }}
+                                <h3 class="text-2xl font-extrabold text-slate-900 leading-tight tracking-tight mb-1">{{
+                                    complejo.nombre }}
                                 </h3>
-                                <p class="text-sm text-gray-500 px-4">{{ complejo.direccion }}</p>
+                                <p class="text-sm font-medium text-slate-500 px-4">{{ complejo.direccion }}</p>
                             </div>
 
-                            <!-- Divisor sutil -->
-                            <div class="border-t border-gray-100 w-full"></div>
-
                             <!-- Otros Detalles (En una sola línea) -->
-                            <div class="space-y-2 pt-2">
+                            <div class="space-y-1 bg-slate-50 border border-slate-100 rounded-2xl p-4">
                                 <!-- Fecha -->
-                                <div class="flex items-center gap-3 py-2 border-b border-gray-50">
+                                <div class="flex items-center gap-3 py-2">
                                     <div
-                                        class="w-9 h-9 bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-600 flex-shrink-0">
-                                        <i class="fas fa-calendar-day text-xs"></i>
+                                        class="w-10 h-10 bg-white border border-slate-100 rounded-xl flex items-center justify-center text-slate-400 flex-shrink-0 shadow-sm">
+                                        <i class="fas fa-calendar-day text-sm"></i>
                                     </div>
                                     <div class="flex-1 flex justify-between items-center">
                                         <span
-                                            class="text-xs text-gray-400 font-extrabold uppercase tracking-widest">Fecha</span>
-                                        <span class="font-bold text-gray-800 text-base capitalize">{{
+                                            class="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest">Fecha</span>
+                                        <span class="font-bold text-slate-800 text-sm capitalize">{{
                                             formattedSelectedDate }}</span>
                                     </div>
                                 </div>
 
                                 <!-- Horario -->
-                                <div class="flex items-center gap-3 py-2 border-b border-gray-50">
+                                <div class="flex items-center gap-3 py-2">
                                     <div
-                                        class="w-9 h-9 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600 flex-shrink-0">
-                                        <i class="fas fa-clock text-xs"></i>
+                                        class="w-10 h-10 bg-white border border-slate-100 rounded-xl flex items-center justify-center text-slate-400 flex-shrink-0 shadow-sm">
+                                        <i class="fas fa-clock text-sm"></i>
                                     </div>
                                     <div class="flex-1 flex justify-between items-center">
                                         <span
-                                            class="text-xs text-gray-400 font-extrabold uppercase tracking-widest">Horario</span>
-                                        <span class="font-bold text-indigo-700 text-base">{{ horarioSeleccionado?.rango
-                                            }}</span>
+                                            class="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest">Horario</span>
+                                        <span class="font-bold text-[#2D9CDB] text-sm">{{ horarioSeleccionado?.rango
+                                        }}</span>
                                     </div>
                                 </div>
 
                                 <!-- Cancha -->
-                                <div class="flex items-center gap-3 py-2 border-b border-gray-50">
+                                <div class="flex items-center gap-3 py-2">
                                     <div
-                                        class="w-9 h-9 bg-amber-50 rounded-lg flex items-center justify-center text-amber-600 flex-shrink-0">
-                                        <i :class="getDeporteIcono()" class="text-xs"></i>
+                                        class="w-10 h-10 bg-white border border-slate-100 rounded-xl flex items-center justify-center text-slate-400 flex-shrink-0 shadow-sm">
+                                        <i :class="getDeporteIcono()" class="text-sm"></i>
                                     </div>
                                     <div class="flex-1 flex justify-between items-center">
                                         <span
-                                            class="text-xs text-gray-400 font-extrabold uppercase tracking-widest">Cancha</span>
-                                        <span class="font-bold text-gray-800 text-base">{{ getFullCanchaNombre()
-                                            }}</span>
+                                            class="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest">Cancha</span>
+                                        <span class="font-bold text-slate-800 text-sm">{{ getFullCanchaNombre()
+                                        }}</span>
                                     </div>
                                 </div>
 
                                 <!-- Precio -->
-                                <div class="flex items-center gap-3 py-2 border-b border-gray-50">
+                                <div class="flex items-center gap-3 py-2">
                                     <div
-                                        class="w-9 h-9 bg-red-50 rounded-lg flex items-center justify-center text-red-600 flex-shrink-0">
-                                        <i class="fas fa-money-bill-wave text-xs"></i>
+                                        class="w-10 h-10 bg-white border border-slate-100 rounded-xl flex items-center justify-center text-slate-400 flex-shrink-0 shadow-sm">
+                                        <i class="fas fa-money-bill-wave text-sm"></i>
                                     </div>
                                     <div class="flex-1 flex justify-between items-center">
                                         <span
-                                            class="text-xs text-gray-400 font-extrabold uppercase tracking-widest">Precio</span>
-                                        <span class="font-bold text-gray-900 text-base">${{
+                                            class="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest">Precio</span>
+                                        <span class="font-bold text-slate-900 text-base">${{
                                             horarioSeleccionado?.precioHora?.toLocaleString('es-AR') }}</span>
                                     </div>
                                 </div>
@@ -261,35 +278,26 @@
                                 <!-- Medio de Pago Summary -->
                                 <div class="flex items-center gap-3 py-2">
                                     <div
-                                        class="w-9 h-9 bg-purple-50 rounded-lg flex items-center justify-center text-purple-600 flex-shrink-0">
-                                        <i :class="getMedioPagoIcono()" class="text-xs"></i>
+                                        class="w-10 h-10 bg-white border border-slate-100 rounded-xl flex items-center justify-center text-slate-400 flex-shrink-0 shadow-sm">
+                                        <i :class="getMedioPagoIcono()" class="text-sm"></i>
                                     </div>
                                     <div class="flex-1 flex justify-between items-center">
                                         <span
-                                            class="text-xs text-gray-400 font-extrabold uppercase tracking-widest">Pago</span>
-                                        <span class="font-bold text-gray-800 text-base">{{ getMedioPagoNombre()
+                                            class="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest">Pago</span>
+                                        <span class="font-bold text-slate-800 text-sm">{{ getMedioPagoNombre()
                                         }}</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Aviso -->
-                            <div class="bg-amber-50 border border-amber-100 rounded-xl p-3 flex gap-3">
-                                <i class="fas fa-info-circle text-amber-500 mt-0.5 text-xs"></i>
-                                <p class="text-xs text-amber-800 leading-relaxed font-medium">
-                                    Al confirmar, tu solicitud se enviará al complejo. Podrás ver el estado en la
-                                    sección 'Mis Reservas'.
-                                </p>
-                            </div>
-
                             <!-- Botones -->
-                            <div class="flex flex-col gap-2 pt-1">
+                            <div class="flex flex-col gap-2 pt-2">
                                 <button @click="confirmarReservaFinal"
-                                    class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg transition-all active:scale-95">
-                                    CONFIRMAR RESERVA
+                                    class="w-full py-4 bg-[#2D9CDB] hover:bg-blue-500 text-white font-black uppercase tracking-widest rounded-xl shadow-lg shadow-[#2D9CDB]/30 transition-all active:scale-95 text-xs">
+                                    Confirmar Reserva
                                 </button>
                                 <button @click="mostrarConfirmacionReserva = false"
-                                    class="w-full py-2.5 bg-white text-gray-500 font-semibold rounded-xl border border-gray-100 hover:bg-gray-50 transition-all text-sm">
+                                    class="w-full py-3 text-slate-400 font-bold uppercase tracking-widest hover:text-slate-600 transition-all text-xs">
                                     Cancelar
                                 </button>
                             </div>
@@ -453,27 +461,36 @@ export default {
         },
         seleccionarDeporte(tipo) {
             this.deporteSeleccionado = tipo;
-            this.canchaSeleccionadaId = null;
-            // Seleccionamos la primera cancha disponible automáticamente
-            this.$nextTick(() => {
-                if (this.canchasFiltradas.length > 0) {
-                    this.canchaSeleccionadaId = this.canchasFiltradas[0].id;
-                }
-            });
+            this.updateCanchaSelection();
         },
         seleccionarCancha(id) {
             this.canchaSeleccionadaId = id;
         },
         resetSelection() {
-            this.canchaSeleccionadaId = null;
             if (this.deportesFiltradosPorDia.length > 0) {
                 this.deporteSeleccionado = this.deportesFiltradosPorDia[0].tipo;
-                this.$nextTick(() => {
-                    if (this.canchasFiltradas.length > 0) {
-                        this.canchaSeleccionadaId = this.canchasFiltradas[0].id;
-                    }
-                });
+                this.updateCanchaSelection();
+            } else {
+                this.canchaSeleccionadaId = null;
             }
+        },
+        updateCanchaSelection() {
+            // Evaluamos las canchas disponibles de forma síncrona para que no se corte la transición
+            const dayData = this.rawHorariosData.find(d => d.fecha.startsWith(this.diaSeleccionado));
+            if (!dayData) {
+                this.canchaSeleccionadaId = null;
+                return;
+            }
+
+            const canchasId = [];
+            dayData.horarios.forEach(h => {
+                const normalizedApiSport = h.tipoCancha.toLowerCase().replace(/ /g, '');
+                if (normalizedApiSport === this.deporteSeleccionado.toLowerCase()) {
+                    if (!canchasId.includes(h.canchaId)) canchasId.push(h.canchaId);
+                }
+            });
+
+            this.canchaSeleccionadaId = canchasId.length > 0 ? canchasId[0] : null;
         },
         volverAInicio() {
             this.mostrarModalConfirmacion = false
