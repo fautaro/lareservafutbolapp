@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-blue: #2D9CDB;
+  --brand-midnight: #0E76A8;
+  --brand-dark: #121212;
+  --brand-green: #1DB954;
+  --brand-green-dark: #27AE60;
+  --brand-warning: #EB5757;
+  --brand-accent: #F2C94C;
+  --brand-purple: #BB6BD9;
+  --brand-gray: #B3B3B3;
+  --brand-gray-light: #E0E0E0;
+  --brand-warm-bg: #F5F3F0;
+  --brand-warm-accent: #C9ADA7;
+}
+
+body {
+  background-color: #f8fafc;
+  color: var(--brand-dark);
+}
+
+.card {
+  padding: 2em;
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Transiciones */
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
