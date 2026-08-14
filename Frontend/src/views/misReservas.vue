@@ -48,13 +48,17 @@
             class="bg-white rounded-[24px] shadow-md sticky top-4 z-40 overflow-hidden mx-1 pb-2 border border-slate-100/50">
             <!-- Título -->
             <div class="px-4 pt-8 pb-5">
-                <h1 class="text-3xl font-bold tracking-tight text-slate-900 leading-none">Mis Reservas</h1>
-                <p class="text-slate-400 text-sm font-medium mt-2">Gestioná tus turnos y seguí tu historial.</p>
+                <h1 class="text-3xl font-bold tracking-tight text-slate-900 leading-none">
+                    {{ isOwner() ? 'Reservas Recibidas' : 'Mis Reservas' }}
+                </h1>
+                <p class="text-slate-400 text-sm font-medium mt-2">
+                    {{ isOwner() ? 'Controlá los turnos agendados por tus clientes.' : 'Gestioná tus turnos y seguí tu historial.' }}
+                </p>
             </div>
 
             <!-- Tabs Selector -->
             <div class="tabs-container flex overflow-x-auto scroll-smooth p-1 pb-3 px-2 gap-2">
-                <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id"
+                <button v-for="tab in filteredTabs" :key="tab.id" @click="activeTab = tab.id"
                     class="flex-shrink-0 py-4 px-4 text-xs font-bold uppercase tracking-widest transition-all duration-300 relative rounded-xl flex items-center justify-center gap-2"
                     :class="activeTab === tab.id ? 'text-[#2D9CDB] bg-[#2D9CDB]/5' : 'text-slate-400 hover:text-slate-600'">
                     {{ tab.label }}
@@ -247,11 +251,19 @@
                             class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-6 text-slate-300">
                             <i class="fas fa-calendar-check text-3xl"></i>
                         </div>
-                        <h3 class="font-bold text-slate-800">Sin partidos próximos</h3>
-                        <p class="text-sm text-slate-400 max-w-[200px] mx-auto mt-1">¡Reservá hoy y empezá a jugar!</p>
-                        <button @click="$router.push({ name: 'Home' })"
+                        <h3 class="font-bold text-slate-800">
+                            {{ isOwner() ? 'Sin reservas próximas' : 'Sin partidos próximos' }}
+                        </h3>
+                        <p class="text-sm text-slate-400 max-w-[240px] mx-auto mt-1">
+                            {{ isOwner() ? 'Cuando los jugadores reserven tus canchas aparecerán acá.' : '¡Reservá hoy y empezá a jugar!' }}
+                        </p>
+                        <button v-if="!isOwner()" @click="$router.push({ name: 'Home' })"
                             class="mt-6 px-6 py-3 bg-[#2D9CDB] text-white rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl shadow-[#2D9CDB]/20 transition-all active:scale-95">
                             Explorar Canchas
+                        </button>
+                        <button v-else @click="$router.push({ name: 'Home' })"
+                            class="mt-6 px-6 py-3 bg-[#2D9CDB] text-white rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl shadow-[#2D9CDB]/20 transition-all active:scale-95">
+                            Ver Mis Canchas
                         </button>
                     </div>
 
@@ -553,13 +565,15 @@
 <script>
 import { startLoader, stopLoader } from '../services/globalLoader';
 import { useAuthUser } from '../composables/useAuthUser';
+import { useRole } from '../composables/useRole';
 import { API_ENDPOINTS } from '../config/apiConfig';
 
 export default {
     name: 'Reservas',
     setup() {
         const { user } = useAuthUser();
-        return { user };
+        const { isOwner } = useRole();
+        return { user, isOwner };
     },
     data() {
         return {
@@ -591,6 +605,12 @@ export default {
         },
         confirmadas() {
             return this.turnos.filter(t => t.estado.toLowerCase().includes('confirmado'));
+        },
+        filteredTabs() {
+            if (this.isOwner()) {
+                return this.tabs.filter(t => t.id !== 'pendientes');
+            }
+            return this.tabs;
         },
         turnoSeleccionado() {
             return this.turnos.find(t => t.id === this.selectedId) ||

@@ -6,10 +6,11 @@ import Home from '../views/Home.vue';
 import MisReservas from '../views/misReservas.vue';
 import nuevaReserva from '../views/nuevaReserva.vue';
 import Menu from '../views/Menu.vue';
-import UserProfile from '../views/User/UserProfile.Vue';
+import UserProfile from '../views/user/UserProfile.vue';
 import ConfigUser from '../views/user/ConfigUser.vue';
-import Help from '../views/User/Help.Vue';
+import Help from '../views/user/Help.vue';
 import Login from '../views/Login.vue';
+import OwnerAgenda from '../views/owner/OwnerAgenda.vue';
 
 const routes = [
   {
@@ -57,6 +58,11 @@ const routes = [
         path: 'help',
         name: 'Help',
         component: Help
+      },
+      {
+        path: 'owner/agenda/:id',
+        name: 'OwnerAgenda',
+        component: OwnerAgenda
       }
     ]
   }

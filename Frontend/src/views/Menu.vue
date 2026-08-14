@@ -31,8 +31,70 @@
     <!-- ══ CUERPO ══ -->
     <div class="px-3 pt-5 animate-slide-up">
 
+      <!-- Sección: Modo (Switch) -->
+      <p class="section-label">Modo de uso</p>
+      <div class="nav-card mb-5 p-1">
+        <div class="relative flex p-1 bg-slate-100/90 rounded-[14px] select-none">
+          <!-- Sliding Indicator Thumb -->
+          <div 
+            class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-xl bg-white shadow-md shadow-slate-200/70 border border-slate-200/50 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] z-0"
+            :style="{
+              transform: targetRole === 'owner' ? 'translateX(100%)' : 'translateX(0%)'
+            }"
+          ></div>
+
+          <!-- Modo Jugador Button -->
+          <button 
+            type="button"
+            @click="handleRoleChange('user')"
+            :disabled="isTransitioning"
+            class="relative z-10 flex-1 py-3 text-[11px] font-black uppercase tracking-widest transition-colors duration-300 rounded-xl flex items-center justify-center gap-2 cursor-pointer focus:outline-none"
+            :class="targetRole === 'user' ? 'text-[#2D9CDB]' : 'text-slate-400 hover:text-slate-600'"
+          >
+            <i class="fas fa-futbol text-xs transition-transform duration-300" :class="{ 'scale-110': targetRole === 'user' }"></i>
+            <span>Modo jugador</span>
+          </button>
+
+          <!-- Modo Dueño Button -->
+          <button 
+            type="button"
+            @click="handleRoleChange('owner')"
+            :disabled="isTransitioning"
+            class="relative z-10 flex-1 py-3 text-[11px] font-black uppercase tracking-widest transition-colors duration-300 rounded-xl flex items-center justify-center gap-2 cursor-pointer focus:outline-none"
+            :class="targetRole === 'owner' ? 'text-[#2D9CDB]' : 'text-slate-400 hover:text-slate-600'"
+          >
+            <i class="fas fa-building text-xs transition-transform duration-300" :class="{ 'scale-110': targetRole === 'owner' }"></i>
+            <span>Modo Dueño</span>
+          </button>
+        </div>
+      </div>
+
       <!-- ── Estado autenticado ── -->
       <template v-if="isAuthenticated">
+
+        <!-- Sección: Dueño (Solo si es modo dueño) -->
+        <transition name="fade-slide">
+          <div v-if="isOwner()">
+            <p class="section-label">Gestión de Dueño</p>
+            <div class="nav-card mb-5">
+              <router-link :to="{ name: 'Home' }" class="nav-row">
+                <div class="nav-icon" style="background: rgba(45,156,219,0.1);">
+                  <i class="fas fa-list-check" style="color: #2D9CDB;"></i>
+                </div>
+                <span class="nav-text">Mis canchas</span>
+                <i class="fas fa-chevron-right nav-arrow"></i>
+              </router-link>
+              <div class="nav-sep"></div>
+              <button class="nav-row w-full text-left">
+                <div class="nav-icon" style="background: rgba(29,185,84,0.1);">
+                  <i class="fas fa-plus" style="color: #1DB954;"></i>
+                </div>
+                <span class="nav-text">Agregar cancha</span>
+                <i class="fas fa-chevron-right nav-arrow"></i>
+              </button>
+            </div>
+          </div>
+        </transition>
 
         <!-- Sección: Cuenta -->
         <p class="section-label">Cuenta</p>
@@ -95,13 +157,59 @@
 </template>
 
 <script setup>
+import { ref, watch } from 'vue';
 import { useAuthUser } from '../composables/useAuthUser';
+import { useRole } from '../composables/useRole';
+import { startLoader, stopLoader } from '../services/globalLoader';
+
 const { isAuthenticated, login, logout } = useAuthUser();
+const { isOwner, isUser, setRole, currentRole } = useRole();
+
+// Estado reactivo local para feedback visual inmediato en el switch
+const targetRole = ref(currentRole.value);
+const isTransitioning = ref(false);
+
+watch(currentRole, (newVal) => {
+  targetRole.value = newVal;
+});
+
+const handleRoleChange = async (role) => {
+  if (role === currentRole.value || isTransitioning.value) return;
+  
+  isTransitioning.value = true;
+  targetRole.value = role; // 1. Respuesta visual instantánea en el switch
+  
+  // 2. Pequeño lapso para ver el deslizamiento suave antes del loader general
+  await new Promise((resolve) => setTimeout(resolve, 180));
+  startLoader();
+  
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    setRole(role);
+  } finally {
+    setTimeout(() => {
+      stopLoader();
+      isTransitioning.value = false;
+    }, 150);
+  }
+};
+
 const loginWithAuth0 = () => login();
 const logoutWithAuth0 = () => logout({ logoutParams: { returnTo: window.location.origin } });
 </script>
 
 <style scoped>
+/* ── Transitions ────────────────────────────────────────────────── */
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
 /* header-block styles are no longer used; header is a nav */
 
 /* ── Section label ──────────────────────────────────────────────── */
