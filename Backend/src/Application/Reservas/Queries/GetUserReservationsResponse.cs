@@ -10,9 +10,12 @@ public class ReservaDetalleResponse
 {
     public long Id { get; set; }
     public string Complejo { get; set; } = string.Empty;
+    public string Direccion { get; set; } = string.Empty;
+    public string Telefono { get; set; } = string.Empty;
     public string Cancha { get; set; } = string.Empty;
     public string Deporte { get; set; } = string.Empty;
     public string Fecha { get; set; } = string.Empty;
+    public string FechaIso { get; set; } = string.Empty;
     public string Hora { get; set; } = string.Empty;
     public string HoraFin { get; set; } = string.Empty;
     public string Estado { get; set; } = string.Empty;

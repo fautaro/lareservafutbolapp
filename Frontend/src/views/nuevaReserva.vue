@@ -323,12 +323,14 @@
 import { API_ENDPOINTS } from '../config/apiConfig';
 import { startLoader, stopLoader } from '../services/globalLoader';
 import { useAuthUser } from '../composables/useAuthUser';
+import { useToast } from '../composables/useToast';
 
 export default {
     name: 'NuevaReserva',
     setup() {
         const { user } = useAuthUser();
-        return { user };
+        const { showToast } = useToast();
+        return { user, showToast };
     },
     data() {
         return {
@@ -374,29 +376,16 @@ export default {
                 }));
         },
         deportesFiltradosPorDia() {
-            if (!this.diaSeleccionado || !this.rawHorariosData.length) return [];
-            const dayData = this.rawHorariosData.find(d => d.fecha.startsWith(this.diaSeleccionado));
-            if (!dayData) return [];
-
-            // Obtenemos los deportes que realmente tienen horarios este día
-            const deportesConHorario = [...new Set(dayData.horarios.map(h => h.tipoCancha.toLowerCase().replace(/ /g, '')))];
-
-            return this.deportesDisponibles.filter(d => deportesConHorario.includes(d.tipo.toLowerCase()));
+            if (!this.complejo || !this.complejo.canchas) return [];
+            const normalize = (str) => str ? str.toLowerCase().replace(/ /g, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "") : "";
+            const deportesConCancha = [...new Set(this.complejo.canchas.map(c => normalize(c.tipoCancha)))];
+            return this.deportesDisponibles.filter(d => deportesConCancha.includes(normalize(d.tipo)));
         },
         canchasFiltradas() {
-            if (!this.diaSeleccionado || !this.deporteSeleccionado || !this.rawHorariosData.length) return [];
-            const dayData = this.rawHorariosData.find(d => d.fecha.startsWith(this.diaSeleccionado));
-            if (!dayData) return [];
-
-            const canchasMap = new Map();
-            dayData.horarios.forEach(h => {
-                const normalizedApiSport = h.tipoCancha.toLowerCase().replace(/ /g, '');
-                if (normalizedApiSport === this.deporteSeleccionado.toLowerCase()) {
-                    canchasMap.set(h.canchaId, h.canchaNombre);
-                }
-            });
-
-            return Array.from(canchasMap, ([id, nombre]) => ({ id, nombre }));
+            if (!this.complejo || !this.complejo.canchas || !this.deporteSeleccionado) return [];
+            const normalize = (str) => str ? str.toLowerCase().replace(/ /g, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "") : "";
+            const selDeporte = normalize(this.deporteSeleccionado);
+            return this.complejo.canchas.filter(c => normalize(c.tipoCancha) === selDeporte);
         },
         formattedSelectedDate() {
             if (!this.diaSeleccionado) return '';
@@ -475,22 +464,8 @@ export default {
             }
         },
         updateCanchaSelection() {
-            // Evaluamos las canchas disponibles de forma síncrona para que no se corte la transición
-            const dayData = this.rawHorariosData.find(d => d.fecha.startsWith(this.diaSeleccionado));
-            if (!dayData) {
-                this.canchaSeleccionadaId = null;
-                return;
-            }
-
-            const canchasId = [];
-            dayData.horarios.forEach(h => {
-                const normalizedApiSport = h.tipoCancha.toLowerCase().replace(/ /g, '');
-                if (normalizedApiSport === this.deporteSeleccionado.toLowerCase()) {
-                    if (!canchasId.includes(h.canchaId)) canchasId.push(h.canchaId);
-                }
-            });
-
-            this.canchaSeleccionadaId = canchasId.length > 0 ? canchasId[0] : null;
+            const canchas = this.canchasFiltradas;
+            this.canchaSeleccionadaId = canchas.length > 0 ? canchas[0].id : null;
         },
         volverAInicio() {
             this.mostrarModalConfirmacion = false
@@ -578,7 +553,7 @@ export default {
                 }, 4000);
             } catch (error) {
                 console.error("Error al confirmar reserva:", error);
-                alert(error.message || 'Hubo un error al procesar tu reserva. Intentalo de nuevo.');
+                this.showToast(error.message || 'Hubo un error al procesar tu reserva. Intentalo de nuevo.', 'error');
             } finally {
                 stopLoader();
                 this.mostrarConfirmacionReserva = false;

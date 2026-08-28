@@ -16,10 +16,14 @@ public class ComplejosRepository : IComplejosRepository
     public async Task<List<ComplejoDTO>> GetComplejos(CancellationToken cancellationToken, long? ciudadId = null, long? deporteId = null, long? complejoId = null, long? duenoId = null)
     {
         var query = _context.Complejos
-            .Where(c => c.Estado)
             .Include(c => c.Ciudad)
             .Include(c => c.Deporte)
             .AsQueryable();
+
+        if (!duenoId.HasValue)
+        {
+            query = query.Where(c => c.Estado);
+        }
 
         if (ciudadId.HasValue)
             query = query.Where(c => c.CiudadId == ciudadId.Value);

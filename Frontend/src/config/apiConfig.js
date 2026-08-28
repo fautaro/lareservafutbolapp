@@ -5,10 +5,27 @@ export const API_CONFIG = {
 }
 
 export const API_ENDPOINTS = {
+  referenceData: {
+    getAll: () => `${BASE_URL}/reference-data`
+  },
   complejos: {
     getAll: (duenoId) => duenoId ? `${BASE_URL}/Complejos?duenoId=${duenoId}` : `${BASE_URL}/Complejos`,
     getById: (id) => `${BASE_URL}/Complejos/${id}`,
-    getAgenda: (id, fecha, usuarioId, soloReservas = false) => `${BASE_URL}/Complejos/${id}/agenda?fecha=${fecha}&usuarioId=${usuarioId}&soloReservas=${soloReservas}`
+    getAgenda: (id, fecha, usuarioId, soloReservas = false) => `${BASE_URL}/Complejos/${id}/agenda?fecha=${fecha}&usuarioId=${usuarioId}&soloReservas=${soloReservas}`,
+    getEstadisticasDia: (id, fecha, usuarioId) => `${BASE_URL}/Complejos/${id}/estadisticas-dia?fecha=${fecha}&usuarioId=${usuarioId}`,
+    getConfig: (id, usuarioId) => `${BASE_URL}/Complejos/${id}/config?usuarioId=${usuarioId}`,
+    create: () => `${BASE_URL}/Complejos`,
+    createCancha: (id) => `${BASE_URL}/Complejos/${id}/canchas`,
+    updateEstado: (id) => `${BASE_URL}/Complejos/${id}/estado`,
+    updateImagen: (id) => `${BASE_URL}/Complejos/${id}/imagen`,
+    updateDireccion: (id) => `${BASE_URL}/Complejos/${id}/direccion`
+  },
+  canchas: {
+    getHorarios: (canchaId) => `${BASE_URL}/Canchas/${canchaId}/horarios`,
+    createHorario: (canchaId) => `${BASE_URL}/Canchas/${canchaId}/horarios`,
+    deleteHorario: (canchaId, horarioId) => `${BASE_URL}/Canchas/${canchaId}/horarios/${horarioId}`,
+    updateEstado: (canchaId) => `${BASE_URL}/Canchas/${canchaId}/estado`,
+    updatePrecio: (canchaId) => `${BASE_URL}/Canchas/${canchaId}/precio`
   },
   reservas: {
     getNext: (usuarioId) => `${BASE_URL}/Reserva/GetNext?UsuarioId=${usuarioId}`,

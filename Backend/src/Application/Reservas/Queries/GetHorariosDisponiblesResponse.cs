@@ -1,4 +1,4 @@
-﻿namespace LaReservaBackend.Application.Reservas.Queries;
+namespace LaReservaBackend.Application.Reservas.Queries;
 
 public class GetHorariosDisponiblesResponse
 {
@@ -12,6 +12,15 @@ public class ComplejoDetalleResponse
     public string Nombre { get; set; } = string.Empty;
     public string Direccion { get; set; } = string.Empty;
     public string? Imagen { get; set; }
+    public List<CanchaDetalleResponse> Canchas { get; set; } = new();
+}
+
+public class CanchaDetalleResponse
+{
+    public long Id { get; set; }
+    public string Nombre { get; set; } = string.Empty;
+    public decimal? PrecioHora { get; set; }
+    public string TipoCancha { get; set; } = string.Empty;
 }
 
 public class HorarioPorDia

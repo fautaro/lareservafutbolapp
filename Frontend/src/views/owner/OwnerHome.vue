@@ -69,9 +69,13 @@
                   </div>
                 </div>
 
-                <div class="flex items-center gap-2 text-[#2D9CDB] font-bold text-xs uppercase tracking-widest group-hover:translate-x-1 transition-transform">
-                  <span>Ver Agenda</span>
-                  <i class="fas fa-chevron-right text-[10px]"></i>
+                <div class="flex items-center gap-3">
+                  <button @click.stop="configurarComplejo(complejo.id)" class="flex items-center gap-2 text-slate-500 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 px-3 py-2 rounded-xl transition-colors font-bold text-xs">
+                    <i class="fas fa-cog"></i> Configurar
+                  </button>
+                  <button @click.stop="verAgenda(complejo.id)" class="flex items-center gap-2 text-white bg-[#2D9CDB] hover:bg-[#2088c2] px-3 py-2 rounded-xl transition-colors font-bold text-xs">
+                    <i class="fas fa-calendar-alt"></i> Agenda
+                  </button>
                 </div>
               </div>
             </div>
@@ -84,7 +88,7 @@
             </div>
             <h3 class="text-lg font-bold text-slate-900">No tenés complejos</h3>
             <p class="text-sm text-slate-400 mt-2 leading-relaxed">Empezá agregando tu primer complejo para recibir reservas.</p>
-            <button class="mt-8 px-8 py-3 bg-slate-100 text-slate-600 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-slate-200 transition-colors">
+            <button @click="agregarComplejo" class="mt-8 px-8 py-3 bg-slate-100 text-slate-600 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-slate-200 transition-colors">
               Agregar Complejo
             </button>
           </div>
@@ -93,7 +97,7 @@
 
       <!-- QUICK ACTIONS -->
       <section v-if="complejos.length > 0 && !isLoading" class="mt-10 px-4">
-         <button class="w-full py-4 border-2 border-dashed border-slate-200 rounded-2xl flex items-center justify-center gap-3 text-slate-400 hover:text-[#2D9CDB] hover:border-[#2D9CDB] transition-colors group">
+         <button @click="agregarComplejo" class="w-full py-4 border-2 border-dashed border-slate-200 rounded-2xl flex items-center justify-center gap-3 text-slate-400 hover:text-[#2D9CDB] hover:border-[#2D9CDB] transition-colors group">
             <i class="fas fa-plus text-sm group-hover:scale-110 transition-transform"></i>
             <span class="text-xs font-bold uppercase tracking-widest">Agregar otro complejo</span>
          </button>
@@ -121,7 +125,7 @@ export default {
     const fetchComplejos = async () => {
       isLoading.value = true
       try {
-        const ownerId = user.value?.sub || 1 // Fallback para dev
+        const ownerId = user.value?.sub || 1
         const response = await fetch(API_ENDPOINTS.complejos.getAll(ownerId))
         
         if (!response.ok) throw new Error('Error al cargar los complejos')
@@ -139,6 +143,14 @@ export default {
       router.push({ name: 'OwnerAgenda', params: { id: complejoId } })
     }
 
+    const configurarComplejo = (complejoId) => {
+      router.push({ name: 'OwnerComplejoConfig', params: { id: complejoId } })
+    }
+
+    const agregarComplejo = () => {
+      router.push({ name: 'OwnerComplejoCreate' })
+    }
+
     onMounted(() => {
       fetchComplejos()
     })
@@ -146,7 +158,9 @@ export default {
     return {
       complejos,
       isLoading,
-      verAgenda
+      verAgenda,
+      configurarComplejo,
+      agregarComplejo
     }
   }
 }

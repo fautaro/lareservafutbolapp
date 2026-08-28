@@ -72,29 +72,7 @@
       <!-- ── Estado autenticado ── -->
       <template v-if="isAuthenticated">
 
-        <!-- Sección: Dueño (Solo si es modo dueño) -->
-        <transition name="fade-slide">
-          <div v-if="isOwner()">
-            <p class="section-label">Gestión de Dueño</p>
-            <div class="nav-card mb-5">
-              <router-link :to="{ name: 'Home' }" class="nav-row">
-                <div class="nav-icon" style="background: rgba(45,156,219,0.1);">
-                  <i class="fas fa-list-check" style="color: #2D9CDB;"></i>
-                </div>
-                <span class="nav-text">Mis canchas</span>
-                <i class="fas fa-chevron-right nav-arrow"></i>
-              </router-link>
-              <div class="nav-sep"></div>
-              <button class="nav-row w-full text-left">
-                <div class="nav-icon" style="background: rgba(29,185,84,0.1);">
-                  <i class="fas fa-plus" style="color: #1DB954;"></i>
-                </div>
-                <span class="nav-text">Agregar cancha</span>
-                <i class="fas fa-chevron-right nav-arrow"></i>
-              </button>
-            </div>
-          </div>
-        </transition>
+
 
         <!-- Sección: Cuenta -->
         <p class="section-label">Cuenta</p>

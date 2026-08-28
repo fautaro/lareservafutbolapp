@@ -1,5 +1,6 @@
 using LaReservaBackend.Application.Common.Exceptions;
 using LaReservaBackend.Application.Common.Interfaces;
+using LaReservaBackend.Application.Complejos.Queries.GetEstadisticasDia;
 using LaReservaBackend.Domain.Entities;
 using LaReservaBackend.Domain.Enums;
 using MediatR;
@@ -69,7 +70,8 @@ public class GetAgendaComplejoHandler : IRequestHandler<GetAgendaComplejoQuery, 
         {
             ComplejoId = complejo.Id,
             ComplejoNombre = complejo.Nombre,
-            Fecha = dateStart
+            Fecha = dateStart,
+            Estadisticas = EstadisticasComplejoHelper.CalcularEstadisticas(complejo, horariosCanchas, reservas)
         };
 
         foreach (var cancha in complejo.Canchas.OrderBy(c => c.Nombre))

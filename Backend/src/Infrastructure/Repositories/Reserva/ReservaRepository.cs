@@ -17,8 +17,9 @@ public class ReservaRepository : IReservaRepository
     {
         // Obtener el complejo con sus canchas
         var complejo = await _context.Complejos
-            .Include(c => c.Canchas)
-            .FirstOrDefaultAsync(c => c.Id == complejoId, cancellationToken);
+            .Include(c => c.Canchas.Where(ca => ca.Estado))
+                .ThenInclude(c => c.TipoCancha)
+            .FirstOrDefaultAsync(c => c.Id == complejoId && c.Estado, cancellationToken);
 
         if (complejo == null)
         {
@@ -41,6 +42,7 @@ public class ReservaRepository : IReservaRepository
         var reservasConfirmadas = await _context.Reservas
             .Where(r => canchasIds.Contains(r.CanchaId)
                 && (r.Confirmada || r.Estado == EstadoReserva.Bloqueado)
+                && r.Estado != EstadoReserva.Eliminado
                 && r.Fecha >= fechaInicio
                 && r.Fecha < fechaFin)
             .Select(r => new { r.CanchaId, r.Fecha, r.FechaFin })
@@ -89,15 +91,12 @@ public class ReservaRepository : IReservaRepository
                 }
             }
 
-            if (horariosDisponibles.Any())
+            horariosPorDia.Add(new HorarioPorDia
             {
-                horariosPorDia.Add(new HorarioPorDia
-                {
-                    Fecha = fechaActual,
-                    DiaSemana = diaSemana,
-                    Horarios = horariosDisponibles.OrderBy(h => h.CanchaNombre).ThenBy(h => h.HoraInicio).ToList()
-                });
-            }
+                Fecha = fechaActual,
+                DiaSemana = diaSemana,
+                Horarios = horariosDisponibles.OrderBy(h => h.CanchaNombre).ThenBy(h => h.HoraInicio).ToList()
+            });
         }
 
 
@@ -108,7 +107,14 @@ public class ReservaRepository : IReservaRepository
                 Id = complejo.Id,
                 Nombre = complejo.Nombre,
                 Direccion = complejo.Direccion ?? string.Empty,
-                Imagen = complejo.Imagen
+                Imagen = complejo.Imagen,
+                Canchas = complejo.Canchas.Select(c => new CanchaDetalleResponse
+                {
+                    Id = c.Id,
+                    Nombre = c.Nombre,
+                    PrecioHora = c.PrecioHora,
+                    TipoCancha = c.TipoCancha?.Nombre ?? string.Empty
+                }).ToList()
             },
             HorariosPorDia = horariosPorDia
         };
@@ -120,6 +126,7 @@ public class ReservaRepository : IReservaRepository
 
         var allReservas = await _context.Reservas
             .Include(r => r.Complejo!)
+                .ThenInclude(c => c.Dueno!)
             .Include(r => r.Cancha!)
                 .ThenInclude(c => c.TipoCancha!)
             .Include(r => r.MedioPago!)
@@ -133,9 +140,12 @@ public class ReservaRepository : IReservaRepository
             {
                 Id = r.Id,
                 Complejo = r.Complejo != null ? r.Complejo.Nombre : "Complejo",
+                Direccion = r.Complejo != null ? (r.Complejo.Direccion ?? string.Empty) : string.Empty,
+                Telefono = (r.Complejo != null && r.Complejo.Dueno != null) ? (r.Complejo.Dueno.Telefono ?? string.Empty) : string.Empty,
                 Cancha = r.Cancha != null ? r.Cancha.Nombre : "Cancha",
                 Deporte = (r.Cancha != null && r.Cancha.TipoCancha != null) ? r.Cancha.TipoCancha.Nombre : "Deporte",
                 Fecha = r.Fecha.ToString("dd/MM/yyyy"),
+                FechaIso = r.Fecha.ToString("yyyy-MM-ddTHH:mm:ss"),
                 Hora = r.Fecha.ToString("HH:mm"),
                 HoraFin = r.FechaFin.ToString("HH:mm"),
                 Estado = r.Confirmada ? "Confirmado" : "Pendiente",
@@ -152,9 +162,12 @@ public class ReservaRepository : IReservaRepository
             {
                 Id = r.Id,
                 Complejo = r.Complejo != null ? r.Complejo.Nombre : "Complejo",
+                Direccion = r.Complejo != null ? (r.Complejo.Direccion ?? string.Empty) : string.Empty,
+                Telefono = (r.Complejo != null && r.Complejo.Dueno != null) ? (r.Complejo.Dueno.Telefono ?? string.Empty) : string.Empty,
                 Cancha = r.Cancha != null ? r.Cancha.Nombre : "Cancha",
                 Deporte = (r.Cancha != null && r.Cancha.TipoCancha != null) ? r.Cancha.TipoCancha.Nombre : "Deporte",
                 Fecha = r.Fecha.ToString("dd/MM/yyyy"),
+                FechaIso = r.Fecha.ToString("yyyy-MM-ddTHH:mm:ss"),
                 Hora = r.Fecha.ToString("HH:mm"),
                 HoraFin = r.FechaFin.ToString("HH:mm"),
                 Estado = "Finalizado",
@@ -178,6 +191,7 @@ public class ReservaRepository : IReservaRepository
         if (reserva == null) return false;
 
         reserva.Estado = EstadoReserva.Eliminado;
+        reserva.Confirmada = false;
         return await _context.SaveChangesAsync(cancellationToken) > 0;
     }
 
@@ -205,6 +219,7 @@ public class ReservaRepository : IReservaRepository
         var now = DateTime.Now;
         var proxima = await _context.Reservas
             .Include(r => r.Complejo!)
+                .ThenInclude(c => c.Dueno!)
             .Include(r => r.Cancha!)
                 .ThenInclude(c => c.TipoCancha!)
             .Include(r => r.MedioPago!)
@@ -214,9 +229,12 @@ public class ReservaRepository : IReservaRepository
             {
                 Id = r.Id,
                 Complejo = r.Complejo != null ? r.Complejo.Nombre : "Complejo",
+                Direccion = r.Complejo != null ? (r.Complejo.Direccion ?? string.Empty) : string.Empty,
+                Telefono = (r.Complejo != null && r.Complejo.Dueno != null) ? (r.Complejo.Dueno.Telefono ?? string.Empty) : string.Empty,
                 Cancha = r.Cancha != null ? r.Cancha.Nombre : "Cancha",
                 Deporte = (r.Cancha != null && r.Cancha.TipoCancha != null) ? r.Cancha.TipoCancha.Nombre : "Deporte",
                 Fecha = r.Fecha.ToString("dd/MM/yyyy"),
+                FechaIso = r.Fecha.ToString("yyyy-MM-ddTHH:mm:ss"),
                 Hora = r.Fecha.ToString("HH:mm"),
                 HoraFin = r.FechaFin.ToString("HH:mm"),
                 Estado = r.Confirmada ? "Confirmado" : "Pendiente",

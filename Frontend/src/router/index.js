@@ -12,6 +12,9 @@ import Help from '../views/user/Help.vue';
 import Login from '../views/Login.vue';
 import OwnerAgenda from '../views/owner/OwnerAgenda.vue';
 
+import OwnerComplejoCreate from '../views/owner/OwnerComplejoCreate.vue';
+import OwnerComplejoConfig from '../views/owner/OwnerComplejoConfig.vue';
+
 const routes = [
   {
     path: '/login',
@@ -63,6 +66,16 @@ const routes = [
         path: 'owner/agenda/:id',
         name: 'OwnerAgenda',
         component: OwnerAgenda
+      },
+      {
+        path: 'owner/complejos/nuevo',
+        name: 'OwnerComplejoCreate',
+        component: OwnerComplejoCreate
+      },
+      {
+        path: 'owner/complejo/:id/config',
+        name: 'OwnerComplejoConfig',
+        component: OwnerComplejoConfig
       }
     ]
   }

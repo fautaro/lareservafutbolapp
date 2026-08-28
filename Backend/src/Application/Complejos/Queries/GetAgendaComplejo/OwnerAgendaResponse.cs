@@ -1,3 +1,5 @@
+using LaReservaBackend.Application.Complejos.Queries.GetEstadisticasDia;
+
 namespace LaReservaBackend.Application.Complejos.Queries.GetAgendaComplejo;
 
 public class OwnerAgendaResponse
@@ -6,6 +8,7 @@ public class OwnerAgendaResponse
     public string ComplejoNombre { get; set; } = string.Empty;
     public DateTime Fecha { get; set; }
     public List<AgendaCanchaDto> Canchas { get; set; } = new();
+    public EstadisticasDiaDto? Estadisticas { get; set; }
 }
 
 public class AgendaCanchaDto
