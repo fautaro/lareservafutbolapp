@@ -1,4 +1,4 @@
-﻿using LaReservaBackend.Application.Common.Interfaces;
+using LaReservaBackend.Application.Common.Interfaces;
 using LaReservaBackend.Application.Common.Models.DTOs.Complejos;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +13,7 @@ public class ComplejosRepository : IComplejosRepository
         _context = context;
     }
 
-    public async Task<List<ComplejoDTO>> GetComplejos(CancellationToken cancellationToken, long? ciudadId = null, long? deporteId = null, long? complejoId = null)
+    public async Task<List<ComplejoDTO>> GetComplejos(CancellationToken cancellationToken, long? ciudadId = null, long? deporteId = null, long? complejoId = null, long? duenoId = null)
     {
         var query = _context.Complejos
             .Where(c => c.Estado)
@@ -27,6 +27,8 @@ public class ComplejosRepository : IComplejosRepository
             query = query.Where(c => c.DeporteId == deporteId.Value);
         if (complejoId.HasValue)
             query = query.Where(c => c.Id == complejoId.Value);
+        if (duenoId.HasValue)
+            query = query.Where(c => c.DuenoId == duenoId.Value);
 
         return await query
             .Select(c => new ComplejoDTO

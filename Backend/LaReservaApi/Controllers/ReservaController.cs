@@ -1,4 +1,4 @@
-﻿using LaReservaBackend.Application.Reservas.Commands;
+using LaReservaBackend.Application.Reservas.Commands;
 using LaReservaBackend.Application.Reservas.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +54,19 @@ public class ReservaController : Controller
         if (result == -1)
         {
             return BadRequest(new { message = "El horario ya no está disponible." });
+        }
+
+        return Ok(new { id = result });
+    }
+
+    [HttpPost("BlockHorario")]
+    public async Task<IActionResult> BlockHorario([FromBody] BlockHorarioCommand command, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(command, cancellationToken);
+
+        if (result == -1)
+        {
+            return BadRequest(new { message = "El horario ya no está disponible o existe una reserva." });
         }
 
         return Ok(new { id = result });

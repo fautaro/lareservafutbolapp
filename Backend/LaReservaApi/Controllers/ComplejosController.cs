@@ -16,20 +16,27 @@ public class ComplejosController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] int? complejoId, [FromQuery] int? deporteId, CancellationToken cancellationToken)
+    public async Task<IActionResult> Get([FromQuery] int? complejoId, [FromQuery] int? deporteId, [FromQuery] long? duenoId, CancellationToken cancellationToken)
     {
-        var request = new GetComplejos(complejoId ?? 0, deporteId ?? 0);
+        var request = new GetComplejos(complejoId ?? 0, deporteId ?? 0, duenoId);
         var response = await _mediator.Send(request, cancellationToken);
 
         return Ok(response);
     }
 
     [HttpGet("{id}/agenda")]
-    public async Task<IActionResult> GetAgenda(long id, [FromQuery] DateTime fecha, [FromQuery] long UsuarioId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAgenda(long id, [FromQuery] DateTime fecha, [FromQuery] long UsuarioId, [FromQuery] bool soloReservas = false, CancellationToken cancellationToken = default)
     {
-        var request = new LaReservaBackend.Application.Complejos.Queries.GetAgendaComplejo.GetAgendaComplejoQuery(id, fecha, UsuarioId);
+        var request = new LaReservaBackend.Application.Complejos.Queries.GetAgendaComplejo.GetAgendaComplejoQuery(id, fecha, UsuarioId, soloReservas);
         var response = await _mediator.Send(request, cancellationToken);
 
         return Ok(response);
+    }
+
+    [HttpGet("debug-reservas")]
+    public async Task<IActionResult> DebugReservas([FromServices] LaReservaBackend.Application.Common.Interfaces.IApplicationDbContext context)
+    {
+        var list = await Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync(context.Reservas);
+        return Ok(list);
     }
 }

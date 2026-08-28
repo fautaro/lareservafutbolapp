@@ -4,5 +4,6 @@ public enum EstadoReserva
 {
     Pendiente = 'P',
     Confirmado = 'C',
-    Eliminado = 'E'
+    Eliminado = 'E',
+    Bloqueado = 'B'
 }

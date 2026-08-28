@@ -84,33 +84,64 @@ public class GetAgendaComplejoHandler : IRequestHandler<GetAgendaComplejoQuery, 
             var horariosParaCancha = horariosCanchas.Where(hc => hc.CanchaId == cancha.Id).ToList();
             var reservasParaCancha = reservas.Where(r => r.CanchaId == cancha.Id).ToList();
 
-            foreach (var hc in horariosParaCancha)
+            if (request.SoloReservas)
             {
-                var currentTime = hc.HoraInicio;
-                // Assuming slots of 1 hour as standard, or we use the specific times
-                // If HoraInicio=08:00 and HoraFin=23:00, we should generate hourly slots.
-                // Let's iterate from HoraInicio to HoraFin by 1 hour increments.
-                while (currentTime < hc.HoraFin)
+                foreach (var reserva in reservasParaCancha.OrderBy(r => r.Fecha))
                 {
-                    var nextTime = currentTime + TimeSpan.FromHours(1);
-                    
-                    var reserva = reservasParaCancha.FirstOrDefault(r => 
-                        r.Fecha.TimeOfDay < nextTime && r.FechaFin.TimeOfDay > currentTime);
-
                     var turno = new TurnoAgendaDto
                     {
-                        HoraInicio = currentTime,
-                        HoraFin = nextTime,
-                        Estado = reserva != null ? "reserved" : "available",
-                        ReservaId = reserva?.Id,
-                        JugadorNombre = reserva?.Usuario?.Nombre,
-                        MedioPagoNombre = reserva?.MedioPago?.Nombre,
-                        MontoTotal = reserva?.MontoTotal,
-                        EstadoPago = reserva?.EstadoPago.ToString()
+                        HoraInicio = reserva.Fecha.TimeOfDay,
+                        HoraFin = reserva.FechaFin.TimeOfDay,
+                        Estado = "reserved",
+                        ReservaId = reserva.Id,
+                        JugadorNombre = reserva.Usuario?.Nombre,
+                        JugadorTelefono = reserva.Usuario?.Telefono,
+                        JugadorEmail = reserva.Usuario?.Email,
+                        MedioPagoNombre = reserva.MedioPago?.Nombre,
+                        MontoTotal = reserva.MontoTotal,
+                        EstadoPago = reserva.EstadoPago.ToString(),
+                        Confirmada = reserva.Confirmada,
+                        EstadoReserva = reserva.Estado.ToString(),
+                        FechaReserva = reserva.FechaReserva
                     };
-
                     agendaCancha.Turnos.Add(turno);
-                    currentTime = nextTime;
+                }
+            }
+            else
+            {
+                foreach (var hc in horariosParaCancha)
+                {
+                    var currentTime = hc.HoraInicio;
+                    // Assuming slots of 1 hour as standard, or we use the specific times
+                    // If HoraInicio=08:00 and HoraFin=23:00, we should generate hourly slots.
+                    // Let's iterate from HoraInicio to HoraFin by 1 hour increments.
+                    while (currentTime < hc.HoraFin)
+                    {
+                        var nextTime = currentTime + TimeSpan.FromHours(1);
+                        
+                        var reserva = reservasParaCancha.FirstOrDefault(r => 
+                            r.Fecha.TimeOfDay < nextTime && r.FechaFin.TimeOfDay > currentTime);
+
+                        var turno = new TurnoAgendaDto
+                        {
+                            HoraInicio = currentTime,
+                            HoraFin = nextTime,
+                            Estado = reserva == null ? "available" : (reserva.Estado == EstadoReserva.Bloqueado ? "blocked" : "reserved"),
+                            ReservaId = reserva?.Id,
+                            JugadorNombre = reserva?.Usuario?.Nombre,
+                            JugadorTelefono = reserva?.Usuario?.Telefono,
+                            JugadorEmail = reserva?.Usuario?.Email,
+                            MedioPagoNombre = reserva?.MedioPago?.Nombre,
+                            MontoTotal = reserva?.MontoTotal,
+                            EstadoPago = reserva?.EstadoPago.ToString(),
+                            Confirmada = reserva?.Confirmada,
+                            EstadoReserva = reserva?.Estado.ToString(),
+                            FechaReserva = reserva?.FechaReserva
+                        };
+
+                        agendaCancha.Turnos.Add(turno);
+                        currentTime = nextTime;
+                    }
                 }
             }
 

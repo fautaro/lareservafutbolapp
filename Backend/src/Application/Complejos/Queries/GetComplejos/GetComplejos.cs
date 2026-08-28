@@ -1,4 +1,4 @@
-﻿using LaReservaBackend.Application.Common.Interfaces;
+using LaReservaBackend.Application.Common.Interfaces;
 
 namespace LaReservaBackend.Application.Complejos.Queries.GetComplejos;
 
@@ -6,11 +6,13 @@ public class GetComplejos : IRequest<GetComplejosResponse>
 {
     public int ComplejoId { get; init; }
     public int DeporteId { get; init; }
+    public long? DuenoId { get; init; }
 
-    public GetComplejos(int complejoId, int deporteId)
+    public GetComplejos(int complejoId, int deporteId, long? duenoId = null)
     {
         ComplejoId = complejoId;
         DeporteId = deporteId;
+        DuenoId = duenoId;
     }
 }
 
@@ -27,7 +29,7 @@ public class GetComplejosHandler : IRequestHandler<GetComplejos, GetComplejosRes
 
     public async Task<GetComplejosResponse> Handle(GetComplejos request, CancellationToken cancellationToken)
     {
-        var complejos = await _complejosRepository.GetComplejos(cancellationToken, request.DeporteId != 0 ? request.DeporteId : null, request.ComplejoId != 0 ? request.ComplejoId : null);
+        var complejos = await _complejosRepository.GetComplejos(cancellationToken, request.DeporteId != 0 ? request.DeporteId : null, request.ComplejoId != 0 ? request.ComplejoId : null, request.DuenoId);
         var deportes = await _deportesRepository.GetDeportes(cancellationToken);
 
         return new GetComplejosResponse

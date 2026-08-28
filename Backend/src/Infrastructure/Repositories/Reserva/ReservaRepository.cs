@@ -1,4 +1,4 @@
-﻿using LaReservaBackend.Application.Common.Interfaces;
+using LaReservaBackend.Application.Common.Interfaces;
 using LaReservaBackend.Application.Reservas.Queries;
 using LaReservaBackend.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -40,7 +40,7 @@ public class ReservaRepository : IReservaRepository
         // Obtener todas las reservas confirmadas de todas las canchas del complejo
         var reservasConfirmadas = await _context.Reservas
             .Where(r => canchasIds.Contains(r.CanchaId)
-                && r.Confirmada
+                && (r.Confirmada || r.Estado == EstadoReserva.Bloqueado)
                 && r.Fecha >= fechaInicio
                 && r.Fecha < fechaFin)
             .Select(r => new { r.CanchaId, r.Fecha, r.FechaFin })

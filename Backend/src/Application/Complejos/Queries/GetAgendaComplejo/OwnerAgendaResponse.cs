@@ -23,7 +23,12 @@ public class TurnoAgendaDto
     public string Estado { get; set; } = string.Empty; // "available" or "reserved"
     public long? ReservaId { get; set; }
     public string? JugadorNombre { get; set; }
+    public string? JugadorTelefono { get; set; }
+    public string? JugadorEmail { get; set; }
     public string? MedioPagoNombre { get; set; }
     public decimal? MontoTotal { get; set; }
     public string? EstadoPago { get; set; }
+    public bool? Confirmada { get; set; }
+    public string? EstadoReserva { get; set; }
+    public DateTime? FechaReserva { get; set; }
 }

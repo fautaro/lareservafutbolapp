@@ -20,33 +20,39 @@
       <!-- OWNER STATS / GREETING -->
       <section class="mt-8 px-4">
         <div class="space-y-0.5">
-          <h2 class="text-xl font-bold text-slate-900 tracking-tight">Mis Canchas</h2>
-          <p class="text-[11px] text-slate-400 font-medium">Gestioná tus espacios y revisá la agenda</p>
+          <h2 class="text-xl font-bold text-slate-900 tracking-tight">Mis Complejos</h2>
+          <p class="text-[11px] text-slate-400 font-medium">Gestioná tus complejos y revisá sus agendas</p>
         </div>
       </section>
 
-      <!-- CANCHAS LIST -->
+      <!-- COMPLEJOS LIST -->
       <section class="mt-6 px-1">
-        <div class="space-y-6">
-          <div v-for="cancha in canchas" :key="cancha.id" class="animate-slide-up">
-            <div class="group relative bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-500 cursor-pointer" @click="verAgenda(cancha.id)">
+        <!-- LOADING STATE -->
+        <div v-if="isLoading" class="flex flex-col items-center justify-center py-20">
+          <i class="fas fa-circle-notch animate-spin text-3xl text-[#2D9CDB]"></i>
+          <p class="mt-4 font-bold text-slate-500 text-sm">Cargando complejos...</p>
+        </div>
+
+        <div v-else class="space-y-6">
+          <div v-for="complejo in complejos" :key="complejo.id" class="animate-slide-up">
+            <div class="group relative bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-500 cursor-pointer" @click="verAgenda(complejo.id)">
               
               <!-- Image Container (Simplified from Complex card) -->
               <div class="relative aspect-[16/10] overflow-hidden">
-                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" :src="cancha.imagen" :alt="cancha.nombre" />
+                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" :src="complejo.imagen || 'https://images.unsplash.com/photo-1544919982-b61976f0ba4a?q=80&w=800&auto=format&fit=crop'" :alt="complejo.nombre" />
                 <!-- Gradient Overlay -->
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-60"></div>
                 
                 <!-- Floating Labels -->
                 <div class="absolute top-4 left-4">
-                  <span class="bg-white/95 backdrop-blur-md text-[11px] font-black px-3.5 py-1.5 rounded-xl shadow-lg border border-white/50 text-[#2D9CDB]">
-                    {{ cancha.tipo }}
+                  <span v-if="complejo.categoria" class="bg-white/95 backdrop-blur-md text-[11px] font-black px-3.5 py-1.5 rounded-xl shadow-lg border border-white/50" :class="complejo.deportePillText">
+                    {{ complejo.categoria }}
                   </span>
                 </div>
 
                 <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between">
                   <div class="space-y-1">
-                    <h3 class="text-2xl font-bold text-white tracking-tight drop-shadow-md">{{ cancha.nombre }}</h3>
+                    <h3 class="text-2xl font-bold text-white tracking-tight drop-shadow-md">{{ complejo.nombre }}</h3>
                   </div>
                 </div>
               </div>
@@ -55,10 +61,10 @@
               <div class="px-5 py-5 flex items-center justify-between bg-white border-t border-slate-50">
                 <div class="flex items-center gap-4">
                   <div class="flex flex-col">
-                    <span class="text-[9px] font-black text-slate-300 uppercase tracking-widest leading-none mb-1">Precio x Hora</span>
+                    <span class="text-[9px] font-black text-slate-300 uppercase tracking-widest leading-none mb-1">Precio x Hora (Desde)</span>
                     <div class="flex items-baseline gap-1">
-                      <span class="text-base font-bold text-slate-900">${{ cancha.precio }}</span>
-                      <span class="text-[10px] font-bold text-slate-400">ARS</span>
+                      <span class="text-base font-bold text-slate-900">{{ complejo.precio || '-' }}</span>
+                      <span v-if="complejo.precio" class="text-[10px] font-bold text-slate-400">ARS</span>
                     </div>
                   </div>
                 </div>
@@ -72,24 +78,24 @@
           </div>
 
           <!-- EMPTY STATE REFINED -->
-          <div v-if="canchas.length === 0" class="flex flex-col items-center justify-center py-20 text-center px-10">
+          <div v-if="complejos.length === 0" class="flex flex-col items-center justify-center py-20 text-center px-10">
             <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mb-6">
               <i class="fas fa-plus text-slate-200 text-4xl"></i>
             </div>
-            <h3 class="text-lg font-bold text-slate-900">No tenés canchas</h3>
-            <p class="text-sm text-slate-400 mt-2 leading-relaxed">Empezá agregando tu primer cancha para recibir reservas.</p>
+            <h3 class="text-lg font-bold text-slate-900">No tenés complejos</h3>
+            <p class="text-sm text-slate-400 mt-2 leading-relaxed">Empezá agregando tu primer complejo para recibir reservas.</p>
             <button class="mt-8 px-8 py-3 bg-slate-100 text-slate-600 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-slate-200 transition-colors">
-              Agregar Cancha
+              Agregar Complejo
             </button>
           </div>
         </div>
       </section>
 
       <!-- QUICK ACTIONS -->
-      <section v-if="canchas.length > 0" class="mt-10 px-4">
+      <section v-if="complejos.length > 0 && !isLoading" class="mt-10 px-4">
          <button class="w-full py-4 border-2 border-dashed border-slate-200 rounded-2xl flex items-center justify-center gap-3 text-slate-400 hover:text-[#2D9CDB] hover:border-[#2D9CDB] transition-colors group">
             <i class="fas fa-plus text-sm group-hover:scale-110 transition-transform"></i>
-            <span class="text-xs font-bold uppercase tracking-widest">Agregar otra cancha</span>
+            <span class="text-xs font-bold uppercase tracking-widest">Agregar otro complejo</span>
          </button>
       </section>
 
@@ -99,31 +105,48 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthUser } from '../../composables/useAuthUser'
+import { API_ENDPOINTS } from '../../config/apiConfig'
+
 export default {
   name: 'OwnerHome',
-  data() {
-    return {
-      canchas: [
-        {
-          id: 1,
-          nombre: 'Cancha Principal - El Fortín',
-          tipo: 'Fútbol 5',
-          precio: '12000',
-          imagen: 'https://images.unsplash.com/photo-1544919982-b61976f0ba4a?q=80&w=800&auto=format&fit=crop'
-        },
-        {
-          id: 2,
-          nombre: 'Cancha 2 - Turf Pro',
-          tipo: 'Fútbol 7',
-          precio: '18000',
-          imagen: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=800&auto=format&fit=crop'
-        }
-      ]
+  setup() {
+    const router = useRouter()
+    const { user } = useAuthUser()
+    const complejos = ref([])
+    const isLoading = ref(true)
+
+    const fetchComplejos = async () => {
+      isLoading.value = true
+      try {
+        const ownerId = user.value?.sub || 1 // Fallback para dev
+        const response = await fetch(API_ENDPOINTS.complejos.getAll(ownerId))
+        
+        if (!response.ok) throw new Error('Error al cargar los complejos')
+        
+        const data = await response.json()
+        complejos.value = data.complejos || []
+      } catch (error) {
+        console.error('Error fetching owner complejos:', error)
+      } finally {
+        isLoading.value = false
+      }
     }
-  },
-  methods: {
-    verAgenda(canchaId) {
-      this.$router.push({ name: 'OwnerAgenda', params: { id: canchaId } })
+
+    const verAgenda = (complejoId) => {
+      router.push({ name: 'OwnerAgenda', params: { id: complejoId } })
+    }
+
+    onMounted(() => {
+      fetchComplejos()
+    })
+
+    return {
+      complejos,
+      isLoading,
+      verAgenda
     }
   }
 }
