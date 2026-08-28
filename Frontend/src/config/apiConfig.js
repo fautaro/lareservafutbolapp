@@ -7,7 +7,8 @@ export const API_CONFIG = {
 export const API_ENDPOINTS = {
   complejos: {
     getAll: () => `${BASE_URL}/Complejos`,
-    getById: (id) => `${BASE_URL}/Complejos/${id}`
+    getById: (id) => `${BASE_URL}/Complejos/${id}`,
+    getAgenda: (id, fecha, usuarioId) => `${BASE_URL}/Complejos/${id}/agenda?fecha=${fecha}&usuarioId=${usuarioId}`
   },
   reservas: {
     getNext: (usuarioId) => `${BASE_URL}/Reserva/GetNext?UsuarioId=${usuarioId}`,

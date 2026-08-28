@@ -13,6 +13,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
      .UseSnakeCaseNamingConvention());
 
 builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUser, LaReservaApi.Services.CurrentUser>();
 
 builder.Services.AddCors(options =>
 {
