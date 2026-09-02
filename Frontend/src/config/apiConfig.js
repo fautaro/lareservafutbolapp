@@ -13,6 +13,8 @@ export const API_ENDPOINTS = {
     getById: (id) => `${BASE_URL}/Complejos/${id}`,
     getAgenda: (id, fecha, usuarioId, soloReservas = false) => `${BASE_URL}/Complejos/${id}/agenda?fecha=${fecha}&usuarioId=${usuarioId}&soloReservas=${soloReservas}`,
     getEstadisticasDia: (id, fecha, usuarioId) => `${BASE_URL}/Complejos/${id}/estadisticas-dia?fecha=${fecha}&usuarioId=${usuarioId}`,
+    getEstadisticas: (complejoId, fechaInicio, fechaFin, usuarioId) => 
+      `${BASE_URL}/Complejos/estadisticas?${complejoId ? `complejoId=${complejoId}&` : ''}fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&usuarioId=${usuarioId}`,
     getConfig: (id, usuarioId) => `${BASE_URL}/Complejos/${id}/config?usuarioId=${usuarioId}`,
     create: () => `${BASE_URL}/Complejos`,
     createCancha: (id) => `${BASE_URL}/Complejos/${id}/canchas`,
@@ -32,6 +34,7 @@ export const API_ENDPOINTS = {
     getHorariosDisponibles: (complejoId) => `${BASE_URL}/Reserva/HorariosDisponiblesComplejo?ComplejoId=${complejoId}`,
     getUserReservations: (usuarioId) => `${BASE_URL}/Reserva/UserReservations?UsuarioId=${usuarioId}`,
     cancelReservation: (id) => `${BASE_URL}/Reserva/CancelReservation/${id}`,
+    confirm: (id, usuarioId) => `${BASE_URL}/Reserva/ConfirmReservation/${id}?UsuarioId=${usuarioId}`,
     create: `${BASE_URL}/Reserva/CreateReserva`,
     block: `${BASE_URL}/Reserva/BlockHorario`
   },

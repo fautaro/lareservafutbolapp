@@ -41,9 +41,9 @@ public class CreateReservaHandler : IRequestHandler<CreateReservaCommand, long>
             FechaFin = fechaFin,
             MontoTotal = request.MontoTotal,
             MedioPagoId = request.MedioPagoId,
-            Estado = EstadoReserva.Confirmado,
+            Estado = EstadoReserva.Pendiente,
             FechaReserva = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified),
-            Confirmada = true,
+            Confirmada = false,
             EstadoPago = EstadoPago.pendiente
         };
 

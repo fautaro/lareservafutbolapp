@@ -38,10 +38,9 @@ public class ReservaRepository : IReservaRepository
             .Where(h => canchasIds.Contains(h.CanchaId) && h.Disponible)
             .ToListAsync(cancellationToken);
 
-        // Obtener todas las reservas confirmadas de todas las canchas del complejo
+        // Obtener todas las reservas que no estén eliminadas de todas las canchas del complejo
         var reservasConfirmadas = await _context.Reservas
             .Where(r => canchasIds.Contains(r.CanchaId)
-                && (r.Confirmada || r.Estado == EstadoReserva.Bloqueado)
                 && r.Estado != EstadoReserva.Eliminado
                 && r.Fecha >= fechaInicio
                 && r.Fecha < fechaFin)
@@ -130,7 +129,7 @@ public class ReservaRepository : IReservaRepository
             .Include(r => r.Cancha!)
                 .ThenInclude(c => c.TipoCancha!)
             .Include(r => r.MedioPago!)
-            .Where(r => r.UsuarioId == usuarioId && r.Estado == EstadoReserva.Confirmado)
+            .Where(r => r.UsuarioId == usuarioId && (r.Estado == EstadoReserva.Confirmado || r.Estado == EstadoReserva.Pendiente))
             .OrderByDescending(r => r.Fecha)
             .ToListAsync(cancellationToken);
 
@@ -148,7 +147,7 @@ public class ReservaRepository : IReservaRepository
                 FechaIso = r.Fecha.ToString("yyyy-MM-ddTHH:mm:ss"),
                 Hora = r.Fecha.ToString("HH:mm"),
                 HoraFin = r.FechaFin.ToString("HH:mm"),
-                Estado = r.Confirmada ? "Confirmado" : "Pendiente",
+                Estado = r.Estado == EstadoReserva.Pendiente ? "Pendiente" : "Confirmado",
                 MedioPago = r.MedioPago != null ? r.MedioPago.Nombre : "No especificado",
                 RequiereComprobante = r.MedioPago != null && r.MedioPago.RequiereComprobante,
                 Precio = r.MontoTotal ?? 0,
@@ -223,7 +222,7 @@ public class ReservaRepository : IReservaRepository
             .Include(r => r.Cancha!)
                 .ThenInclude(c => c.TipoCancha!)
             .Include(r => r.MedioPago!)
-            .Where(r => r.UsuarioId == usuarioId && r.Estado == EstadoReserva.Confirmado && r.Fecha >= now)
+            .Where(r => r.UsuarioId == usuarioId && (r.Estado == EstadoReserva.Confirmado || r.Estado == EstadoReserva.Pendiente) && r.Fecha >= now)
             .OrderBy(r => r.Fecha)
             .Select(r => new ReservaDetalleResponse
             {
@@ -237,7 +236,7 @@ public class ReservaRepository : IReservaRepository
                 FechaIso = r.Fecha.ToString("yyyy-MM-ddTHH:mm:ss"),
                 Hora = r.Fecha.ToString("HH:mm"),
                 HoraFin = r.FechaFin.ToString("HH:mm"),
-                Estado = r.Confirmada ? "Confirmado" : "Pendiente",
+                Estado = r.Estado == EstadoReserva.Pendiente ? "Pendiente" : "Confirmado",
                 MedioPago = r.MedioPago != null ? r.MedioPago.Nombre : "No especificado",
                 RequiereComprobante = r.MedioPago != null && r.MedioPago.RequiereComprobante,
                 Precio = r.MontoTotal ?? 0,

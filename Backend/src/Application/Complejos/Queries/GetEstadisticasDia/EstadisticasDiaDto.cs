@@ -14,12 +14,20 @@ public class EstadisticasDiaDto
     public double PorcentajeOcupacion { get; set; }
     public List<EstadisticaCanchaDto> DesgloseCanchas { get; set; } = new();
     public List<EstadisticaMedioPagoDto> DesgloseMediosPago { get; set; } = new();
+    public List<EstadisticaHorarioDto> DesgloseHorarios { get; set; } = new();
+}
+
+public class EstadisticaHorarioDto
+{
+    public string Horario { get; set; } = string.Empty;
+    public int CantidadReservas { get; set; }
 }
 
 public class EstadisticaCanchaDto
 {
     public long CanchaId { get; set; }
     public string CanchaNombre { get; set; } = string.Empty;
+    public string ComplejoNombre { get; set; } = string.Empty;
     public string DeporteNombre { get; set; } = string.Empty;
     public int ReservasCount { get; set; }
     public int TotalTurnos { get; set; }

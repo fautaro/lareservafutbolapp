@@ -1,5 +1,6 @@
 using LaReservaBackend.Application.Reservas.Commands;
 using LaReservaBackend.Application.Reservas.Queries;
+using LaReservaBackend.Application.Common.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -70,6 +71,29 @@ public class ReservaController : Controller
         }
 
         return Ok(new { id = result });
+    }
+
+    [HttpPut("ConfirmReservation/{id}")]
+    public async Task<IActionResult> ConfirmReservation(long id, [FromQuery] long UsuarioId, CancellationToken cancellationToken)
+    {
+        var command = new ConfirmReservationCommand { ReservaId = id, UsuarioId = UsuarioId };
+        try 
+        {
+            var result = await _mediator.Send(command, cancellationToken);
+            return Ok(result);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized();
+        }
+        catch (ForbiddenAccessException)
+        {
+            return Forbid();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
     }
 
     [HttpGet("GetNext")]

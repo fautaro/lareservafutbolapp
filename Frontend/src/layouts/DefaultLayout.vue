@@ -45,6 +45,14 @@
         <p class="text-[10px] font-semibold leading-none tracking-wide">Reservas</p>
       </router-link>
 
+      <router-link v-if="isOwner()" to="/owner/estadisticas" class="flex flex-1 flex-col items-center justify-center py-2 mx-0.5 gap-1 rounded-[1.25rem] transition-all duration-300 active:scale-95"
+        :class="route.name === 'OwnerEstadisticas' ? 'text-[#101518] bg-black/5 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]' : 'text-[#5c748a] hover:bg-black/[0.02]'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+          <path d="M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V200H112V88a8,8,0,0,0-8-8H48a8,8,0,0,0-8,8V200H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM56,96H96V200H56Z"></path>
+        </svg>
+        <p class="text-[10px] font-semibold leading-none tracking-wide">Estadísticas</p>
+      </router-link>
+
       <router-link to="/menu" class="flex flex-1 flex-col items-center justify-center py-2 mx-0.5 gap-1 rounded-[1.25rem] transition-all duration-300 active:scale-95"
         :class="route.name === 'Menu' ? 'text-[#101518] bg-black/5 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]' : 'text-[#5c748a] hover:bg-black/[0.02]'">
         <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
@@ -61,6 +69,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useGlobalLoader } from '../services/globalLoader'
+import { useRole } from '../composables/useRole'
 import logo from '../assets/logo.svg'
 
 export default {
@@ -68,9 +77,11 @@ export default {
   setup() {
     const route = useRoute()
     const { loading } = useGlobalLoader()
+    const { isOwner } = useRole()
     return {
       route,
-      loading
+      loading,
+      isOwner
     }
   },
   data() {

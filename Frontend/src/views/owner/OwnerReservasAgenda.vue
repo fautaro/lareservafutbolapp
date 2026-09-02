@@ -2,77 +2,79 @@
   <div class="min-h-screen bg-[#F8FAFC] pb-24 text-slate-800" style="font-family: Inter, 'Noto Sans', sans-serif;">
     
     <!-- HEADER -->
-    <div class="bg-white rounded-[24px] shadow-sm sticky top-4 z-40 overflow-hidden mx-1 pb-4 border border-slate-100/50 mt-4 px-4 pt-4">
+    <div class="sticky top-0 z-40 bg-[#F8FAFC]/90 backdrop-blur-md px-5 pt-6 pb-4 mb-2">
+      <!-- Title & Actions Row -->
+      <div class="flex items-end justify-between mb-5">
+        <div>
+          <span class="text-[10px] font-black tracking-widest text-[#2D9CDB] uppercase mb-1 block">Modo Dueño</span>
+          <h1 class="text-[28px] font-extrabold text-slate-900 tracking-tight leading-none">Agenda</h1>
+        </div>
+        
+        <div class="flex items-center gap-2">
+          <!-- Filter Button -->
+          <button 
+            @click="openFiltersModal" 
+            class="relative w-9 h-9 flex items-center justify-center bg-white rounded-full shadow-sm border border-slate-100 text-slate-500 hover:text-[#2D9CDB] hover:border-[#2D9CDB]/30 active:scale-95 transition-all"
+            title="Filtrar agenda"
+          >
+            <i class="fas fa-filter text-xs"></i>
+            <span v-if="showOnlyPending || showOnlyConfirmed" class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+          </button>
+          
+        </div>
+      </div>
+
+      <!-- Date Selector Row -->
       <div class="flex items-center justify-between mb-4">
-        <div class="w-10 h-10 flex items-center justify-center bg-[#2D9CDB]/10 text-[#2D9CDB] rounded-full shrink-0">
-          <i class="fas fa-calendar-alt text-sm"></i>
+        <h2 class="text-xl font-bold text-slate-800 capitalize leading-tight">
+          {{ displayDay }} <span class="text-slate-400 font-medium text-lg ml-1">{{ displayMonth }}</span>
+        </h2>
+        
+        <div class="flex items-center gap-1">
+          <button @click="changeDate(-1)" class="w-8 h-8 flex items-center justify-center text-[#2D9CDB] bg-[#2D9CDB]/10 hover:bg-[#2D9CDB]/20 rounded-full transition-colors active:scale-95">
+            <i class="fas fa-chevron-left text-xs"></i>
+          </button>
+          <button @click="changeDate(1)" class="w-8 h-8 flex items-center justify-center text-[#2D9CDB] bg-[#2D9CDB]/10 hover:bg-[#2D9CDB]/20 rounded-full transition-colors active:scale-95">
+            <i class="fas fa-chevron-right text-xs"></i>
+          </button>
         </div>
-        <div class="text-center w-full px-2">
-          <h1 class="text-[11px] font-black uppercase tracking-widest text-slate-400 mb-0.5">Modo Dueño</h1>
-          <p class="text-base font-bold text-slate-900 leading-tight tracking-tight truncate">
-            Agenda de Reservas
-          </p>
-        </div>
-        <button 
-          @click="openStatsModal" 
-          class="w-10 h-10 flex items-center justify-center bg-[#2D9CDB]/5 border border-[#2D9CDB]/20 rounded-full text-[#2D9CDB] hover:bg-[#2D9CDB]/10 active:scale-95 transition-all shrink-0 cursor-pointer"
-          title="Ver estadísticas del día"
-        >
-          <i class="fas fa-chart-line text-xs"></i>
-        </button>
       </div>
-
-      <!-- DATE Selector -->
-      <div class="flex items-center justify-between bg-slate-50 border border-slate-100/50 rounded-2xl p-2 mb-3">
-        <button @click="changeDate(-1)" class="w-10 h-10 flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors bg-white rounded-xl shadow-sm border border-slate-100">
-          <i class="fas fa-chevron-left text-xs"></i>
-        </button>
-        <div class="flex flex-col items-center">
-          <span class="text-[10px] font-black text-[#2D9CDB] uppercase tracking-widest">{{ displayMonth }}</span>
-          <span class="text-sm font-bold text-slate-900 capitalize">{{ displayDay }}</span>
-        </div>
-        <button @click="changeDate(1)" class="w-10 h-10 flex items-center justify-center text-slate-400 hover:text-slate-900 transition-colors bg-white rounded-xl shadow-sm border border-slate-100">
-          <i class="fas fa-chevron-right text-xs"></i>
-        </button>
-      </div>
-
+      
       <!-- Complejos Selector Filter -->
-      <div v-if="complejosList.length > 0" class="flex overflow-x-auto gap-2 no-scrollbar pb-2">
+      <div v-if="complejosList.length > 0" class="flex overflow-x-auto gap-2 no-scrollbar pb-1">
         <button 
           @click="selectComplejo('all')"
-          class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5"
-          :class="selectedComplejoId === 'all' ? 'bg-[#2D9CDB] text-white shadow-md shadow-[#2D9CDB]/20' : 'bg-slate-50 text-slate-500 border border-slate-100 hover:bg-slate-100'"
+          class="px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap border"
+          :class="selectedComplejoId === 'all' ? 'bg-slate-900 text-white border-slate-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'"
         >
-          <i class="fas fa-layer-group text-[10px]"></i>
           Todos ({{ complejosList.length }})
         </button>
         <button 
           v-for="complejo in complejosList" 
           :key="complejo.id"
           @click="selectComplejo(complejo.id)"
-          class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5"
-          :class="selectedComplejoId === complejo.id ? 'bg-[#2D9CDB] text-white shadow-md shadow-[#2D9CDB]/20' : 'bg-slate-50 text-slate-500 border border-slate-100 hover:bg-slate-100'"
+          class="px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap border"
+          :class="selectedComplejoId === complejo.id ? 'bg-slate-900 text-white border-slate-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'"
         >
-          <i class="fas fa-building text-[10px]"></i>
           {{ complejo.nombre }}
         </button>
       </div>
 
       <!-- Canchas Selector Tabs (Filtered by selected complejo) -->
-      <div v-if="availableCanchas.length > 1" class="flex overflow-x-auto gap-2 no-scrollbar pt-1 border-t border-slate-100">
+      <div v-if="availableCanchas.length > 1" class="flex overflow-x-auto gap-2 no-scrollbar pt-3 mt-1 border-t border-slate-200/50">
         <button 
           @click="selectedCanchaId = 'all'"
-          class="px-3 py-1.5 rounded-xl text-[11px] font-bold transition-colors whitespace-nowrap"
-          :class="selectedCanchaId === 'all' ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-500 border border-slate-100 hover:bg-slate-100'"
+          class="px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors whitespace-nowrap"
+          :class="selectedCanchaId === 'all' ? 'bg-[#2D9CDB] text-white shadow-sm' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50'"
         >
-          Todas las canchas ({{ availableCanchas.length }})
+          Todas ({{ availableCanchas.length }})
         </button>
         <button 
           v-for="cancha in availableCanchas" 
           :key="cancha.canchaId"
           @click="selectedCanchaId = cancha.canchaId"
-          class="px-3 py-1.5 rounded-xl text-[11px] font-bold transition-colors whitespace-nowrap"
-          :class="selectedCanchaId === cancha.canchaId ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-500 border border-slate-100 hover:bg-slate-100'"
+          class="px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors whitespace-nowrap"
+          :class="selectedCanchaId === cancha.canchaId ? 'bg-[#2D9CDB] text-white shadow-sm' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50'"
         >
           {{ selectedComplejoId === 'all' ? `${cancha.complejoNombre} - ${cancha.canchaNombre}` : cancha.canchaNombre }}
         </button>
@@ -261,6 +263,10 @@
 
             <!-- Botones para turno RESERVADO -->
             <div v-if="selectedTurn.estado === 'reserved'" class="flex flex-col gap-3">
+              <button v-if="selectedTurn.estadoReserva === 'Pendiente'" @click="executeConfirm" :disabled="isConfirming" class="w-full py-3.5 bg-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-200 active:scale-95 transition-all text-sm uppercase tracking-widest flex justify-center items-center gap-2">
+                <i v-if="isConfirming" class="fas fa-circle-notch animate-spin"></i>
+                <span>{{ isConfirming ? 'Confirmando...' : 'Confirmar Reserva' }}</span>
+              </button>
               <button @click="openReservaDetail" class="w-full py-3.5 bg-[#2D9CDB] text-white font-bold rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition-all text-sm uppercase tracking-widest">
                 Ver detalle reserva
               </button>
@@ -391,6 +397,14 @@
                 </div>
               </div>
 
+              <!-- Action Button -->
+              <div v-if="selectedTurn.estadoReserva === 'Pendiente'" class="mb-4">
+                <button @click="executeConfirm" :disabled="isConfirming" class="w-full py-3.5 bg-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-200 active:scale-95 transition-all text-sm uppercase tracking-widest flex justify-center items-center gap-2">
+                  <i v-if="isConfirming" class="fas fa-circle-notch animate-spin"></i>
+                  <span>{{ isConfirming ? 'Confirmando...' : 'Confirmar Reserva' }}</span>
+                </button>
+              </div>
+
               <!-- Volver button -->
               <button @click="modalView = 'summary'" class="w-full py-3.5 bg-slate-100 text-slate-700 font-bold rounded-xl active:scale-95 transition-all text-sm uppercase tracking-widest">
                 <i class="fas fa-arrow-left mr-2 text-xs"></i> Volver
@@ -402,10 +416,12 @@
       </div>
     </transition>
 
-    <!-- MODAL ESTADISTICAS DEL DIA (BOTTOM SHEET / MODAL) -->
+
+
+    <!-- MODAL FILTROS DE BÚSQUEDA -->
     <transition name="fade">
-      <div v-if="isStatsModalOpen" class="fixed inset-0 z-[2000] flex items-end sm:items-center justify-center p-0 sm:p-4">
-        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" @click="closeStatsModal"></div>
+      <div v-if="isFiltersModalOpen" class="fixed inset-0 z-[2000] flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" @click="closeFiltersModal"></div>
         
         <div class="relative w-full max-w-lg bg-white rounded-t-[32px] sm:rounded-[28px] shadow-2xl overflow-hidden max-h-[90vh] flex flex-col animate-slide-up z-10">
           
@@ -413,219 +429,65 @@
           <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mt-3 mb-1 sm:hidden"></div>
 
           <!-- Header -->
-          <div class="px-5 py-3.5 border-b border-slate-100/80 flex items-center justify-between gap-3 bg-white">
-            <div class="flex items-center gap-3 min-w-0 flex-1">
+          <div class="px-5 py-4 border-b border-slate-100/80 flex items-center justify-between gap-3 bg-white">
+            <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-2xl bg-[#2D9CDB]/10 text-[#2D9CDB] flex items-center justify-center shrink-0">
-                <i class="fas fa-chart-line text-sm"></i>
+                <i class="fas fa-filter text-sm"></i>
               </div>
-              <div class="min-w-0 flex-1">
-                <div class="flex items-center gap-1.5">
-                  <h3 class="text-base font-extrabold text-slate-900 tracking-tight leading-tight truncate">Estadísticas del Día</h3>
-                  <span class="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md bg-[#2D9CDB]/10 text-[#2D9CDB] capitalize shrink-0">
-                    {{ displayMonth }}
-                  </span>
-                </div>
-                <p class="text-xs text-slate-500 capitalize truncate mt-0.5">
-                  {{ displayDay }} • {{ selectedComplejoId === 'all' ? 'Todos los Complejos' : currentComplejoNombre }}
-                </p>
+              <div>
+                <h3 class="text-base font-extrabold text-slate-900 tracking-tight leading-tight truncate">Filtros de Búsqueda</h3>
+                <p class="text-[10px] text-slate-500 font-medium">Personalizá cómo ves tu agenda</p>
               </div>
             </div>
-
             <button 
-              @click="closeStatsModal" 
+              @click="closeFiltersModal" 
               class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 border border-slate-200/70 text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all active:scale-90 shrink-0 cursor-pointer"
-              title="Cerrar"
             >
-              <i class="fas fa-times text-xs"></i>
+              <i class="fas fa-times text-sm"></i>
             </button>
           </div>
 
-          <!-- Body (Scrollable) -->
-          <div class="px-5 pt-4 pb-8 overflow-y-auto space-y-5 no-scrollbar">
-
-            <!-- Hero Card: Ganancias Confirmadas -->
-            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 p-5 text-white shadow-lg">
-              <div class="flex items-center justify-between mb-2">
-                <div class="flex items-center gap-2">
-                  <i class="fas fa-sack-dollar text-emerald-400 text-xs"></i>
-                  <span class="text-[10px] font-black uppercase tracking-widest text-slate-300">Ganancias Confirmadas</span>
+          <!-- Body -->
+          <div class="p-5 overflow-y-auto no-scrollbar space-y-4">
+            
+            <!-- Toggle Pendientes -->
+            <div class="flex items-center justify-between bg-slate-50 p-4 rounded-2xl border border-slate-100 cursor-pointer transition-all active:scale-[0.98]" @click="togglePending">
+              <div class="flex items-center gap-3 pointer-events-none">
+                <div class="w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-colors"
+                     :class="showOnlyPending ? 'bg-amber-100 text-amber-600' : 'bg-white text-slate-400 shadow-sm border border-slate-100'">
+                  <i class="fas fa-clock text-xs"></i>
                 </div>
-                <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                  {{ aggregatedStats.cantidadReservasConfirmadas }} {{ aggregatedStats.cantidadReservasConfirmadas === 1 ? 'partido' : 'partidos' }}
-                </span>
-              </div>
-
-              <div class="text-3xl font-black tracking-tight text-white mb-4">
-                ${{ formatMoney(aggregatedStats.gananciasConfirmadas) }}
-              </div>
-
-              <!-- Breakdown pills -->
-              <div class="grid grid-cols-2 gap-2 pt-3 border-t border-white/10">
-                <div class="bg-white/5 rounded-xl p-2.5 border border-white/5">
-                  <div class="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                    Cobrado
-                  </div>
-                  <div class="text-sm font-bold text-emerald-400">
-                    ${{ formatMoney(aggregatedStats.gananciasCobradas) }}
-                  </div>
-                </div>
-
-                <div class="bg-white/5 rounded-xl p-2.5 border border-white/5">
-                  <div class="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">
-                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-                    Por Cobrar
-                  </div>
-                  <div class="text-sm font-bold text-amber-300">
-                    ${{ formatMoney(aggregatedStats.gananciasPendientesCobro) }}
-                  </div>
+                <div>
+                  <span class="text-sm font-bold text-slate-900 block leading-tight">Solo pendientes</span>
+                  <span class="text-[10px] font-medium text-slate-500">Reservas esperando confirmación</span>
                 </div>
               </div>
+              <label class="relative inline-flex items-center cursor-pointer pointer-events-none">
+                <input type="checkbox" :checked="showOnlyPending" class="sr-only peer">
+                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+              </label>
             </div>
 
-            <!-- Operational Metrics (2x2 Grid) -->
-            <div class="grid grid-cols-2 gap-3">
-              <!-- Reservas Totales -->
-              <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex flex-col justify-between">
-                <div class="flex items-center justify-between mb-2">
-                  <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Reservas</span>
-                  <i class="fas fa-calendar-check text-[#2D9CDB] text-xs"></i>
+            <!-- Toggle Confirmadas -->
+            <div class="flex items-center justify-between bg-slate-50 p-4 rounded-2xl border border-slate-100 cursor-pointer transition-all active:scale-[0.98]" @click="toggleConfirmed">
+              <div class="flex items-center gap-3 pointer-events-none">
+                <div class="w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-colors"
+                     :class="showOnlyConfirmed ? 'bg-emerald-100 text-emerald-600' : 'bg-white text-slate-400 shadow-sm border border-slate-100'">
+                  <i class="fas fa-check text-xs"></i>
                 </div>
                 <div>
-                  <div class="text-2xl font-black text-slate-900">{{ aggregatedStats.cantidadReservasTotales }}</div>
-                  <p class="text-[10px] font-bold text-slate-400 mt-0.5">
-                    {{ aggregatedStats.cantidadReservasConfirmadas }} confirmadas • {{ aggregatedStats.cantidadReservasPendientes }} pendientes
-                  </p>
+                  <span class="text-sm font-bold text-slate-900 block leading-tight">Solo confirmadas</span>
+                  <span class="text-[10px] font-medium text-slate-500">Reservas ya aprobadas</span>
                 </div>
               </div>
-
-              <!-- Ocupación -->
-              <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex flex-col justify-between">
-                <div class="flex items-center justify-between mb-2">
-                  <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Ocupación</span>
-                  <i class="fas fa-chart-pie text-indigo-500 text-xs"></i>
-                </div>
-                <div>
-                  <div class="text-2xl font-black text-slate-900">{{ aggregatedStats.porcentajeOcupacion }}%</div>
-                  <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden mt-1.5 mb-1">
-                    <div 
-                      class="bg-[#2D9CDB] h-full rounded-full transition-all duration-500" 
-                      :style="{ width: `${aggregatedStats.porcentajeOcupacion}%` }"
-                    ></div>
-                  </div>
-                  <p class="text-[10px] font-bold text-slate-400">
-                    {{ aggregatedStats.cantidadReservasTotales }} de {{ aggregatedStats.totalTurnosDisponibles }} turnos
-                  </p>
-                </div>
-              </div>
-
-              <!-- Turnos Disponibles -->
-              <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex flex-col justify-between">
-                <div class="flex items-center justify-between mb-2">
-                  <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Disponibles</span>
-                  <i class="fas fa-door-open text-emerald-500 text-xs"></i>
-                </div>
-                <div>
-                  <div class="text-2xl font-black text-slate-900">{{ aggregatedStats.cantidadHorariosDisponibles }}</div>
-                  <p class="text-[10px] font-bold text-slate-400 mt-0.5">Horarios libres hoy</p>
-                </div>
-              </div>
-
-              <!-- Horarios Bloqueados -->
-              <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex flex-col justify-between">
-                <div class="flex items-center justify-between mb-2">
-                  <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Bloqueados</span>
-                  <i class="fas fa-ban text-slate-400 text-xs"></i>
-                </div>
-                <div>
-                  <div class="text-2xl font-black text-slate-900">{{ aggregatedStats.cantidadHorariosBloqueados }}</div>
-                  <p class="text-[10px] font-bold text-slate-400 mt-0.5">Horarios no habilitados</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Desglose por Cancha -->
-            <div v-if="aggregatedStats.desgloseCanchas && aggregatedStats.desgloseCanchas.length > 0" class="space-y-2.5">
-              <div class="flex items-center justify-between px-1">
-                <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                  Rendimiento por Cancha ({{ aggregatedStats.desgloseCanchas.length }})
-                </span>
-              </div>
-
-              <div class="space-y-2">
-                <div 
-                  v-for="cancha in aggregatedStats.desgloseCanchas" 
-                  :key="cancha.canchaId"
-                  class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between gap-3"
-                >
-                  <div class="min-w-0 flex-1">
-                    <div class="flex items-center gap-2 mb-1">
-                      <h4 class="text-xs font-extrabold text-slate-900 truncate">
-                        {{ cancha.complejoNombre ? `${cancha.complejoNombre} - ` : '' }}{{ cancha.canchaNombre }}
-                      </h4>
-                      <span v-if="cancha.deporteNombre" class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 shrink-0">
-                        {{ cancha.deporteNombre }}
-                      </span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <div class="w-20 bg-slate-200 h-1.5 rounded-full overflow-hidden shrink-0">
-                        <div 
-                          class="bg-[#2D9CDB] h-full rounded-full" 
-                          :style="{ width: `${cancha.porcentajeOcupacion}%` }"
-                        ></div>
-                      </div>
-                      <span class="text-[10px] text-slate-500 font-bold">
-                        {{ cancha.reservasCount }}/{{ cancha.totalTurnos }} turnos ({{ cancha.porcentajeOcupacion }}%)
-                      </span>
-                    </div>
-                  </div>
-
-                  <div class="text-right shrink-0">
-                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block leading-none mb-0.5">Ingresos</span>
-                    <span class="text-sm font-extrabold text-slate-900">
-                      ${{ formatMoney(cancha.ingresos) }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Desglose por Medios de Pago -->
-            <div class="space-y-2.5">
-              <div class="flex items-center justify-between px-1">
-                <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                  Medios de Pago
-                </span>
-              </div>
-
-              <div v-if="aggregatedStats.desgloseMediosPago && aggregatedStats.desgloseMediosPago.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div 
-                  v-for="(medio, idx) in aggregatedStats.desgloseMediosPago" 
-                  :key="idx"
-                  class="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between"
-                >
-                  <div class="flex items-center gap-2.5 min-w-0">
-                    <div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-[#2D9CDB] shrink-0">
-                      <i class="fas fa-wallet text-xs"></i>
-                    </div>
-                    <div class="truncate">
-                      <p class="text-xs font-bold text-slate-900 truncate">{{ medio.medioPagoNombre }}</p>
-                      <p class="text-[10px] text-slate-400">{{ medio.cantidadReservas }} {{ medio.cantidadReservas === 1 ? 'partido' : 'partidos' }}</p>
-                    </div>
-                  </div>
-                  <div class="text-right shrink-0 font-extrabold text-xs text-slate-900 ml-2">
-                    ${{ formatMoney(medio.montoTotal) }}
-                  </div>
-                </div>
-              </div>
-
-              <div v-else class="p-4 bg-slate-50 rounded-xl border border-slate-100 text-center">
-                <p class="text-xs font-bold text-slate-400">Aún no se registran pagos en las reservas de hoy.</p>
-              </div>
+              <label class="relative inline-flex items-center cursor-pointer pointer-events-none">
+                <input type="checkbox" :checked="showOnlyConfirmed" class="sr-only peer">
+                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+              </label>
             </div>
 
           </div>
-
+          
         </div>
       </div>
     </transition>
@@ -659,7 +521,21 @@ export default {
     const isBlocking = ref(false)
     const errorMessage = ref('')
     const successMessage = ref('')
-    const isStatsModalOpen = ref(false)
+
+    const showOnlyPending = ref(false)
+    const showOnlyConfirmed = ref(false)
+    const isFiltersModalOpen = ref(false)
+
+    const openFiltersModal = () => { isFiltersModalOpen.value = true }
+    const closeFiltersModal = () => { isFiltersModalOpen.value = false }
+    const togglePending = () => {
+      showOnlyPending.value = !showOnlyPending.value
+      if (showOnlyPending.value) showOnlyConfirmed.value = false
+    }
+    const toggleConfirmed = () => {
+      showOnlyConfirmed.value = !showOnlyConfirmed.value
+      if (showOnlyConfirmed.value) showOnlyPending.value = false
+    }
 
     const fetchAllData = async () => {
       isLoading.value = true
@@ -817,12 +693,20 @@ export default {
                 })
               }
 
-              result.push({
-                ...cancha,
-                complejoId: comp.id,
-                complejoNombre: comp.nombre,
-                turnos: mergedTurnos
+              const finalTurnos = mergedTurnos.filter(t => {
+                  if (showOnlyPending.value) return t.estadoReserva === 'Pendiente'
+                  if (showOnlyConfirmed.value) return t.estadoReserva === 'Confirmado' || (t.estado === 'reserved' && t.confirmada)
+                  return true
               })
+
+              if (finalTurnos.length > 0) {
+                result.push({
+                  ...cancha,
+                  complejoId: comp.id,
+                  complejoNombre: comp.nombre,
+                  turnos: finalTurnos
+                })
+              }
             }
           })
         }
@@ -904,6 +788,34 @@ export default {
       }
     }
 
+    const isConfirming = ref(false)
+
+    const executeConfirm = async () => {
+      errorMessage.value = ''
+      isConfirming.value = true
+      
+      try {
+        const currentUserId = user.value?.sub || 1
+        const response = await fetch(API_ENDPOINTS.reservas.confirm(selectedTurn.value.reservaId, currentUserId), {
+          method: 'PUT'
+        })
+        if (!response.ok) {
+          throw new Error('No se pudo confirmar la reserva')
+        }
+        
+        successMessage.value = 'Reserva confirmada correctamente.'
+        setTimeout(() => {
+          closeModal()
+          fetchAllData()
+        }, 1500)
+      } catch (err) {
+        console.error(err)
+        errorMessage.value = err.message || 'Error al confirmar la reserva'
+      } finally {
+        isConfirming.value = false
+      }
+    }
+
     const executeBlock = async () => {
       errorMessage.value = ''
       isBlocking.value = true
@@ -968,132 +880,16 @@ export default {
       return Number(val).toLocaleString('es-AR')
     }
 
-    const openStatsModal = () => {
-      isStatsModalOpen.value = true
-    }
 
-    const closeStatsModal = () => {
-      isStatsModalOpen.value = false
-    }
-
-    // Aggregated statistics calculation (across all complexes or for the selected complex)
-    const aggregatedStats = computed(() => {
-      let gananciasConfirmadas = 0
-      let gananciasCobradas = 0
-      let gananciasPendientesCobro = 0
-      let totalReservas = 0
-      let confirmadas = 0
-      let pendientes = 0
-      let bloqueados = 0
-      let disponibles = 0
-      let totalTurnos = 0
-      const canchasMap = []
-      const mediosMap = {}
-
-      const processedReservas = new Set()
-
-      const targetComplejos = selectedComplejoId.value === 'all'
-        ? complejosList.value
-        : complejosList.value.filter(c => c.id === selectedComplejoId.value)
-
-      targetComplejos.forEach(comp => {
-        const agenda = agendasMap.value[comp.id]
-        if (agenda && agenda.canchas) {
-          agenda.canchas.forEach(c => {
-            let canchaReservas = 0
-            let canchaIngresos = 0
-            const canchaTurnos = c.turnos ? c.turnos.length : 0
-            totalTurnos += canchaTurnos
-
-            if (c.turnos) {
-              c.turnos.forEach(t => {
-                if (t.estado === 'reserved') {
-                  let isNewReserva = true
-                  if (t.reservaId) {
-                    if (processedReservas.has(t.reservaId)) {
-                      isNewReserva = false
-                    } else {
-                      processedReservas.add(t.reservaId)
-                    }
-                  }
-
-                  if (isNewReserva) {
-                    totalReservas++
-                    const monto = Number(t.montoTotal) || 0
-                    const isConf = t.confirmada || t.estadoReserva === 'Confirmado'
-                    if (isConf) {
-                      confirmadas++
-                      gananciasConfirmadas += monto
-                      canchaIngresos += monto
-                      if (t.estadoPago === 'pagado' || t.estadoPago === 'Pagado') {
-                        gananciasCobradas += monto
-                      } else {
-                        gananciasPendientesCobro += monto
-                      }
-
-                      const medio = t.medioPagoNombre || 'Efectivo / En complejo'
-                      if (!mediosMap[medio]) {
-                        mediosMap[medio] = { medioPagoNombre: medio, cantidadReservas: 0, montoTotal: 0 }
-                      }
-                      mediosMap[medio].cantidadReservas++
-                      mediosMap[medio].montoTotal += monto
-                    } else {
-                      pendientes++
-                    }
-                  }
-                  canchaReservas++
-                } else if (t.estado === 'blocked') {
-                  let isNewBlock = true
-                  if (t.reservaId) {
-                    if (processedReservas.has(t.reservaId)) {
-                      isNewBlock = false
-                    } else {
-                      processedReservas.add(t.reservaId)
-                    }
-                  }
-                  if (isNewBlock) {
-                    bloqueados++
-                  }
-                } else {
-                  disponibles++
-                }
-              })
-            }
-
-            const ocupacion = canchaTurnos > 0 ? Math.round((canchaReservas / canchaTurnos) * 1000) / 10 : 0
-            canchasMap.push({
-              canchaId: c.canchaId,
-              canchaNombre: c.canchaNombre,
-              complejoNombre: selectedComplejoId.value === 'all' ? comp.nombre : '',
-              deporteNombre: c.deporteNombre || '',
-              reservasCount: canchaReservas,
-              totalTurnos: canchaTurnos,
-              porcentajeOcupacion: Math.min(100, ocupacion),
-              ingresos: canchaIngresos
-            })
-          })
-        }
-      })
-
-      const ocupacionGral = totalTurnos > 0 ? Math.round((totalReservas / totalTurnos) * 1000) / 10 : 0
-
-      return {
-        gananciasConfirmadas,
-        gananciasCobradas,
-        gananciasPendientesCobro,
-        cantidadReservasTotales: totalReservas,
-        cantidadReservasConfirmadas: confirmadas,
-        cantidadReservasPendientes: pendientes,
-        cantidadHorariosBloqueados: bloqueados,
-        cantidadHorariosDisponibles: disponibles,
-        totalTurnosDisponibles: totalTurnos,
-        porcentajeOcupacion: Math.min(100, ocupacionGral),
-        desgloseCanchas: canchasMap,
-        desgloseMediosPago: Object.values(mediosMap).sort((a, b) => b.montoTotal - a.montoTotal)
-      }
-    })
 
     return {
+      showOnlyPending,
+      showOnlyConfirmed,
+      isFiltersModalOpen,
+      openFiltersModal,
+      closeFiltersModal,
+      togglePending,
+      toggleConfirmed,
       currentDate,
       selectedComplejoId,
       selectedCanchaId,
@@ -1112,6 +908,7 @@ export default {
       modalView,
       isCancelling,
       isBlocking,
+      isConfirming,
       errorMessage,
       successMessage,
       handleTurnClick,
@@ -1120,13 +917,10 @@ export default {
       initCancel,
       executeCancel,
       executeBlock,
+      executeConfirm,
       formatTime,
       formatFechaReserva,
-      formatMoney,
-      isStatsModalOpen,
-      openStatsModal,
-      closeStatsModal,
-      aggregatedStats
+      formatMoney
     }
   }
 }

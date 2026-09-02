@@ -14,6 +14,7 @@ import OwnerAgenda from '../views/owner/OwnerAgenda.vue';
 
 import OwnerComplejoCreate from '../views/owner/OwnerComplejoCreate.vue';
 import OwnerComplejoConfig from '../views/owner/OwnerComplejoConfig.vue';
+import OwnerEstadisticas from '../views/owner/OwnerEstadisticas.vue';
 
 const routes = [
   {
@@ -76,6 +77,11 @@ const routes = [
         path: 'owner/complejo/:id/config',
         name: 'OwnerComplejoConfig',
         component: OwnerComplejoConfig
+      },
+      {
+        path: 'owner/estadisticas',
+        name: 'OwnerEstadisticas',
+        component: OwnerEstadisticas
       }
     ]
   }

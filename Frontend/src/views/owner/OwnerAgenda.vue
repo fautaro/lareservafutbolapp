@@ -191,6 +191,10 @@
 
             <!-- Botones para turno RESERVADO -->
             <div v-if="selectedTurn.estado === 'reserved'" class="flex flex-col gap-3">
+              <button v-if="selectedTurn.estadoReserva === 'Pendiente'" @click="executeConfirm" :disabled="isConfirming" class="w-full py-3.5 bg-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-200 active:scale-95 transition-all text-sm uppercase tracking-widest flex justify-center items-center gap-2">
+                <i v-if="isConfirming" class="fas fa-circle-notch animate-spin"></i>
+                <span>{{ isConfirming ? 'Confirmando...' : 'Confirmar Reserva' }}</span>
+              </button>
               <button @click="openReservaDetail" class="w-full py-3.5 bg-[#2D9CDB] text-white font-bold rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition-all text-sm uppercase tracking-widest">
                 Ver detalle reserva
               </button>
@@ -319,6 +323,14 @@
                     <span class="text-xs font-bold text-slate-900">{{ formatFechaReserva(selectedTurn.fechaReserva) }}</span>
                   </div>
                 </div>
+              </div>
+
+              <!-- Action Button -->
+              <div v-if="selectedTurn.estadoReserva === 'Pendiente'" class="mb-4">
+                <button @click="executeConfirm" :disabled="isConfirming" class="w-full py-3.5 bg-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-200 active:scale-95 transition-all text-sm uppercase tracking-widest flex justify-center items-center gap-2">
+                  <i v-if="isConfirming" class="fas fa-circle-notch animate-spin"></i>
+                  <span>{{ isConfirming ? 'Confirmando...' : 'Confirmar Reserva' }}</span>
+                </button>
               </div>
 
               <!-- Volver button -->
@@ -685,6 +697,35 @@ export default {
       }
     }
 
+    const isConfirming = ref(false)
+
+    const executeConfirm = async () => {
+      errorMessage.value = ''
+      isConfirming.value = true
+      
+      try {
+          const currentUserId = user.value?.sub || 1
+          const response = await fetch(API_ENDPOINTS.reservas.confirm(selectedTurn.value.reservaId, currentUserId), {
+              method: 'PUT'
+          })
+          if (!response.ok) {
+              throw new Error('No se pudo confirmar la reserva')
+          }
+          
+          successMessage.value = 'Reserva confirmada correctamente.'
+          setTimeout(() => {
+             closeModal()
+             fetchAgenda()
+          }, 1500)
+          
+      } catch (err) {
+          console.error(err)
+          errorMessage.value = err.message || 'Error al confirmar la reserva'
+      } finally {
+          isConfirming.value = false
+      }
+    }
+
     const isBlocking = ref(false)
 
     const executeBlock = async () => {
@@ -990,6 +1031,7 @@ export default {
       modalView,
       isCancelling,
       isBlocking,
+      isConfirming,
       errorMessage,
       successMessage,
       handleTurnClick,
@@ -998,6 +1040,7 @@ export default {
       initCancel,
       executeCancel,
       executeBlock,
+      executeConfirm,
       formatTime,
       formatFechaReserva,
       isStatsModalOpen,

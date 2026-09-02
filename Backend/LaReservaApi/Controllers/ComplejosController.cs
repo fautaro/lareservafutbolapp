@@ -43,6 +43,15 @@ public class ComplejosController : Controller
         return Ok(response);
     }
 
+    [HttpGet("estadisticas")]
+    public async Task<IActionResult> GetEstadisticas([FromQuery] long? complejoId, [FromQuery] DateTime fechaInicio, [FromQuery] DateTime fechaFin, [FromQuery] long usuarioId, CancellationToken cancellationToken = default)
+    {
+        var request = new LaReservaBackend.Application.Complejos.Queries.GetEstadisticas.GetEstadisticasQuery(complejoId, fechaInicio, fechaFin, usuarioId);
+        var response = await _mediator.Send(request, cancellationToken);
+
+        return Ok(response);
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateComplejo([FromBody] LaReservaBackend.Application.Complejos.Commands.CreateComplejo.CreateComplejoCommand command, CancellationToken cancellationToken)
     {

@@ -13,8 +13,11 @@
   "dependencies": {
     "@auth0/auth0-vue": "^2.4.0",
     "@fortawesome/fontawesome-free": "^6.7.2",
+    "chart.js": "^4.5.1",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "flowbite": "^3.1.2",
     "vue": "^3.5.13",
+    "vue-chartjs": "^5.3.4",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
