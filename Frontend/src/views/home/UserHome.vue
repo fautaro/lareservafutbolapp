@@ -2,21 +2,38 @@
   <div class="min-h-screen bg-[#F8FAFC] pb-32 text-slate-800" style="font-family: Inter, 'Noto Sans', sans-serif;">
 
     <!-- ERROR STATE -->
-    <div v-if="loadError"
-      class="fixed inset-0 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm z-[2000] p-6 text-left">
-      <div class="bg-white rounded-2xl shadow-2xl p-8 text-center max-w-sm w-full animate-slide-up">
-        <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center text-red-500 mx-auto mb-5">
-          <i class="fas fa-wifi text-2xl"></i>
+    <Teleport to="body">
+      <transition name="modal-fade">
+        <div
+          v-if="loadError"
+          class="fixed inset-0 z-[9999] flex items-center justify-center p-6 text-left"
+        >
+          <!-- Fullscreen Backdrop Overlay -->
+          <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
+
+          <!-- Modal Content Card -->
+          <div
+            class="relative bg-white rounded-2xl shadow-2xl p-8 text-center max-w-sm w-full animate-slide-up border border-slate-100"
+            style="font-family: Inter, 'Noto Sans', sans-serif;"
+          >
+            <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center text-red-500 mx-auto mb-5 text-2xl shadow-inner">
+              <i class="fas fa-wifi"></i>
+            </div>
+            <h2 class="text-xl font-bold mb-2 text-slate-900">Problema de conexión</h2>
+            <p class="text-slate-500 mb-6 text-sm leading-relaxed">
+              No pudimos obtener la información de los complejos. Por favor, revisá tu conexión e intentá de nuevo.
+            </p>
+            <button
+              type="button"
+              @click="retryLoad"
+              class="w-full bg-slate-900 hover:bg-slate-800 text-white py-4 rounded-xl font-bold uppercase tracking-widest text-[10px] shadow-lg active:scale-95 transition-all cursor-pointer"
+            >
+              Reintentar ahora
+            </button>
+          </div>
         </div>
-        <h2 class="text-xl font-bold mb-2 text-slate-900">Problema de conexión</h2>
-        <p class="text-slate-500 mb-6 text-sm leading-relaxed">No pudimos obtener la información de los complejos. Por
-          favor, revisá tu conexión e intentá de nuevo.</p>
-        <button @click="retryLoad"
-          class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold uppercase tracking-widest text-[10px] shadow-lg active:scale-95 transition-all">
-          Reintentar ahora
-        </button>
-      </div>
-    </div>
+      </transition>
+    </Teleport>
 
     <!-- MAIN APP FLOW -->
     <div v-if="!loading && !loadError" class="animate-fade-in text-left">
@@ -293,5 +310,15 @@ export default {
 .fade-leave-to {
   opacity: 0;
   transform: scale(0.95) translateY(10px);
+}
+
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
 }
 </style>

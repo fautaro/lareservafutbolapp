@@ -59,13 +59,20 @@
 </template>
 
 <script>
+import { useAuthUser } from '../../composables/useAuthUser';
+import { API_ENDPOINTS } from '../../config/apiConfig';
+
 export default {
     name: 'ConfigUser',
+    setup() {
+        const { user, setDebeCambiarPassword } = useAuthUser();
+        return { user, setDebeCambiarPassword };
+    },
     data() {
         return {
             form: {
                 Teléfono: '+54 9 11 2345-6789',
-                Contraseña: '********',
+                Contraseña: '••••••••',
                 notificaciones: true
             },
             original: {},
@@ -93,18 +100,43 @@ export default {
     },
     methods: {
         enableEdit(label) {
+            if (label === 'Contraseña' && this.form.Contraseña === '••••••••') {
+                this.form.Contraseña = '';
+            }
             this.editableFields[label] = true
         },
-        guardarCambios() {
-            this.original = { ...this.form }
-            this.editableFields = {
-                Teléfono: false,
-                Contraseña: false
+        async guardarCambios() {
+            try {
+                if (this.editableFields['Contraseña'] && this.form.Contraseña && this.form.Contraseña !== this.original.Contraseña) {
+                    const userId = this.user?.id || this.user?.sub || 1;
+                    const response = await fetch(API_ENDPOINTS.usuarios.cambiarPassword(), {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            usuarioId: userId,
+                            nuevaPassword: this.form.Contraseña.trim()
+                        })
+                    });
+                    if (!response.ok) {
+                        const err = await response.json().catch(() => ({}));
+                        throw new Error(err.message || 'Error al actualizar contraseña.');
+                    }
+                    this.setDebeCambiarPassword(false);
+                }
+
+                this.original = { ...this.form }
+                this.editableFields = {
+                    Teléfono: false,
+                    Contraseña: false
+                }
+                this.showSuccess = true
+                setTimeout(() => {
+                    this.showSuccess = false
+                }, 3000)
+            } catch (error) {
+                console.error("Error al guardar cambios:", error);
+                alert(error.message || 'Error al guardar cambios.');
             }
-            this.showSuccess = true
-            setTimeout(() => {
-                this.showSuccess = false
-            }, 3000)
         },
         onChange() { }
     },

@@ -1,4 +1,4 @@
-﻿using LaReservaBackend.Application.Common.Interfaces;
+using LaReservaBackend.Application.Common.Interfaces;
 using LaReservaBackend.Domain.Constants;
 using LaReservaBackend.Infrastructure.Data;
 using LaReservaBackend.Infrastructure.Data.Interceptors;
@@ -45,6 +45,7 @@ public static class DependencyInjection
 
         services.AddSingleton(TimeProvider.System);
         services.AddTransient<IIdentityService, IdentityService>();
+        services.AddScoped<IPasswordHasher<LaReservaBackend.Domain.Entities.Usuario>, PasswordHasher<LaReservaBackend.Domain.Entities.Usuario>>();
 
         services.AddAuthorization(options =>
             options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));

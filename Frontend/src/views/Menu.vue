@@ -37,9 +37,9 @@
         <div class="relative flex p-1 bg-slate-100/90 rounded-[14px] select-none">
           <!-- Sliding Indicator Thumb -->
           <div 
-            class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-xl bg-white shadow-md shadow-slate-200/70 border border-slate-200/50 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] z-0"
+            class="absolute top-1 bottom-1 left-1 w-[calc(33.333%-3px)] rounded-xl bg-white shadow-md shadow-slate-200/70 border border-slate-200/50 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] z-0"
             :style="{
-              transform: targetRole === 'owner' ? 'translateX(100%)' : 'translateX(0%)'
+              transform: targetRole === 'owner' ? 'translateX(100%)' : (targetRole === 'admin' ? 'translateX(200%)' : 'translateX(0%)')
             }"
           ></div>
 
@@ -48,11 +48,11 @@
             type="button"
             @click="handleRoleChange('user')"
             :disabled="isTransitioning"
-            class="relative z-10 flex-1 py-3 text-[11px] font-black uppercase tracking-widest transition-colors duration-300 rounded-xl flex items-center justify-center gap-2 cursor-pointer focus:outline-none"
+            class="relative z-10 flex-1 py-2.5 sm:py-3 text-[10px] sm:text-[11px] font-black uppercase tracking-wider transition-colors duration-300 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer focus:outline-none"
             :class="targetRole === 'user' ? 'text-[#2D9CDB]' : 'text-slate-400 hover:text-slate-600'"
           >
             <i class="fas fa-futbol text-xs transition-transform duration-300" :class="{ 'scale-110': targetRole === 'user' }"></i>
-            <span>Modo jugador</span>
+            <span>Jugador</span>
           </button>
 
           <!-- Modo Dueño Button -->
@@ -60,11 +60,23 @@
             type="button"
             @click="handleRoleChange('owner')"
             :disabled="isTransitioning"
-            class="relative z-10 flex-1 py-3 text-[11px] font-black uppercase tracking-widest transition-colors duration-300 rounded-xl flex items-center justify-center gap-2 cursor-pointer focus:outline-none"
+            class="relative z-10 flex-1 py-2.5 sm:py-3 text-[10px] sm:text-[11px] font-black uppercase tracking-wider transition-colors duration-300 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer focus:outline-none"
             :class="targetRole === 'owner' ? 'text-[#2D9CDB]' : 'text-slate-400 hover:text-slate-600'"
           >
             <i class="fas fa-building text-xs transition-transform duration-300" :class="{ 'scale-110': targetRole === 'owner' }"></i>
-            <span>Modo Dueño</span>
+            <span>Dueño</span>
+          </button>
+
+          <!-- Modo Admin Button -->
+          <button 
+            type="button"
+            @click="handleRoleChange('admin')"
+            :disabled="isTransitioning"
+            class="relative z-10 flex-1 py-2.5 sm:py-3 text-[10px] sm:text-[11px] font-black uppercase tracking-wider transition-colors duration-300 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer focus:outline-none"
+            :class="targetRole === 'admin' ? 'text-[#2D9CDB]' : 'text-slate-400 hover:text-slate-600'"
+          >
+            <i class="fas fa-user-shield text-xs transition-transform duration-300" :class="{ 'scale-110': targetRole === 'admin' }"></i>
+            <span>Admin</span>
           </button>
         </div>
       </div>
@@ -141,7 +153,7 @@ import { useRole } from '../composables/useRole';
 import { startLoader, stopLoader } from '../services/globalLoader';
 
 const { isAuthenticated, login, logout } = useAuthUser();
-const { isOwner, isUser, setRole, currentRole } = useRole();
+const { isOwner, isUser, isAdmin, setRole, currentRole } = useRole();
 
 // Estado reactivo local para feedback visual inmediato en el switch
 const targetRole = ref(currentRole.value);

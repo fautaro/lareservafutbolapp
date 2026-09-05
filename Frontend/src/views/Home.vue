@@ -5,6 +5,7 @@
 <script>
 import UserHome from './home/UserHome.vue'
 import OwnerHome from './owner/OwnerHome.vue'
+import AdminUsers from './admin/AdminUsers.vue'
 import { useRole } from '../composables/useRole'
 import { computed } from 'vue'
 
@@ -12,13 +13,16 @@ export default {
   name: 'HomeWrapper',
   components: {
     UserHome,
-    OwnerHome
+    OwnerHome,
+    AdminUsers
   },
   setup() {
     const { currentRole } = useRole()
     
     const activeHome = computed(() => {
-      return currentRole.value === 'owner' ? 'OwnerHome' : 'UserHome'
+      if (currentRole.value === 'admin') return 'AdminUsers'
+      if (currentRole.value === 'owner') return 'OwnerHome'
+      return 'UserHome'
     })
 
     return {

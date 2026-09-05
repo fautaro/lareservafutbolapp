@@ -20,6 +20,8 @@ CREATE TABLE IF NOT EXISTS Usuario (
     Nombre VARCHAR(100) NOT NULL,
     Email VARCHAR(100) UNIQUE NOT NULL,
     Telefono VARCHAR(20),
+    PasswordHash VARCHAR(255),
+    DebeCambiarPassword BOOLEAN DEFAULT FALSE,
     TipoUsuarioId INTEGER NOT NULL REFERENCES TipoUsuario(Id),
     FechaRegistro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

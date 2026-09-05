@@ -1,10 +1,11 @@
 import { ref } from 'vue'
 
-const currentRole = ref(localStorage.getItem('userRole') || 'user') // 'user' or 'owner'
+const currentRole = ref(localStorage.getItem('userRole') || 'user') // 'user', 'owner', or 'admin'
 
 export function useRole() {
   const isOwner = () => currentRole.value === 'owner'
   const isUser = () => currentRole.value === 'user'
+  const isAdmin = () => currentRole.value === 'admin'
 
   const toggleRole = () => {
     currentRole.value = currentRole.value === 'user' ? 'owner' : 'user'
@@ -20,6 +21,7 @@ export function useRole() {
     currentRole,
     isOwner,
     isUser,
+    isAdmin,
     toggleRole,
     setRole
   }

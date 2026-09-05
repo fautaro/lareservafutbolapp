@@ -15,6 +15,8 @@ import OwnerAgenda from '../views/owner/OwnerAgenda.vue';
 import OwnerComplejoCreate from '../views/owner/OwnerComplejoCreate.vue';
 import OwnerComplejoConfig from '../views/owner/OwnerComplejoConfig.vue';
 import OwnerEstadisticas from '../views/owner/OwnerEstadisticas.vue';
+import AdminUsers from '../views/admin/AdminUsers.vue';
+import AdminUserCreate from '../views/admin/AdminUserCreate.vue';
 
 const routes = [
   {
@@ -82,6 +84,16 @@ const routes = [
         path: 'owner/estadisticas',
         name: 'OwnerEstadisticas',
         component: OwnerEstadisticas
+      },
+      {
+        path: 'admin/usuarios',
+        name: 'AdminUsuarios',
+        component: AdminUsers
+      },
+      {
+        path: 'admin/usuarios/nuevo',
+        name: 'AdminUserCreate',
+        component: AdminUserCreate
       }
     ]
   }

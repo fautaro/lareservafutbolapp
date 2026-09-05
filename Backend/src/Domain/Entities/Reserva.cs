@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LaReservaBackend.Domain.Entities;
 public class Reserva
@@ -28,6 +28,10 @@ public class Reserva
 
     public EstadoPago EstadoPago { get; set; } = EstadoPago.pendiente;
 
+    /// <summary>
+    /// DEPRECATED como fuente de verdad independiente. Usar Estado == EstadoReserva.Confirmado.
+    /// Se mantiene mapeada en la BD para compatibilidad, pero siempre debe derivarse de Estado.
+    /// </summary>
     public bool Confirmada { get; set; } = false;
 
     public EstadoReserva Estado { get; set; } = EstadoReserva.Pendiente;

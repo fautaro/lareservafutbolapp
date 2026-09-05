@@ -102,7 +102,8 @@ public class GetAgendaComplejoHandler : IRequestHandler<GetAgendaComplejoQuery, 
                         MedioPagoNombre = reserva.MedioPago?.Nombre,
                         MontoTotal = reserva.MontoTotal,
                         EstadoPago = reserva.EstadoPago.ToString(),
-                        Confirmada = reserva.Confirmada,
+                        // Confirmada derivada de Estado (fuente de verdad única)
+                        Confirmada = reserva.Estado == EstadoReserva.Confirmado,
                         EstadoReserva = reserva.Estado.ToString(),
                         FechaReserva = reserva.FechaReserva
                     };
@@ -136,7 +137,8 @@ public class GetAgendaComplejoHandler : IRequestHandler<GetAgendaComplejoQuery, 
                             MedioPagoNombre = reserva?.MedioPago?.Nombre,
                             MontoTotal = reserva?.MontoTotal,
                             EstadoPago = reserva?.EstadoPago.ToString(),
-                            Confirmada = reserva?.Confirmada,
+                            // Confirmada derivada de Estado (fuente de verdad única)
+                            Confirmada = reserva != null ? reserva.Estado == EstadoReserva.Confirmado : null,
                             EstadoReserva = reserva?.Estado.ToString(),
                             FechaReserva = reserva?.FechaReserva
                         };

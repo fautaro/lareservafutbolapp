@@ -1,4 +1,4 @@
-﻿using LaReservaBackend.Application.Common.Interfaces;
+using LaReservaBackend.Application.Common.Interfaces;
 using LaReservaBackend.Domain.Entities;
 using LaReservaBackend.Domain.Enums;
 using LaReservaBackend.Infrastructure.Identity;
@@ -41,13 +41,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         {
             b.ToTable("usuario");
             b.Property(x => x.Id).HasColumnName("id");
-            b.Property(x => x.Auth0Id).HasColumnName("auth0id").HasMaxLength(128).IsRequired();
+            b.Property(x => x.Auth0Id).HasColumnName("auth0id").HasMaxLength(128).IsRequired(false);
             b.Property(x => x.Nombre).HasColumnName("nombre").HasMaxLength(100).IsRequired();
+            b.Property(x => x.Apellido).HasColumnName("apellido").HasMaxLength(100);
+            b.Property(x => x.Dni).HasColumnName("dni").HasMaxLength(20);
             b.Property(x => x.Email).HasColumnName("email").HasMaxLength(100).IsRequired();
             b.Property(x => x.Telefono).HasColumnName("telefono").HasMaxLength(20);
+            b.Property(x => x.Activo).HasColumnName("activo").HasDefaultValue(true);
+            b.Property(x => x.PasswordHash).HasColumnName("password_hash").HasMaxLength(255);
+            b.Property(x => x.DebeCambiarPassword).HasColumnName("debe_cambiar_password").HasDefaultValue(false);
             b.Property(x => x.TipoUsuarioId).HasColumnName("tipousuarioid");
             b.Property(x => x.FechaRegistro).HasColumnName("fecharegistro").HasDefaultValueSql("CURRENT_TIMESTAMP");
-            b.HasIndex(x => x.Auth0Id).IsUnique();
             b.HasIndex(x => x.Email).IsUnique();
             b.HasOne(x => x.TipoUsuario)
              .WithMany(t => t.Usuarios)

@@ -14,6 +14,9 @@
       </transition>
     </Teleport>
 
+    <!-- Modal obligatorio de cambio de contraseña -->
+    <CambioPasswordModal />
+
     <main class="relative flex-1 overflow-y-auto pb-32" style="padding-top: max(12px, env(safe-area-inset-top, 0px));">
       <router-view v-slot="{ Component, route }">
         <transition name="fade" mode="out-in" appear>
@@ -28,15 +31,16 @@
       style="bottom: calc(1rem + env(safe-area-inset-bottom, 0px));">
       
       <router-link to="/" class="flex flex-1 flex-col items-center justify-center py-2 mx-0.5 gap-1 rounded-[1.25rem] transition-all duration-300 active:scale-95"
-        :class="route.name === 'Home' ? 'text-[#101518] bg-black/5 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]' : 'text-[#5c748a] hover:bg-black/[0.02]'">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+        :class="route.name === 'Home' || route.name === 'AdminUsuarios' || route.name === 'AdminUserCreate' ? 'text-[#101518] bg-black/5 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]' : 'text-[#5c748a] hover:bg-black/[0.02]'">
+        <i v-if="isAdmin()" class="fas fa-users text-lg py-0.5"></i>
+        <svg v-else xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
           <path
             d="M224,115.55V208a16,16,0,0,1-16,16H168a16,16,0,0,1-16-16V168a8,8,0,0,0-8-8H112a8,8,0,0,0-8,8v40a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V115.55a16,16,0,0,1,5.17-11.78l80-75.48.11-.11a16,16,0,0,1,21.53,0,1.14,1.14,0,0,0,.11.11l80,75.48A16,16,0,0,1,224,115.55Z" />
         </svg>
-        <p class="text-[10px] font-semibold leading-none tracking-wide">Inicio</p>
+        <p class="text-[10px] font-semibold leading-none tracking-wide">{{ isAdmin() ? 'Usuarios' : 'Inicio' }}</p>
       </router-link>
 
-      <router-link to="/reservas" class="flex flex-1 flex-col items-center justify-center py-2 mx-0.5 gap-1 rounded-[1.25rem] transition-all duration-300 active:scale-95"
+      <router-link v-if="!isAdmin()" to="/reservas" class="flex flex-1 flex-col items-center justify-center py-2 mx-0.5 gap-1 rounded-[1.25rem] transition-all duration-300 active:scale-95"
         :class="route.name === 'MisReservas' ? 'text-[#101518] bg-black/5 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]' : 'text-[#5c748a] hover:bg-black/[0.02]'">
         <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
           <path
@@ -70,18 +74,23 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useGlobalLoader } from '../services/globalLoader'
 import { useRole } from '../composables/useRole'
+import CambioPasswordModal from '../components/CambioPasswordModal.vue'
 import logo from '../assets/logo.svg'
 
 export default {
   name: 'DefaultLayout',
+  components: {
+    CambioPasswordModal
+  },
   setup() {
     const route = useRoute()
     const { loading } = useGlobalLoader()
-    const { isOwner } = useRole()
+    const { isOwner, isAdmin } = useRole()
     return {
       route,
       loading,
-      isOwner
+      isOwner,
+      isAdmin
     }
   },
   data() {

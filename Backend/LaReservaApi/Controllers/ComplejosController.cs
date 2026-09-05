@@ -1,7 +1,6 @@
 using LaReservaBackend.Application.Complejos.Queries.GetComplejos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace LaReservaApi.Controllers;
 
@@ -122,13 +121,5 @@ public class ComplejosController : Controller
         }
         
         return Ok();
-    }
-
-
-    [HttpGet("debug-reservas")]
-    public async Task<IActionResult> DebugReservas([FromServices] LaReservaBackend.Application.Common.Interfaces.IApplicationDbContext context)
-    {
-        var list = await EntityFrameworkQueryableExtensions.ToListAsync(context.Reservas);
-        return Ok(list);
     }
 }

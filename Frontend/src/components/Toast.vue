@@ -1,16 +1,28 @@
 <template>
-  <transition name="toast-fade">
-    <div v-if="toastState.show" class="fixed top-6 left-1/2 -translate-x-1/2 z-[3000] max-w-sm w-[90%] bg-white/95 backdrop-blur shadow-2xl border rounded-2xl p-4 flex items-start gap-3">
-      <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0" :class="iconClass">
-        <i :class="icon"></i>
+  <transition name="toast-slide">
+    <div
+      v-if="toastState.show"
+      class="fixed bottom-24 inset-x-0 flex justify-center z-[3500] px-4 pointer-events-none"
+    >
+      <div
+        class="pointer-events-auto flex items-center gap-3 px-5 py-3.5 bg-slate-900 text-white rounded-2xl shadow-2xl border border-slate-800 max-w-sm sm:max-w-md animate-slide-up"
+        role="alert"
+      >
+        <div class="flex items-center justify-center shrink-0">
+          <i :class="[iconClass, iconColorClass]" class="text-base"></i>
+        </div>
+        <span class="text-xs sm:text-sm font-bold text-white leading-tight">
+          {{ toastState.message }}
+        </span>
+        <button
+          type="button"
+          @click="hideToast"
+          class="ml-1.5 text-slate-400 hover:text-white transition-colors text-xs p-1 -mr-1"
+          title="Cerrar"
+        >
+          <i class="fas fa-times"></i>
+        </button>
       </div>
-      <div class="flex-1 min-w-0 pt-0.5">
-        <p class="text-xs font-black uppercase tracking-wider text-slate-400 mb-0.5">{{ title }}</p>
-        <p class="text-sm font-bold text-slate-800 leading-snug">{{ toastState.message }}</p>
-      </div>
-      <button @click="hideToast" class="w-6 h-6 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors">
-        <i class="fas fa-times text-xs"></i>
-      </button>
     </div>
   </transition>
 </template>
@@ -25,44 +37,60 @@ export default {
     const { toastState, hideToast } = useToast()
 
     const iconClass = computed(() => {
-      if (toastState.value.type === 'success') return 'bg-emerald-50 text-emerald-500 border border-emerald-100'
-      if (toastState.value.type === 'info') return 'bg-blue-50 text-blue-500 border border-blue-100'
-      return 'bg-rose-50 text-rose-500 border border-rose-100'
-    })
-
-    const icon = computed(() => {
+      const msg = (toastState.value.message || '').toLowerCase()
+      if (msg.includes('baja')) return 'fas fa-user-minus'
+      if (msg.includes('reactiv')) return 'fas fa-rotate-left'
       if (toastState.value.type === 'success') return 'fas fa-check-circle'
       if (toastState.value.type === 'info') return 'fas fa-info-circle'
       return 'fas fa-exclamation-circle'
     })
 
-    const title = computed(() => {
-      if (toastState.value.type === 'success') return 'Éxito'
-      if (toastState.value.type === 'info') return 'Info'
-      return 'Alerta'
+    const iconColorClass = computed(() => {
+      const msg = (toastState.value.message || '').toLowerCase()
+      if (msg.includes('baja')) return 'text-rose-400'
+      if (toastState.value.type === 'success') return 'text-green-400'
+      if (toastState.value.type === 'info') return 'text-sky-400'
+      return 'text-rose-400'
     })
 
     return {
       toastState,
       hideToast,
       iconClass,
-      icon,
-      title
+      iconColorClass
     }
   }
 }
 </script>
 
 <style scoped>
-.toast-fade-enter-active, .toast-fade-leave-active {
+.toast-slide-enter-active,
+.toast-slide-leave-active {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.toast-fade-enter-from {
+
+.toast-slide-enter-from {
   opacity: 0;
-  transform: translate(-50%, -20px);
+  transform: translateY(16px) scale(0.95);
 }
-.toast-fade-leave-to {
+
+.toast-slide-leave-to {
   opacity: 0;
-  transform: translate(-50%, -20px);
+  transform: translateY(16px) scale(0.95);
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 </style>

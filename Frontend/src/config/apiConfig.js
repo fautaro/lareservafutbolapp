@@ -1,4 +1,4 @@
-const BASE_URL = 'https://localhost:7116/api'
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://localhost:7116/api'
 
 export const API_CONFIG = {
   baseURL: BASE_URL
@@ -39,7 +39,13 @@ export const API_ENDPOINTS = {
     block: `${BASE_URL}/Reserva/BlockHorario`
   },
   usuarios: {
-    getProfile: (id) => `${BASE_URL}/Usuario/${id}`
+    getProfile: (id) => `${BASE_URL}/Usuario/${id}`,
+    getAll: () => `${BASE_URL}/Usuario`,
+    create: () => `${BASE_URL}/Usuario`,
+    login: () => `${BASE_URL}/Usuario/login`,
+    cambiarPassword: () => `${BASE_URL}/Usuario/cambiar-password`,
+    baja: (id) => `${BASE_URL}/Usuario/${id}/baja`,
+    reactivar: (id) => `${BASE_URL}/Usuario/${id}/reactivar`
   },
   medioPagos: {
     getAll: () => `${BASE_URL}/MedioPago`

@@ -151,7 +151,8 @@ public class ReservaRepository : IReservaRepository
                 MedioPago = r.MedioPago != null ? r.MedioPago.Nombre : "No especificado",
                 RequiereComprobante = r.MedioPago != null && r.MedioPago.RequiereComprobante,
                 Precio = r.MontoTotal ?? 0,
-                Confirmada = r.Confirmada
+                // Confirmada derivada de Estado (fuente de verdad única)
+                Confirmada = r.Estado == EstadoReserva.Confirmado
             })
             .ToList();
 
@@ -173,7 +174,8 @@ public class ReservaRepository : IReservaRepository
                 MedioPago = r.MedioPago != null ? r.MedioPago.Nombre : "No especificado",
                 RequiereComprobante = r.MedioPago != null && r.MedioPago.RequiereComprobante,
                 Precio = r.MontoTotal ?? 0,
-                Confirmada = r.Confirmada
+                // Confirmada derivada de Estado (fuente de verdad única)
+                Confirmada = r.Estado == EstadoReserva.Confirmado
             })
             .ToList();
 
@@ -190,27 +192,51 @@ public class ReservaRepository : IReservaRepository
         if (reserva == null) return false;
 
         reserva.Estado = EstadoReserva.Eliminado;
+        // Confirmada derivada de Estado (fuente de verdad única)
         reserva.Confirmada = false;
         return await _context.SaveChangesAsync(cancellationToken) > 0;
     }
 
     public async Task<long> CreateReservation(LaReservaBackend.Domain.Entities.Reserva reserva, CancellationToken cancellationToken = default)
     {
-        // Verificar disponibilidad de último momento
-        var existeSobreposicion = await _context.Reservas
-            .AnyAsync(r =>
-                r.CanchaId == reserva.CanchaId &&
-                r.Estado != EstadoReserva.Eliminado &&
-                ((reserva.Fecha >= r.Fecha && reserva.Fecha < r.FechaFin) ||
-                 (reserva.FechaFin > r.Fecha && reserva.FechaFin <= r.FechaFin) ||
-                 (reserva.Fecha <= r.Fecha && reserva.FechaFin >= r.FechaFin))
-            , cancellationToken);
+        // Usar transacción explícita con advisory lock para prevenir reservas duplicadas concurrentes.
+        // pg_advisory_xact_lock serializa las inserciones por cancha y se libera automáticamente al commit/rollback.
+        var dbContext = (Microsoft.EntityFrameworkCore.DbContext)_context;
 
-        if (existeSobreposicion) return -1;
+        using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
+        try
+        {
+            // Adquirir lock exclusivo para esta cancha específica
+            await dbContext.Database.ExecuteSqlRawAsync(
+                "SELECT pg_advisory_xact_lock({0})",
+                reserva.CanchaId);
 
-        _context.Reservas.Add(reserva);
-        await _context.SaveChangesAsync(cancellationToken);
-        return reserva.Id;
+            // Verificar disponibilidad dentro del lock (ya no hay race condition)
+            var existeSobreposicion = await _context.Reservas
+                .AnyAsync(r =>
+                    r.CanchaId == reserva.CanchaId &&
+                    r.Estado != EstadoReserva.Eliminado &&
+                    ((reserva.Fecha >= r.Fecha && reserva.Fecha < r.FechaFin) ||
+                     (reserva.FechaFin > r.Fecha && reserva.FechaFin <= r.FechaFin) ||
+                     (reserva.Fecha <= r.Fecha && reserva.FechaFin >= r.FechaFin))
+                , cancellationToken);
+
+            if (existeSobreposicion)
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                return -1;
+            }
+
+            _context.Reservas.Add(reserva);
+            await _context.SaveChangesAsync(cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
+            return reserva.Id;
+        }
+        catch
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            throw;
+        }
     }
 
     public async Task<ReservaDetalleResponse?> GetNextReserva(long usuarioId, CancellationToken cancellationToken = default)
@@ -240,7 +266,8 @@ public class ReservaRepository : IReservaRepository
                 MedioPago = r.MedioPago != null ? r.MedioPago.Nombre : "No especificado",
                 RequiereComprobante = r.MedioPago != null && r.MedioPago.RequiereComprobante,
                 Precio = r.MontoTotal ?? 0,
-                Confirmada = r.Confirmada
+                // Confirmada derivada de Estado (fuente de verdad única)
+                Confirmada = r.Estado == EstadoReserva.Confirmado
             })
             .FirstOrDefaultAsync(cancellationToken);
 

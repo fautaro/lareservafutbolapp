@@ -8,8 +8,9 @@ public static class EstadisticasComplejoHelper
     public static EstadisticasDiaDto CalcularEstadisticas(Complejo complejo, List<HorarioCancha> horariosCanchas, List<Reserva> reservas)
     {
         var activas = reservas.Where(r => r.Estado != EstadoReserva.Eliminado && r.Estado != EstadoReserva.Bloqueado).ToList();
-        var confirmadas = activas.Where(r => r.Estado == EstadoReserva.Confirmado || r.Confirmada).ToList();
-        var pendientes = activas.Where(r => r.Estado == EstadoReserva.Pendiente && !r.Confirmada).ToList();
+        // Estado es la única fuente de verdad para el estado de confirmación
+        var confirmadas = activas.Where(r => r.Estado == EstadoReserva.Confirmado).ToList();
+        var pendientes = activas.Where(r => r.Estado == EstadoReserva.Pendiente).ToList();
         var bloqueadas = reservas.Where(r => r.Estado == EstadoReserva.Bloqueado).ToList();
 
         decimal gananciasConfirmadas = confirmadas.Sum(r => r.MontoTotal ?? 0);
